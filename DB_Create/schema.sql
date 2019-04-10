@@ -27,13 +27,14 @@ CREATE TABLE OU(
 
 
 
-# CREATE TABLE Status(
-#   status BOOLEAN PRIMARY KEY ,
-#   statusType VARCHAR(32)
-# );
+-- CREATE TABLE Status(
+--   status BOOLEAN PRIMARY KEY ,
+--   statusType VARCHAR(32)
+-- );
 CREATE TABLE OUstatus(
   ouID INTEGER PRIMARY KEY,
   moneySpend FLOAT,
+  aveRate FLOAT,
   status BOOLEAN,
   statusTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- ON UPDATE CURRENT_TIMESTAMP, -- check for changing status
   FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE
@@ -67,8 +68,9 @@ CREATE TABLE ItemInfo(
   itemID INTEGER PRIMARY KEY,
   image BLOB,               -- Only allow store file/image up to 64KB
   title VARCHAR(64),
-  description VARCHAR(128),
+  description VARCHAR(256),
   priceType BOOLEAN,
+  usedStates BOOLEAN,
   saleStatus BOOLEAN,
   postTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
@@ -89,7 +91,7 @@ CREATE TABLE FixedPrice(
 CREATE TABLE ItemBid(
   itemID INTEGER PRIMARY KEY,
   startPrice FLOAT,
-#   bid_high FLOAT,
+--  bid_high FLOAT,
   endDay TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
 );
@@ -107,7 +109,7 @@ CREATE TABLE BidRecord(
 
 
 CREATE TABLE Category(  -- ?
-#   categoryID INTEGER AUTO_INCREMENT,
+--   categoryID INTEGER AUTO_INCREMENT,
   category VARCHAR(64),
   itemID INTEGER,
   PRIMARY KEY (category,itemID),
@@ -148,10 +150,10 @@ CREATE TABLE Complaint(
   FOREIGN KEY (itemID) REFERENCES Transaction(itemID) ON DELETE CASCADE
 );
 
-# CREATE TABLE WarningCategory(
-#   warningID INTEGER PRIMARY KEY,
-#   description VARCHAR(128)
-# );
+--  CREATE TABLE WarningCategory(
+--    warningID INTEGER PRIMARY KEY,
+--    description VARCHAR(128)
+--  );
 CREATE TABLE Warning(
   itemID INTEGER,
   warningID INTEGER,

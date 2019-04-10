@@ -15,12 +15,13 @@ def write_file(data, filename):
     with open(filename, 'wb') as file:
         file.write(data)
 
-def insertItemInfo(cursor, itemID, image, title, priceType,saleStatus):
+def insertItemInfo(cursor, itemID, image, title,description, priceType,usedStates, saleStatus):
     try:
         image1 = convertToBinaryData(image)
-        qry = ("INSERT INTO ItemInfo(itemID, image, title, priceType, saleStatus) VALUE (%s,%s,%s,%s,%s)"
-               "ON DUPLICATE KEY UPDATE image=%s, title=%s, priceType=%s, saleStatus=%s;")
-        result = cursor.execute(qry, (itemID,image1,title,priceType,saleStatus,image1,title,priceType,saleStatus))
+        qry = ("INSERT INTO ItemInfo(itemID, image, title, description, priceType, usedStates, saleStatus) VALUE (%s,%s,%s,%s,%s,%s, %s)"
+               "ON DUPLICATE KEY UPDATE image=%s, title=%s, description = %s, priceType=%s, usedStates = %s, saleStatus=%s;")
+        result = cursor.execute(qry, (itemID,image1,title,description,priceType,usedStates, saleStatus,
+                                      image1,title,description,priceType,usedStates, saleStatus))
         cnx.commit()
     except mysql.connector.Error as err:
         print("Error in insert item info to database")
@@ -93,13 +94,27 @@ if __name__  == "__main__":
 
     # Insert Item info
     # Maximum size currently an image can have is 64KB
+    # insertItemInfo(cursor, itemID, image, title,description, priceType,usedStates, saleStatus)
     print("Insert Item Info")
-    insertItemInfo(cursor, 1,"images/item1.jpg","SHE Forever CD",False, True)
-    insertItemInfo(cursor,2,"images/item2.jpg","SHE Shero DVD",False, True)
-    insertItemInfo(cursor,3,"images/item3.jpg","Harry Potter Book Series",False, True)
-    insertItemInfo(cursor,4,"images/item4.jpg","The Hunger Games by suzanne collins",False, True)
-    insertItemInfo(cursor,5,"images/item5.jpg","Samsung 17-Inch Series 7 Chronos Laptop",False, True)
-    insertItemInfo(cursor,6,"images/item6.jpg","Macbook Air 13-Inch, pink",False, True)
+    insertItemInfo(cursor, itemID=1,image="images/item1.jpg",title="SHE Forever CD",
+                   description="New Song + Collection, released on 21 July 2006 by HIM International Music",
+                   priceType=False, usedStates=False, saleStatus=True)
+    insertItemInfo(cursor,itemID=2, image="images/item2.jpg",title="SHE Shero DVD",description = None,
+                   priceType=False, usedStates=False, saleStatus=True)
+    insertItemInfo(cursor,itemID=3,image="images/item3.jpg",title="Harry Potter Book Series",
+                   description="Author: J. K. Rowling. Include The Philosopher's Stone. (1997), The Chamber of Secrets. (1998),"
+                   "The Prisoner of Azkaban. (1999),The Goblet of Fire. (2000),The Order of the Phoenix. (2003),"
+                   "The Half-Blood Prince. (2005),The Deathly Hallows. (2007)",
+                   priceType=False, usedStates=False, saleStatus=True)
+    insertItemInfo(cursor,itemID=4,image="images/item4.jpg",title="The Hunger Games",
+                   description="2008 dystopian novel by the American writer Suzanne Collins.",
+                   priceType=False, usedStates=False, saleStatus=True)
+    insertItemInfo(cursor,itemID=5,image="images/item5.jpg",title="Samsung 17-Inch Series 7 Chronos Laptop",
+                   description="Used a year, still in good condition, Bright and vivid display; Good JBL speakers; Long battery life",
+                   priceType=True, usedStates=True, saleStatus=True)
+    insertItemInfo(cursor,itemID=6,image="images/item6.jpg",title="Macbook Air 13-Inch",description="Used 2 year, early 2015 version. "
+                    "1.8GHz dual-core Intel Core i5 processor,\n Turbo Boost up to 2.9GHz,\n128GB SSD storage",
+                   priceType=True, usedStates=True, saleStatus=True)
     cnx.commit()        #Need to make sure everything push to database
 
 # Test get image
