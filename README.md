@@ -9,15 +9,15 @@ Below is instruction to initalize the eByMazon Database
 - [MariaDB](https://mariadb.org/)
 
 ### Steps
-1.Clone and install packages and modules
-'''
+1.Clone and install modules
+```
 git clone https://github.com/jinchen1036/eByMazon.git
 cd eByMazon
 pip install mysql-connect 
-'''
+```
 
 2. Go to db_init.py in DB_Create folder, enter your username and password for your own mysql. 
 3. run python file to start initialize eByMazon database
-'''
-python3 db_init.py
-'''
+```
+python3 DB_Create/db_init.py
+```
