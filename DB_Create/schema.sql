@@ -15,6 +15,17 @@ CREATE TABLE User(
   userType BOOLEAN
 );
 
+
+CREATE TABLE GUapplications(
+  applicationID INTEGER PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(64) UNIQUE NOT NULL,
+  name VARCHAR(32) NOT NULL,
+  cardNumber VARCHAR(32) NOT NULL,
+  address VARCHAR(64),
+  state VARCHAR(32),    -- calculate tax during check out
+  phone VARCHAR(32)
+);
+
 CREATE TABLE OU(
   ouID INTEGER PRIMARY KEY,
   name VARCHAR(32) NOT NULL,
@@ -25,8 +36,6 @@ CREATE TABLE OU(
   FOREIGN KEY (ouID) REFERENCES User(ID) ON DELETE CASCADE
 );
 
-
-
 -- CREATE TABLE Status(
 --   status BOOLEAN PRIMARY KEY ,
 --   statusType VARCHAR(32)
@@ -35,11 +44,16 @@ CREATE TABLE OUstatus(
   ouID INTEGER PRIMARY KEY,
   moneySpend FLOAT,
   aveRate FLOAT,
-  status BOOLEAN,
+  status INTEGER ,    -- 0 for OU, 1 for VIP, 2 for Suspended, 3 for remove
   statusTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- ON UPDATE CURRENT_TIMESTAMP, -- check for changing status
   FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE
 );
 
+CREATE TABLE Appeal(
+  ouID INTEGER PRIMARY KEY,
+  message VARCHAR(256),
+  FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE
+)
 CREATE TABLE FriendList(
   ownerID INTEGER,
   friendID INTEGER,
@@ -72,6 +86,7 @@ CREATE TABLE ItemInfo(
   priceType BOOLEAN,
   usedStates BOOLEAN,
   saleStatus BOOLEAN,
+  approvalStatus BOOLEAN,   -- approval by SU
   postTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
 );
@@ -146,6 +161,7 @@ CREATE TABLE Complaint(
   complainerID  INTEGER REFERENCES Transaction(buyerID) ON DELETE SET NULL,
   description VARCHAR(128),
   compliantTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  justified BOOLEAN,
   PRIMARY KEY (itemID, complainerID),
   FOREIGN KEY (itemID) REFERENCES Transaction(itemID) ON DELETE CASCADE
 );
@@ -169,7 +185,6 @@ CREATE TABLE searchKeyword(
   FOREIGN KEY (keyword) REFERENCES KeywordRecord(keyword)
 );
 
-
 CREATE TABLE OUlike(
   ouID INTEGER,
   keyword VARCHAR(64),
@@ -185,7 +200,9 @@ CREATE TABLE ItemView(
   FOREIGN KEY (itemID) REFERENCES itemOwner(itemID) ON DELETE CASCADE
 );
 
-
+CREATE TABLE Notification(
+  keyword VARCHAR(64)
+);
 
 -- Others
 CREATE TABLE Tax (
