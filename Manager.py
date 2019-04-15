@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty,StringProperty
+# from kivy.properties import ObjectProperty,StringProperty
 from kivy.core.window import Window
 
 userID = -1
@@ -27,10 +27,32 @@ class HomePage(Screen):
         print(feature)
 
 
+class OSprofile(Screen):
+
+    def friendlist(self):
+        print()
+    
+    def history(self):
+        print()
+    
+
+class FriendList(Screen):
+    pass
+
+class History(Screen):
+    pass
+
+class EditProfile(Screen):
+    pass
+
+    
+
+
 class ScreenManagement(ScreenManager):
     # userID = StringProperty("-1")
     # itemID = StringProperty("-1")
     pass
+
 
 
 
