@@ -257,28 +257,81 @@ ScreenManagement:
                 Label:
                     size_hint_y:0.1
 
-
+<friendInfo @BoxLayout>:
+    orientation:"horizontal"
+    Button:
+        size_hint_x:0.2
+        text:root.text
+    Button:
+        size_hint_x:0.2
+        text:str(root.value)
 
 
 <FriendList>:
     name: "friendlist"
     title: "the friend list"
     BoxLayout:
-        size_hint_y:1.92
-        orientation: "horizontal"
-        height: 15
-        spacing: 10
-        Label:
-            text: "My friends"
-            color: 0,0,0,1
-    BoxLayout:
-        size_hint_y: 0.05
-        orientation: "horizontal"
-        height: 30
-        spacing: 10
-        Button:
-            text: "Go back"
-            on_press: root.manager.current = "osProfile"
+        orientation:"vertical"
+        BoxLayout:
+            size_hint_y:0.1
+            orientation: "horizontal"
+            height: 15
+            spacing: 10
+            Label:
+                size_hint_x:0.90
+                text: "My friends"
+                color: 0,0,0,1
+            Button:
+                size_hint_x:0.10
+                text: "Go back"
+                on_press: root.manager.current = "osProfile"
+        BoxLayout:
+            size_hint_y: 0.90
+            orientation: "horizontal"
+            BoxLayout:
+                size_hint_x:0.4
+                orientation:"vertical"
+                Label:
+                    size_hint_y:0.1
+                    text:"List"
+                    color:0,0,0,1
+                BoxLayout:
+                    size_hint_y:0.8
+                    RecycleView:
+                        id: list
+                        viewClass:'friendInfo'
+                        RecycleBoxLayout:
+                            default_size: None, dp(30)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+                Button:
+                    size_hint_y:0.1
+                    text:"+"
+
+            BoxLayout:
+                size_hint_x:0.1
+            BoxLayout:
+                size_hint_x:0.5
+                orientation:"vertical"
+                Label:
+                    size_hint_y:0.1
+                    text:"name"
+                    color:0,0,0,1
+                BoxLayout:
+                    size_hint_y:0.8
+                BoxLayout:
+                    orientation:"horizontal"
+                    size_hint_y:0.1
+                    TextInput:
+                        size_hint_x:0.8
+                        id: chat
+                        multiline: False
+                    Button:
+                        size_hint_x:0.2
+                        text:"send"
+                               
 
 <History>:
     name: "history"

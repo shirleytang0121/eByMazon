@@ -35,9 +35,19 @@ class OSprofile(Screen):
     def history(self):
         print()
     
-
+def convert_data(data):
+    l = []
+    for item in data:
+        for key, value in item.items():
+            l.append({'text': key, 'value': value})
+    return l
+    
 class FriendList(Screen):
-    pass
+    def abc(self):
+        #fetching from database
+        arr = ({'Item1': 5000},{'Item2': 4000},{'Item3': 3000})
+        self.list.data = convert_data(arr)
+    
 
 class History(Screen):
     pass
