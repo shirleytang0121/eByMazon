@@ -101,6 +101,11 @@
                                 text: "My Account"
                                 color: 0, 0, 0, 1
                                 on_press: root.toProfile()
+                        BoxLayout:
+                            orientation: 'vertical'
+                            size_hint_y: .2
+                            Label:
+                                text: 
                 BoxLayout:
                     size_hint_y: 0.7
                     orientation: "horizontal"
@@ -114,63 +119,77 @@
             title: "Login Page"
             BoxLayout:
                 orientation: "vertical"
-                padding: [400,100,400,100]
-                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                # padding: [200,100,200,100]
+                # pos_hint: {'center_y': 0.5, 'center_x': 0.5}
                 BoxLayout:
                     size_hint: (0.5,0.4)
-                    orientation: "vertical"
+                    orientation: "horizontal"
 
                     BoldLabel:
                         text: "User Name"
                     InfoInput:
+                        size_hint_x: 1.5
+                        size_hint_y: .3
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
                         id: username
+                BoxLayout:
+                    size_hint: (0.5,0.4)
+                    orientation: "horizontal"
 
                     BoldLabel:
-
+                        pos_hint: {'center_y': 1, 'center_x': 0.5}
                         text: "Password"
                     InfoInput:
+                        size_hint_x: 1.5
+                        size_hint_y: .3
+                        pos_hint: {'center_y': 1, 'center_x': 0.5}
                         id: password
 
                 BoxLayout:
                     orientation: "horizontal"
                     padding:(50,50)
-                    size_hint: (0.7,0.3)
-#                    pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                    size_hint: (0.6,1)
+                    # pos_hint: {'center_y': 1, 'center_x': 0.5}
                     LoginButton:
+                        size_hint_y: .15
+                        pos_hint: {'center_y': 1.3, 'center_x': 0.5}
                         background_color: [2.55, 2.04, 2.55, 0.7]
                         text: "Login"
                         on_press:
                             root.checkLogin(username.text,password.text)
-                    LoginButton:
-                        background_color: [2.17, 2.17, 2.17, 0.7]
-                        text: "Cancel"
-                        on_press: root.tohome()
 
                     LoginButton:
+                        size_hint_y: .15
+                        pos_hint: {'center_y': 1.3, 'center_x': 0.5}
                         background_color: [2.04, 2.30, 2.55, 1]
                         text: "Clear"
                         on_press: username.text =""
                         on_press: password.text =""
-                Label:
-                    size_hint_y: 0.3
+                    LoginButton:
+                        size_hint_y: .15
+                        pos_hint: {'center_y': 1.3, 'center_x': 0.5}
+                        background_color: [2.17, 2.17, 2.17, 0.7]
+                        text: "Cancel"
+                        on_press: root.tohome()
+                # Label:
+                #     size_hint_y: 0.3
 
         Signup:
             id: signup
             name: "signupPage"
             title: "Sign Up"
-#            show: False
             BoxLayout:
                 orientation: "vertical"
-                padding:[200,100, 200, 100]
+                # padding:[200,100, 200, 100]
                 pos_hint: {'center_y': 0.5, 'center_x': 0.5}
-                BoldLabel:
-                    id: userRepeat
-                    text: ""
-#                    opacity: 1 if self.parent.parent.show else 0
+                # BoldLabel:
+                #     id: userRepeat
+                #     text: ""
+                #     # opacity: 1 if self.parent.parent.show else 0
 
                 GridLayout:
-                    pos_hint: {'center_y': 0.5, 'center_x': 0.5}
-#                    spacing: [50,50]
+                    pos_hint: {'center_y': 1, 'center_x': 0.5}
+                    # spacing: [50,50]
                     rows: 7
                     cols: 2
                     BoldLabel:
@@ -203,7 +222,7 @@
                     InfoInput:
                         id: GUcard
                 BoxLayout:
-#                    padding: [50, 0, 50, 200]
+                    # padding: [50, 0, 50, 200]
                     orientation: "horizontal"
                     size_hint_x: 0.6
                     pos_hint: {'center_y': 0.5, 'center_x': 0.5}
