@@ -153,7 +153,7 @@
                     LoginButton:
                         size_hint_y: .15
                         pos_hint: {'center_y': 1.3, 'center_x': 0.5}
-                        background_color: [2.55, 2.04, 2.55, 0.7]
+                        background_color: [2.37, 1.13, .68, 0.7]
                         text: "Login"
                         on_press:
                             root.checkLogin(username.text,password.text)
@@ -161,7 +161,7 @@
                     LoginButton:
                         size_hint_y: .15
                         pos_hint: {'center_y': 1.3, 'center_x': 0.5}
-                        background_color: [2.04, 2.30, 2.55, 1]
+                        background_color: [2.44, 2.14, 1.24, .8]
                         text: "Clear"
                         on_press: username.text =""
                         on_press: password.text =""
@@ -186,60 +186,79 @@
                 #     id: userRepeat
                 #     text: ""
                 #     # opacity: 1 if self.parent.parent.show else 0
-
-                GridLayout:
-                    pos_hint: {'center_y': 1, 'center_x': 0.5}
-                    # spacing: [50,50]
-                    rows: 7
-                    cols: 2
-                    BoldLabel:
-                        text: 'username'
-                    InfoInput:
-                        id: GUusername
-                        on_text_validate: root.checkUsername(GUusername.text)
-                    BoldLabel:
-                        text: 'name'
-                    InfoInput:
-                        id: GUname
-                    BoldLabel:
-                        text: 'Phone number'
-                    InfoInput:
-                        id: GUphone
-                    BoldLabel:
-                        text: 'Email'
-                    InfoInput:
-                        id: GUemail
-                    BoldLabel:
-                        text: 'Address'
-                    InfoInput:
-                        id: GUaddress
-                    BoldLabel:
-                        text: 'State'
-                    InfoInput:
-                        id: GUState
-                    BoldLabel:
-                        text: 'Card Number'
-                    InfoInput:
-                        id: GUcard
+                BoxLayout:
+                    orientation: 'horizontal'
+                    GridLayout:
+                        # pos_hint: {'center_y': 1, 'center_x': 0.5}
+                        # spacing: [50,50]
+                        padding:[0,50, 0, 0]
+                        rows: 7
+                        cols: 2
+                        
+                        BoldLabel:
+                            # text_size: self.size
+                            # halgin: 'left'
+                            text: 'username'
+                            # size_hint_x: .3
+                        InfoInput:
+                            size_hint_x: 0.7
+                            id: GUusername
+                            on_text_validate: root.checkUsername(GUusername.text)
+                        BoldLabel:
+                            text: 'name'
+                        InfoInput:
+                            id: GUname
+                        BoldLabel:
+                            text: 'Phone number'
+                        InfoInput:
+                            id: GUphone
+                        BoldLabel:
+                            text: 'Email'
+                        InfoInput:
+                            id: GUemail
+                        BoldLabel:
+                            text: 'Address'
+                        InfoInput:
+                            id: GUaddress
+                        BoldLabel:
+                            text: 'State'
+                        InfoInput:
+                            id: GUState
+                        BoldLabel:
+                            text: 'Card Number'
+                        InfoInput:
+                            id: GUcard
+                    BoxLayout:
+                        size_hint_x: .5
                 BoxLayout:
                     # padding: [50, 0, 50, 200]
                     orientation: "horizontal"
-                    size_hint_x: 0.6
-                    pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                    size_hint_x: 0.7
+                    # pos_hint: {'center_y': 1, 'center_x': 0}
+                    Label:
+                        size_hint_x: .2
                     LoginButton:
                         text: "Sign Up"
                         on_press:root.checkSignUp(firstName.text, lastName.text, email.text, username.text)
-
-                    LoginButton:
-                        background_color: [2.17, 2.17, 2.17, 0.7]
-                        text: "Cancel"
-                        on_press:root.tohome()
+                        pos_hint: {'center_y': .7, 'center_x': 0}
+                        background_color: [2.37, 1.13, .68, 0.7]
+                        size_hint_y: .15
                     LoginButton:
                         text: "Clear"
+                        pos_hint: {'center_y': .7, 'center_x': 0}
+                        size_hint_y: .15
                         on_press: firstName.text =""
                         on_press: lastName.text =""
                         on_press: email.text =""
                         on_press: username.text =""
+                        background_color: [2.44, 2.14, 1.24, .8]
+                    LoginButton:
+                        background_color: [2.17, 2.17, 2.17, 0.7]
+                        text: "Cancel"
+                        on_press:root.tohome()
+                        pos_hint: {'center_y': .7, 'center_x': 0}
+                        size_hint_y: .15
+                    
 
 
         OUprofile:
