@@ -4,15 +4,15 @@ INSERT INTO User(username, password,userType)
 VALUES ('admin','password',TRUE),('selina81','1031',FALSE),('hebe83','0330',FALSE),
       ('ella84','0618',FALSE),('lu7','0420',FALSE);
 
-INSERT INTO OU(ouID, name, cardNumber,address,state,phone) VALUES
-(2,'Selina Ren','1234567890123456','Taibei 101', 'NY', 9171201031),
-(3,'Hebe Tian','0987654321098765','Xinzhu 102','NJ',9174050330),
-(4,'Ella Chen','1357924680123456','PingDong 103', 'CA', 9177700618),
-(5, 'Han Lu', '1234560987610293', 'BeiJing 104','WI', 9177770420);
+INSERT INTO OU(ouID, name, cardNumber,email,address,state,phone) VALUES
+(2,'Selina Ren','1234567890123456','sren@gmail.com','Taibei 101', 'NY', 9171201031),
+(3,'Hebe Tian','0987654321098765','htian@gmail.com','Xinzhu 102','NJ',9174050330),
+(4,'Ella Chen','1357924680123456','schen@aol.com','PingDong 103', 'CA', 9177700618),
+(5, 'Han Lu', '1234560987610293', 'hlu777@yahoo.com','BeiJing 104','WI', 9177770420);
 
 INSERT INTO OUstatus(ouID, moneySpend, status) VALUES
-(2,10.31, TRUE),(3,0,FALSE),(4,0,FALSE),(5, 777, TRUE);
-# INSERT INTO ItemInfo(itemID, image, title, priceType, saleStatus)
+(2,10.31, 1),(3,0,0),(4,0,0),(5, 777, 1);
+-- INSERT INTO ItemInfo(itemID, image, title, priceType, saleStatus)
 
 INSERT INTO FriendList(ownerID, friendID, discount) VALUES
 (2,3,0.05),(3,2,0.10),(4,2,0.03);
