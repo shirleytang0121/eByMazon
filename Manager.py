@@ -1,8 +1,21 @@
+import mysql.connector
+from mysql.connector import errorcode, OperationalError
+
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
+
+from GeneralFunctions import General
+from GU import GU
+from SU import SU
+from OU import OU
+from Item import Item
+
+
+
+
 
 class Home(Screen):
 
@@ -35,8 +48,20 @@ class History(Screen):
 class EditProfile(Screen):
     pass
 
-class Manager(Screen):
+def convert_data(data):
+    l = []
+    for item in data:
+        for key, value in item.items():
+            l.append({'text': key, 'value': value})
+    return l
 
+class Manager(Screen):
+    def abc(self):
+        #fetching from database
+        arr = ({'Item1': 5000},{'Item2': 1000},{'Item 3':500})
+
+        # convert to [{'text': 'Item1', 'value': 5000}, {'text': 'Item2', 'value': 1000}]
+        self.ids['rv'].data = convert_data(arr)
     def tohome(self):
         self.ids['screenmanager'].current = "homepage"
     def tologin(self):
@@ -65,23 +90,36 @@ class Manager(Screen):
 
     def checkLogin(self,username,password):
         print("Username: %s \nPassword: %s" % (username,password))
-        self.ids['screenmanager'].current = "homepage"
+        userInfo = general.login_check(username,password)
+        if userInfo:
+            self.login = True
+            self.ids['screenmanager'].current = "homepage"
+        else:
+            self.login = False
 
 
-    def checkSignUp(self,firstName, lastName, email,username):
-        self.ids['screenmanager'].current = "homepage"
+    def signUp(self,username, name, phone, email,address,state,card):
+        applied = guest.apply(username, name, email,card,address,state,phone)
+        if applied:
+            self.ids['userRepeat'].text = ""
+            self.ids['screenmanager'].current = "homepage"
+        else:
+            self.ids['userRepeat'].text = "Fail to Apply"
+
 
 
     def checkUsername(self, username):
-        # self.ids['userRepeat'].text = "Username already "
-        self.ids['userRepeat'].text = "Username already Existed"
-        print("SU username : %s"% username)
+        nameCheck = guest.checkUsername(username)
+        if not nameCheck:
+            self.ids['userRepeat'].text = "Username already Existed"
+        else:
+            self.ids['userRepeat'].text = "Username can be used "
 
-        pass
 
 
 
     def searchKeyword(self, word):
+        self.abc()
         print(word)
 
 
@@ -103,4 +141,25 @@ class ShowcaseApp(App):
         return root
 
 if __name__ == "__main__":
+    config = {
+        "user": '',                 # Enter your own username
+        "password": '',             # Enter your own password
+        "host": '127.0.0.1',
+        "database": 'eByMazon'
+    }
+
+    try:
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor(buffered=True)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with your user name or password")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist")
+        else:
+            print(err)
+        raise err
+
+    general = General(cursor=cursor)
+    guest = GU(cursor=cursor)
     ShowcaseApp().run()

@@ -24,7 +24,27 @@
 #    height: self.minimum_height
 #    width: 500
 
+<Item@BoxLayout>:
+    orientation: "horizontal"
 
+#    Image:
+##            size_hint_x: .35
+#        texture: ""
+#        halign: 'left'
+#        valign: 'middle'
+    BoldLabel:
+#            size_hint_x: .35
+        text: "Item Image"
+        halign: 'left'
+        valign: 'middle'
+    BoxLayout:
+        orientation: "vertical"
+        BoldLabel:
+            text: "Item Title"
+        BoldLabel:
+            text: "Item Description"
+        BoldLabel:
+            text: "Item Rating"
 
 <Manager>:
     login: False
@@ -65,6 +85,7 @@
                             Button:
                                 size_hint_x: 0.05
                                 background_color: 255, 255, 255, 1
+                                on_press: root.searchKeyword(search_id.text)
                                 Image:
                                     source: "search.png"
                                     y: self.parent.y
@@ -107,24 +128,25 @@
                             Label:
                                 text: 
                 BoxLayout:
-                    size_hint_y: 0.7
-                    orientation: "horizontal"
-                    height: 30
-                    BoldLabel:
-                        text: " "
-                        size_hint_x: .80
+                    RecycleView:
+                        id: rv
+                        viewclass: 'Item'
+                        RecycleBoxLayout:
+                            default_size: None, dp(100)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
         Login:
             id: login
             name: 'loginpage'
             title: "Login Page"
             BoxLayout:
                 orientation: "vertical"
-                # padding: [200,100,200,100]
-                # pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                pos_hint: {'center_y': 0.3, 'center_x': 0.7}
                 BoxLayout:
                     size_hint: (0.5,0.4)
                     orientation: "horizontal"
-
                     BoldLabel:
                         text: "User Name"
                     InfoInput:
@@ -179,27 +201,21 @@
             name: "signupPage"
             title: "Sign Up"
             BoxLayout:
+                pos_hint: {'center_y': 0.5, 'center_x': 0.6}
                 orientation: "vertical"
-                # padding:[200,100, 200, 100]
-                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
-                # BoldLabel:
-                #     id: userRepeat
-                #     text: ""
-                #     # opacity: 1 if self.parent.parent.show else 0
+                BoldLabel:
+                    id: userRepeat
+                    text: ""
+                    color:
                 BoxLayout:
                     orientation: 'horizontal'
                     GridLayout:
-                        # pos_hint: {'center_y': 1, 'center_x': 0.5}
-                        # spacing: [50,50]
-                        padding:[0,50, 0, 0]
+#                        padding:[0,50, 0, 50]
                         rows: 7
                         cols: 2
                         
                         BoldLabel:
-                            # text_size: self.size
-                            # halgin: 'left'
                             text: 'username'
-                            # size_hint_x: .3
                         InfoInput:
                             size_hint_x: 0.7
                             id: GUusername
@@ -231,7 +247,6 @@
                     BoxLayout:
                         size_hint_x: .5
                 BoxLayout:
-                    # padding: [50, 0, 50, 200]
                     orientation: "horizontal"
                     size_hint_x: 0.7
                     # pos_hint: {'center_y': 1, 'center_x': 0}
@@ -239,7 +254,7 @@
                         size_hint_x: .2
                     LoginButton:
                         text: "Sign Up"
-                        on_press:root.checkSignUp(firstName.text, lastName.text, email.text, username.text)
+                        on_press:root.signUp(GUusername.text, GUname.text, GUphone.text,GUemail.text, GUaddress.text,GUState.text,GUcard.text)
                         pos_hint: {'center_y': .7, 'center_x': 0}
                         background_color: [2.37, 1.13, .68, 0.7]
                         size_hint_y: .15

@@ -22,7 +22,6 @@ CREATE TABLE GUapplications(
   email VARCHAR(64),
   name VARCHAR(32) NOT NULL,
   cardNumber VARCHAR(32) NOT NULL,
-  email VARCHAR (64),
   address VARCHAR(64),
   state VARCHAR(32),    -- calculate tax during check out
   phone VARCHAR(32)
@@ -56,7 +55,7 @@ CREATE TABLE Appeal(
   ouID INTEGER PRIMARY KEY,
   message VARCHAR(256),
   FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE
-)
+);
 CREATE TABLE FriendList(
   ownerID INTEGER,
   friendID INTEGER,
