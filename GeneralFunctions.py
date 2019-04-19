@@ -1,3 +1,4 @@
+import mysql.connector
 class General():
     def __init__(self,cursor):
         self.cursor = cursor
