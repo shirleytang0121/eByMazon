@@ -269,22 +269,22 @@
                 orientation: "vertical"
                 BoxLayout:
                     orientation: "horizontal"
-                    size_hint_y:0.10
-                    height: 15
-                    spacing: 10
-                    Label:
+                    size_hint_y:0.1
+                    # height: 15
+                    # spacing: 10
+                    BoldLabel:
                         size_hint_x:0.9
                         text: "My Account"
                         color: 0,0,0,1
                     Button:
                         size_hint_x:0.1
-                        text:"go back"
+                        text:"Go BACK"
                         on_press: root.tohome()
                 BoxLayout:
                     orientation: "horizontal"
                     height: 15
-                    spacing: 10
-                    size_hint_y:0.90
+                    # spacing: 10
+                    size_hint_y:1
 
                     BoxLayout:
                         orientation:"vertical"
@@ -320,11 +320,12 @@
                             size_hint_y: 0.1
                             text: "Edit"
                             on_press: root.editInfo()
+                            background_color: [2.37, 1.13, .68, 0.7]
                         Label:
                             size_hint_y: 0.2
                     BoxLayout:
                         orientation: "vertical"
-                        size_hint_x:0.3
+                        size_hint_x:0.1
 
                     BoxLayout:
                         orientation: "vertical"
@@ -335,18 +336,22 @@
                             size_hint_y: 0.1
                             text: "Friend List"
                             on_press: root.friendLst()
+                            background_color: [2.37, 1.13, .68, 0.7]
                         Button:
                             size_hint_y: 0.1
                             text: "History"
                             on_press: root.history()
+                            background_color: [2.37, 1.13, .68, 0.7]
                         Button:
                             size_hint_y: 0.1
                             spacing: 10
                             text: "My item"
+                            background_color: [2.37, 1.13, .68, 0.7]
                         Button:
                             size_hint_y: 0.1
                             spacing: 10
                             text: "Warning"
+                            background_color: [2.37, 1.13, .68, 0.7]
                         Label:
                             size_hint_y:0.1
 
