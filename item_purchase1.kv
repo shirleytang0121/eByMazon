@@ -97,7 +97,7 @@ Purchase:
                 orientation: 'horizontal'
                 Button:
                     size: self.size
-                    text: "I want to buy"
+                    text: "I WANT TO BUY"
                     size_hint_x: .8
                     background_color: [.66, 1.82, 2.44, 0.7]
                     border: (1, .1, 1, 1)
@@ -110,13 +110,14 @@ Purchase:
                 orientation: "horizontal"
                 height: 30
                 Button:
-                    text: "I want to bid"
+                    text: "I WANT TO BID"
                     size_hint_x: .80
                     background_color: [.19, .84, 1.19, 0.7]
                     border: (1, .1, 1, 1)
                     
                 TextInput: 
                     id: bid_price
+                    text_size: self.size
                     on_hint_text: "Enter Price"
                     multiline: False
                     # size: self.size
@@ -135,7 +136,7 @@ Purchase:
                 size_hint_y: .2
 
             GridLayout:
-                size_hint_y: .7
+                size_hint_y: 
                 cols: 2
                 orientation: 'vertical'
                 row_force_default: True 
@@ -174,8 +175,12 @@ Purchase:
                     font_size: 32
                     size_hint: 1.8, .1
             Button:
-                text: 'I want to rate'
-                size_hint_y: .3       
+                text: 'I WANT TO RATE'
+                size_hint_y: .3  
+                background_color: [2.06, .18, .24, .7]  
+            Button:
+                text: 'GO BACK'
+                size_hint_y: .3
 
 
 <DescriptionList>:
