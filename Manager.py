@@ -1,67 +1,106 @@
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+from kivy.properties import ObjectProperty
 from kivy.lang import Builder
-# from kivy.properties import ObjectProperty,StringProperty
 from kivy.core.window import Window
 
-userID = -1
-itemID = -1
+class Home(Screen):
 
-class LoginScreen(Screen):
-    def checkLogin(self,username,password):
-        print("Username: %s \nPassword: %s" % (username,password))
-        global userID
-        userID = 0
+    ttext = 'Screen 2'
+    #other code
 
-
-class NewUser(Screen):
+class Login(Screen):
+    def setText(self):
+        self.ids['button1'].text="Now"
+        self.ids['screenmanager'].current ="testy_screen"
     pass
 
-class HomePage(Screen):
+class Signup(Screen):
+    # def checkUsername(self, username):
+    #     # self.ids['userRepeat'].text = "Username already "
+    #     self.ids['show'] = True
+    #     print("SU username : %s"% username)
+    #
+    #     pass
+    pass
 
-    def searchKeyword(self, word):
-        print(word)
-        print(userID)
-
-    def sort_feature(self,feature):
-        print(feature)
-
-
-class OSprofile(Screen):
-
-    def friendlist(self):
-        print()
-    
-    def history(self):
-        print()
-    
+class OUprofile(Screen):
+    pass
 
 class FriendList(Screen):
     pass
 
 class History(Screen):
     pass
-
 class EditProfile(Screen):
     pass
 
-    
+class Manager(Screen):
+
+    def tohome(self):
+        self.ids['screenmanager'].current = "homepage"
+    def tologin(self):
+        self.ids['screenmanager'].current = "loginpage"
+    def signup(self):
+        self.ids['screenmanager'].current = "signupPage"
+    def toProfile(self):
+        self.ids['screenmanager'].current = "profilePage"
 
 
-class ScreenManagement(ScreenManager):
-    # userID = StringProperty("-1")
-    # itemID = StringProperty("-1")
+    def editInfo(self):
+        self.ids['screenmanager'].current = "editPage"
+    def friendLst(self):
+        self.ids['screenmanager'].current = "friendPage"
+    def history(self):
+        self.ids['screenmanager'].current = "historyPage"
+    def setText(self):
+        print("In")
+        self.ids['button1'].text="Now"
+        self.ids['screenmanager'].current ="testy_screen"
     pass
 
+    # def checkUsername(self, username):
+    #     print("username : %s"% username)
+    #     pass
+
+    def checkLogin(self,username,password):
+        print("Username: %s \nPassword: %s" % (username,password))
+        self.ids['screenmanager'].current = "homepage"
+
+
+    def checkSignUp(self,firstName, lastName, email,username):
+        self.ids['screenmanager'].current = "homepage"
+
+
+    def checkUsername(self, username):
+        # self.ids['userRepeat'].text = "Username already "
+        self.ids['userRepeat'].text = "Username already Existed"
+        print("SU username : %s"% username)
+
+        pass
 
 
 
+    def searchKeyword(self, word):
+        print(word)
 
-class MainApp(App):
+
+    def sort_feature(self,feature):
+        print(feature)
+
+    def friendlist(self):
+        print('friendlist')
+
+    # def history(self):
+    #     print('history')
+
+class ShowcaseApp(App):
+
     def build(self):
         Window.clearcolor = (1, 1, 1, 1)
-        return Builder.load_file("manage.kv")
-
+        Builder.load_file("main.kv")
+        root = Manager()
+        return root
 
 if __name__ == "__main__":
-    MainApp().run()
+    ShowcaseApp().run()

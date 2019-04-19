@@ -12,15 +12,17 @@ CREATE TABLE User(
   ID INTEGER PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(64) UNIQUE NOT NULL,
   password VARCHAR(64) NOT NULL,
-  userType BOOLEAN
+  userType BOOLEAN    -- True for SU, False for OU
 );
 
 
 CREATE TABLE GUapplications(
   applicationID INTEGER PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(64) UNIQUE NOT NULL,
+  email VARCHAR(64),
   name VARCHAR(32) NOT NULL,
   cardNumber VARCHAR(32) NOT NULL,
+  email VARCHAR (64),
   address VARCHAR(64),
   state VARCHAR(32),    -- calculate tax during check out
   phone VARCHAR(32)
@@ -30,6 +32,7 @@ CREATE TABLE OU(
   ouID INTEGER PRIMARY KEY,
   name VARCHAR(32) NOT NULL,
   cardNumber VARCHAR(32) NOT NULL,
+  email VARCHAR (64),
   address VARCHAR(64),
   state VARCHAR(32),    -- calculate tax during check out
   phone VARCHAR(32),

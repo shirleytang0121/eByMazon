@@ -1,366 +1,393 @@
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
 
 #Global Variable
-<CustLabel@Label>:
+<BoldLabel@Label>:
     color: 0, 0, 0, 1
     font_size: 36
     bold: True
+<BlueButton@Button>:
+    background_color: 0, 100, 255, 0.5
+    color: 0, 0, 0, 1
 
+<LoginButton@Button>:
+    color: [0, 0, 0, 1]
+    font_size: 33
+    size_hint_y: 0.4
 
-ScreenManagement:
-    transition: FadeTransition()
-    HomePage:
-    LoginScreen:
-    NewUser:
-    OSprofile:
-    FriendList:
-    History:
-    EditProfile:
-<HomePage>:
-    name: "homepage"
-    orientation: "vertical"
-    padding: 10
-    spacing: 20
-
-    BoxLayout:
-        orientation: "vertical"
-        canvas.before:
-            Color:
-                rgb: (255, 255, 255)
-            Rectangle:
-                pos: self.pos
-                size: self.size
-
-        BoxLayout:
-            size_hint_y: 0.2
-            orientation: "horizontal"
-            height: 30
-            CustLabel:
-                id: header
-                text: "Welcome to EbayMazon"
-                size_hint_x: 1
-
-        # ------------- First Line ------------#
-
-        BoxLayout:
-            size_hint_y: 0.05
-            orientation: "horizontal"
-            height: 30
-            spacing: 10
-#            canvas.before:
-#                Color:
-#                    rgb: (0,0,0)
-#                Rectangle:
-#                    pos: self.pos
-#                    size: self.size
-            Image:
-                size_hint_x: 0.2
-                source: "logo.png"
-                size: self.parent.size
-                allow_stretch: True
-
-            TextInput:
-                id: search_id
-                size_hint_x: 0.3
-                multiline: False
-                on_hint_text: "Search Keyword"
-                on_text_validate: root.searchKeyword(search_id.text)
-
-            Button:
-                size_hint_x: 0.05
-                background_color: 255, 255, 255, 1
-                Image:
-                    source: "search.png"
-                    y: self.parent.y
-                    x: self.parent.x
-                    size: self.parent.size
-                    allow_stretch: True
-            Spinner:
-                id: sort_id
-                size_hint_x: 0.15
-                background_color: 0, 100, 255, 0.5
-                text: "Price: Low to High"
-                color: 0, 0, 0, 1
-                values: ["Price: Low to High", "Price: High to Low","User Rating"]
-                on_text: root.sort_feature(sort_id.text)
-
-            Button:
-                size_hint_x: 0.1
-                background_color: 0, 100, 255, 0.5
-                text: "Login"
-                color: 0, 0, 0, 1
-                on_press:
-                    root.manager.current = "login"
-
-            Button:
-                size_hint_x: 0.1
-                background_color: 0, 100, 255, 0.5
-                text: "New User"
-                color: 0, 0, 0, 1
-                on_press:
-                    root.manager.current = "newUser"
-
-            Button:
-                size_hint_x: 0.1
-                background_color: 0, 100, 255, 0.5
-                text: "My Account"
-                color: 0, 0, 0, 1
-                on_press:
-                    root.manager.current = "osProfile"
-
-
-        BoxLayout:
-            size_hint_y: 0.7
-            orientation: "horizontal"
-            height: 30
-            CustLabel:
-                text: "Welcome to EbayMazon 2"
-                size_hint_x: .80
-
-<LoginScreen>:
-    name: "login"
-    title: 'Login'
-    size: (200,200)
-
-    FloatLayout:
-        canvas:
-            Color:
-                rgb: 1, 1, 3
-            Rectangle:
-                size: self.size
-                pos: self.pos
-        GridLayout:
-            rows: 3
-            cols: 2
-            padding: 10
-            spacing: 10
-
-            CustLabel:
-                text: 'User Name'
-
-            TextInput:
-                id: username
-                multiline: False
-            CustLabel:
-                text: 'Password'
-            TextInput:
-                id: password
-                multiline: False
-
-            Button:
-                text: 'Login'
-                on_press:
-                    root.checkLogin(username.text,password.text)
-                    root.manager.current = "homepage"
-            Button:
-                text: 'Clear Entry'
-                on_press: username.text =""
-                on_press: password.text =""
+<InfoInput@TextInput>:
+    font_size:36
+    size_hint_x: 0.8
+    multiline: False
+#    pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+#    padding:[0,0,0,300]
+#    size_hint: (None, 0.5)
+#    height: self.minimum_height
+#    width: 500
 
 
 
-<NewUser>:
-    name: "newUser"
-    title: "The New User"
-    BoxLayout:
-        size_hint_y: 0.7
-        orientation: "horizontal"
-        height: 30
-        Button:
-            text: "Close"
-            on_press: root.manager.current = "homepage"
-
-<OSprofile>:
-    name: "osProfile"
-    title: "The OS Profile"
-    BoxLayout:
-        orientation: "vertical"
-        BoxLayout:
-            orientation: "horizontal"
-            size_hint_y:0.10
-            height: 15
-            spacing: 10
-            Label:
-                size_hint_x:0.9
-                text: "My Account"
-                color: 0,0,0,1
-            Button:
-                size_hint_x:0.1
-                text:"go back"
-                on_press: root.manager.current = "homepage"
-        BoxLayout:
-            orientation: "horizontal"
-            height: 15
-            spacing: 10
-            size_hint_y:0.90
-
+<Manager>:
+    login: False
+    userID: None
+    userType: -1
+    ScreenManager:
+        id: screenmanager
+        Home:
+            id: home
+            name: 'homepage'
+            title: "Home Page"
             BoxLayout:
-                orientation:"vertical"
-                size_hint_x:0.4
-                padding: 50
+                orientation: "vertical"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: 0.3
+                    Image:
+                        size_hint_x: 0.2
+                        source: "logo3.png"
+                        size: self.parent.size
+                        allow_stretch: True
+                    BoxLayout:
+                        orientation: "vertical"
+                        BoldLabel:
+                            id: header
+                            text: "Welcome to EbayMazon"
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            orientation: "horizontal"
+                            TextInput:
+                                id: search_id
+                                size_hint_x: 0.3
+                                multiline: False
+                                on_hint_text: "Search Keyword"
+                                on_text_validate: root.searchKeyword(search_id.text)
+
+                            Button:
+                                size_hint_x: 0.05
+                                background_color: 255, 255, 255, 1
+                                Image:
+                                    source: "search.png"
+                                    y: self.parent.y
+                                    x: self.parent.x
+                                    size: self.parent.size
+                                    allow_stretch: True
+                            Spinner:
+                                id: sort_id
+                                size_hint_x: 0.15
+                                background_color: 0, 100, 255, 0.5
+                                text: "Price: Low to High"
+                                color: 0, 0, 0, 1
+                                values: ["Price: Low to High", "Price: High to Low","User Rating"]
+                                on_text: root.sort_feature(sort_id.text)
+
+                            Button:
+                                id: loginB
+                                size_hint_x: 0.1
+                                background_color: 0, 100, 255, 0.5
+                                text: "Login"
+                                color: 0, 0, 0, 1
+                                on_press: root.tologin()
+
+                            Button:
+                                size_hint_x: 0.1
+                                background_color: 0, 100, 255, 0.5
+                                text: "New User"
+                                color: 0, 0, 0, 1
+                                on_press: root.signup()
+
+                            Button:
+                                size_hint_x: 0.1
+                                background_color: 0, 100, 255, 0.5
+                                text: "My Account"
+                                color: 0, 0, 0, 1
+                                on_press: root.toProfile()
+                BoxLayout:
+                    size_hint_y: 0.7
+                    orientation: "horizontal"
+                    height: 30
+                    BoldLabel:
+                        text: " "
+                        size_hint_x: .80
+        Login:
+            id: login
+            name: 'loginpage'
+            title: "Login Page"
+            BoxLayout:
+                orientation: "vertical"
+                padding: [400,100,400,100]
+                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                BoxLayout:
+                    size_hint: (0.5,0.4)
+                    orientation: "vertical"
+
+                    BoldLabel:
+                        text: "User Name"
+                    InfoInput:
+                        id: username
+
+                    BoldLabel:
+
+                        text: "Password"
+                    InfoInput:
+                        id: password
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    padding:(50,50)
+                    size_hint: (0.7,0.3)
+#                    pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                    LoginButton:
+                        background_color: [2.55, 2.04, 2.55, 0.7]
+                        text: "Login"
+                        on_press:
+                            root.checkLogin(username.text,password.text)
+                    LoginButton:
+                        background_color: [2.17, 2.17, 2.17, 0.7]
+                        text: "Cancel"
+                        on_press: root.tohome()
+
+                    LoginButton:
+                        background_color: [2.04, 2.30, 2.55, 1]
+                        text: "Clear"
+                        on_press: username.text =""
+                        on_press: password.text =""
                 Label:
                     size_hint_y: 0.3
-                Label:
-                    size_hint_y: 0.1
-                    text:"name:xxx"
-                    color: 0,0,0,1
-                Label:
-                    size_hint_y: 0.1
-                    text:"phone number:xxxxxxxx"
-                    color: 0,0,0,1
-                Label:
-                    size_hint_y: 0.1
-                    text:"address:xxxxxxx"
-                    color: 0,0,0,1
-                Label:
-                    size_hint_y: 0.1
-                    text:"State:xx"
-                    color: 0,0,0,1
-                Label:
-                    size_hint_y: 0.1
-                    text:"Status:xx"
-                    color: 0,0,0,1
-                Label:
-                    size_hint_y: 0.1
-                    text:"Rating:xx"
-                    color: 0,0,0,1
-                Button:
-                    size_hint_y: 0.1
-                    text: "Edit"
-                    on_press: root.manager.current = "editProfile"
-                Label:
-                    size_hint_y: 0.2
+
+        Signup:
+            id: signup
+            name: "signupPage"
+            title: "Sign Up"
+#            show: False
             BoxLayout:
                 orientation: "vertical"
-                size_hint_x:0.3
-            
+                padding:[200,100, 200, 100]
+                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                BoldLabel:
+                    id: userRepeat
+                    text: ""
+#                    opacity: 1 if self.parent.parent.show else 0
+
+                GridLayout:
+                    pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+#                    spacing: [50,50]
+                    rows: 7
+                    cols: 2
+                    BoldLabel:
+                        text: 'username'
+                    InfoInput:
+                        id: GUusername
+                        on_text_validate: root.checkUsername(GUusername.text)
+                    BoldLabel:
+                        text: 'name'
+                    InfoInput:
+                        id: GUname
+                    BoldLabel:
+                        text: 'Phone number'
+                    InfoInput:
+                        id: GUphone
+                    BoldLabel:
+                        text: 'Email'
+                    InfoInput:
+                        id: GUemail
+                    BoldLabel:
+                        text: 'Address'
+                    InfoInput:
+                        id: GUaddress
+                    BoldLabel:
+                        text: 'State'
+                    InfoInput:
+                        id: GUState
+                    BoldLabel:
+                        text: 'Card Number'
+                    InfoInput:
+                        id: GUcard
+                BoxLayout:
+#                    padding: [50, 0, 50, 200]
+                    orientation: "horizontal"
+                    size_hint_x: 0.6
+                    pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                    LoginButton:
+                        text: "Sign Up"
+                        on_press:root.checkSignUp(firstName.text, lastName.text, email.text, username.text)
+
+                    LoginButton:
+                        background_color: [2.17, 2.17, 2.17, 0.7]
+                        text: "Cancel"
+                        on_press:root.tohome()
+                    LoginButton:
+                        text: "Clear"
+                        on_press: firstName.text =""
+                        on_press: lastName.text =""
+                        on_press: email.text =""
+                        on_press: username.text =""
+
+
+        OUprofile:
+            id: ouInfo
+            name: "profilePage"
+            title: "The OS Profile"
             BoxLayout:
                 orientation: "vertical"
-                size_hint_x:0.3
-                Label:
-                    size_hint_y:0.1
-                Button:
-                    size_hint_y: 0.1
-                    text: "Friend List"
-                    on_press: root.manager.current = "friendlist"
-                Button:
-                    size_hint_y: 0.1
-                    text: "History"
-                    on_press: root.manager.current = "history" 
-                Button:
-                    size_hint_y: 0.1
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y:0.10
+                    height: 15
                     spacing: 10
-                    text: "My item"
-                Button:
-                    size_hint_y: 0.1
+                    Label:
+                        size_hint_x:0.9
+                        text: "My Account"
+                        color: 0,0,0,1
+                    Button:
+                        size_hint_x:0.1
+                        text:"go back"
+                        on_press: root.tohome()
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: 15
                     spacing: 10
-                    text: "Warning"
+                    size_hint_y:0.90
+
+                    BoxLayout:
+                        orientation:"vertical"
+                        size_hint_x:0.4
+                        padding: 50
+                        Label:
+                            size_hint_y: 0.3
+                        Label:
+                            size_hint_y: 0.1
+                            text:"name:xxx"
+                            color: 0,0,0,1
+                        Label:
+                            size_hint_y: 0.1
+                            text:"phone number:xxxxxxxx"
+                            color: 0,0,0,1
+                        Label:
+                            size_hint_y: 0.1
+                            text:"address:xxxxxxx"
+                            color: 0,0,0,1
+                        Label:
+                            size_hint_y: 0.1
+                            text:"State:xx"
+                            color: 0,0,0,1
+                        Label:
+                            size_hint_y: 0.1
+                            text:"Status:xx"
+                            color: 0,0,0,1
+                        Label:
+                            size_hint_y: 0.1
+                            text:"Rating:xx"
+                            color: 0,0,0,1
+                        Button:
+                            size_hint_y: 0.1
+                            text: "Edit"
+                            on_press: root.editInfo()
+                        Label:
+                            size_hint_y: 0.2
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_x:0.3
+
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_x:0.3
+                        Label:
+                            size_hint_y:0.1
+                        Button:
+                            size_hint_y: 0.1
+                            text: "Friend List"
+                            on_press: root.friendLst()
+                        Button:
+                            size_hint_y: 0.1
+                            text: "History"
+                            on_press: root.history()
+                        Button:
+                            size_hint_y: 0.1
+                            spacing: 10
+                            text: "My item"
+                        Button:
+                            size_hint_y: 0.1
+                            spacing: 10
+                            text: "Warning"
+                        Label:
+                            size_hint_y:0.1
+
+        FriendList:
+            id: friend
+            name: "friendPage"
+            title: "the friend list"
+            BoxLayout:
+                size_hint_y:1.92
+                orientation: "horizontal"
+                height: 15
+                spacing: 10
                 Label:
-                    size_hint_y:0.1
+                    text: "My friends"
+                    color: 0,0,0,1
+            BoxLayout:
+                size_hint_y: 0.05
+                orientation: "horizontal"
+                height: 30
+                spacing: 10
+                Button:
+                    text: "Go back"
+                    on_press: root.toProfile()
+        History:
+            id: history
+            name: "historyPage"
+            title: "the history"
+            BoxLayout:
+                size_hint_y:1.92
+                orientation: "horizontal"
+                height: 15
+                spacing: 10
+                Label:
+                    text: "My Transition History"
+                    color: 0,0,0,1
+            BoxLayout:
+                size_hint_y: 0.05
+                orientation: "horizontal"
+                height: 30
+                spacing: 10
+                Button:
+                    text: "Go back"
+                    on_press: root.toProfile()
 
+        EditProfile:
+            id: editProfile
+            name: "editPage"
+            title: "to edit profile"
+            GridLayout:
+                rows: 7
+                cols: 2
 
-
-
-<FriendList>:
-    name: "friendlist"
-    title: "the friend list"
-    BoxLayout:
-        size_hint_y:1.92
-        orientation: "horizontal"
-        height: 15
-        spacing: 10
-        Label:
-            text: "My friends"
-            color: 0,0,0,1
-    BoxLayout:
-        size_hint_y: 0.05
-        orientation: "horizontal"
-        height: 30
-        spacing: 10
-        Button:
-            text: "Go back"
-            on_press: root.manager.current = "osProfile"
-
-<History>:
-    name: "history"
-    title: "the history"
-    BoxLayout:
-        size_hint_y:1.92
-        orientation: "horizontal"
-        height: 15
-        spacing: 10
-        Label:
-            text: "My Transition History"
-            color: 0,0,0,1
-    BoxLayout:
-        size_hint_y: 0.05
-        orientation: "horizontal"
-        height: 30
-        spacing: 10
-        Button:
-            text: "Go back"
-            on_press: root.manager.current = "osProfile"
-
-<EditProfile>:
-    name: "editProfile"
-    title: "to edit profile"
-    FloatLayout:
-        canvas:
-            Color:
-                rgb: 1, 1, 3
-            Rectangle:
-                size: self.size
-                pos: self.pos
-        GridLayout:
-            rows: 7
-            cols: 2
-            padding: 10
-            spacing: 10
-
-            CustLabel:
-                text: 'name'
-            TextInput:
-                id: name
-                multiline: False
-            CustLabel:
-                text: 'Phone number'
-            TextInput:
-                id: phone_number
-                multiline: False
-            CustLabel:
-                text: 'Email'
-            TextInput:
-                id: email
-                multiline: False
-            CustLabel:
-                text: 'Address'
-            TextInput:
-                id: address
-                multiline: False
-            CustLabel:
-                text: 'State'
-            TextInput:
-                id: state
-                multiline: False
-            CustLabel:
-                text: 'Card Number'
-            TextInput:
-                id: cardNum
-                multiline: False
-            Button:
-                text: "Go back"
-                on_press: root.manager.current = "osProfile"
-            Button:
-                text: "Save"
-                on_press: root.manager.current = "osProfile"
-
-    
-        
-
-
-
-
-        
-
-
-
+                BoldLabel:
+                    text: 'name'
+                InfoInput:
+                    id: name
+                BoldLabel:
+                    text: 'Phone number'
+                InfoInput:
+                    id: phone_number
+                BoldLabel:
+                    text: 'Email'
+                InfoInput:
+                    id: email
+                BoldLabel:
+                    text: 'Address'
+                InfoInput:
+                    id: address
+                BoldLabel:
+                    text: 'State'
+                InfoInput:
+                    id: State
+                BoldLabel:
+                    text: 'Card Number'
+                InfoInput:
+                    id: cardNum
+                Button:
+                    text: "Go back"
+                    on_press: root.toProfile()
+                Button:
+                    text: "Save"
+                    on_press: root.toProfile()
