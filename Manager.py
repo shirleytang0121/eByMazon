@@ -98,7 +98,7 @@ class ShowcaseApp(App):
 
     def build(self):
         Window.clearcolor = (1, 1, 1, 1)
-        Builder.load_file("main.kv")
+        Builder.load_file("manage.kv")
         root = Manager()
         return root
 
