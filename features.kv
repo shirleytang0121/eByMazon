@@ -1,0 +1,71 @@
+#Global Variable
+
+
+#Labels
+<BoldLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 48
+    bold: True
+
+<RegLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 33
+<SmallLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 25
+<WarningLabel@Label>
+    color: 1, 0, 1, 1
+    font_size: 48
+    bold: True
+    pos_hint: {'center_x': 0.2}
+#Buttons
+<SkyBlueButton@Button>:
+    color: 0, 0, 0, 1
+    background_color: 0, 100, 255, 0.5
+    font_size: 33
+
+<OrangeButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.37, 1.13, .68, 0.7]
+    font_size: 33
+
+<GrayButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.17, 2.17, 2.17, 0.7]
+    font_size: 33
+
+<YellowButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.44, 2.14, 1.24, .8]
+    font_size: 33
+
+<PinkButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.55, 2.04, 2.55, 0.7]
+    font_size: 33
+
+<BlueButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.04, 2.30, 2.55, 1]
+    font_size: 33
+
+# Inputs
+<InfoInput@TextInput>:
+    font_size:36
+    multiline: False
+    size_hint: (None, None)
+    height: 60
+    width: 500
+
+<ProfileInput@TextInput>:
+    font_size:33
+    size_hint_x: 0.8
+    multiline: False
+
+#Recycle views
+<RVL@RecycleBoxLayout>:
+    default_size: None, dp(200)
+    default_size_hint: 1, None
+    size_hint_y: None
+    height: self.minimum_height
+    orientation: 'vertical'

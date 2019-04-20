@@ -3,65 +3,39 @@ from mysql.connector import errorcode, OperationalError
 
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
-from kivy.properties import ObjectProperty
+from kivy.properties import StringProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
+
 
 from GeneralFunctions import General
 from GU import GU
 from SU import SU
 from OU import OU
 from Item import Item
+from otherClass import *
 
-
-
-
-
-class Home(Screen):
-
-    ttext = 'Screen 2'
-    #other code
-
-class Login(Screen):
-    def setText(self):
-        self.ids['button1'].text="Now"
-        self.ids['screenmanager'].current ="testy_screen"
-    pass
-
-class Signup(Screen):
-    # def checkUsername(self, username):
-    #     # self.ids['userRepeat'].text = "Username already "
-    #     self.ids['show'] = True
-    #     print("SU username : %s"% username)
-    #
-    #     pass
-    pass
-
-class OUprofile(Screen):
-    pass
-
-class FriendList(Screen):
-    pass
-
-class History(Screen):
-    pass
-class EditProfile(Screen):
-    pass
-
-def convert_data(data):
-    l = []
-    for item in data:
-        for key, value in item.items():
-            l.append({'text': key, 'value': value})
-    return l
 
 class Manager(Screen):
-    def abc(self):
-        #fetching from database
-        arr = ({'Item1': 5000},{'Item2': 1000},{'Item 3':500})
+    def __init__(self, **kwargs):
+        super(Manager, self).__init__(**kwargs)
+        self.displayItem()
 
-        # convert to [{'text': 'Item1', 'value': 5000}, {'text': 'Item2', 'value': 1000}]
-        self.ids['rv'].data = convert_data(arr)
+    def sortPop(self):
+        print("Sort by Popular")
+    def sortRating(self):
+        print("Sort by Rating")
+    def sortPricelh(self):
+        print("Sort by price low to high")
+    def sortPricehl(self):
+        print("Sort by price high to low")
+
+
+
+    def displayItem(self):
+        self.ids['rv'].data = general.popularItem()
+            # [{'value': "Button " + str(x), 'cool': str(x)} for x in range(3)]
+
     def tohome(self):
         self.ids['screenmanager'].current = "homepage"
     def tologin(self):
@@ -78,15 +52,8 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "friendPage"
     def history(self):
         self.ids['screenmanager'].current = "historyPage"
-    def setText(self):
-        print("In")
-        self.ids['button1'].text="Now"
-        self.ids['screenmanager'].current ="testy_screen"
-    pass
 
-    # def checkUsername(self, username):
-    #     print("username : %s"% username)
-    #     pass
+
 
     def checkLogin(self,username,password):
         print("Username: %s \nPassword: %s" % (username,password))
@@ -94,8 +61,10 @@ class Manager(Screen):
         if userInfo:
             self.login = True
             self.ids['screenmanager'].current = "homepage"
+            self.ids['loginCheck'].text = ""
         else:
             self.login = False
+            self.ids['loginCheck'].text ="Login Info Not Correct"
 
 
     def signUp(self,username, name, phone, email,address,state,card):
@@ -104,27 +73,24 @@ class Manager(Screen):
             self.ids['userRepeat'].text = ""
             self.ids['screenmanager'].current = "homepage"
         else:
-            self.ids['userRepeat'].text = "Fail to Apply"
+            self.ids['userRepeat'].text = "Fail to Apply!!!"
 
 
 
     def checkUsername(self, username):
         nameCheck = guest.checkUsername(username)
         if not nameCheck:
-            self.ids['userRepeat'].text = "Username already Existed"
+            self.ids['userRepeat'].text = "Username already Existed!!!"
         else:
             self.ids['userRepeat'].text = "Username can be used "
 
 
-
-
     def searchKeyword(self, word):
-        self.abc()
+        self.displayItem()
         print(word)
 
 
-    def sort_feature(self,feature):
-        print(feature)
+
 
     def friendlist(self):
         print('friendlist')
@@ -132,7 +98,7 @@ class Manager(Screen):
     # def history(self):
     #     print('history')
 
-class ShowcaseApp(App):
+class eByMazonApp(App):
 
     def build(self):
         Window.clearcolor = (1, 1, 1, 1)
@@ -162,4 +128,4 @@ if __name__ == "__main__":
 
     general = General(cursor=cursor)
     guest = GU(cursor=cursor)
-    ShowcaseApp().run()
+    eByMazonApp().run()

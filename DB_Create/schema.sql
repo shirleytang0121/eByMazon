@@ -38,10 +38,6 @@ CREATE TABLE OU(
   FOREIGN KEY (ouID) REFERENCES User(ID) ON DELETE CASCADE
 );
 
--- CREATE TABLE Status(
---   status BOOLEAN PRIMARY KEY ,
---   statusType VARCHAR(32)
--- );
 CREATE TABLE OUstatus(
   ouID INTEGER PRIMARY KEY,
   moneySpend FLOAT,
@@ -85,8 +81,8 @@ CREATE TABLE ItemInfo(
   image BLOB,               -- Only allow store file/image up to 64KB
   title VARCHAR(64),
   description VARCHAR(256),
-  priceType BOOLEAN,
-  usedStates BOOLEAN,
+  priceType BOOLEAN,        -- False for fixed price, true for bidding
+  usedStatus BOOLEAN,
   saleStatus BOOLEAN,
   approvalStatus BOOLEAN,   -- approval by SU
   postTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

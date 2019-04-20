@@ -14,14 +14,18 @@ def write_file(data, filename):
     # Convert binary data to proper format and write it on Hard Disk
     with open(filename, 'wb') as file:
         file.write(data)
+        # file.write(data.decode('base64'))
 
-def insertItemInfo(cursor, itemID, image, title,description, priceType,usedStates, saleStatus):
+def insertItemInfo(cursor, itemID, image, title,description, priceType,usedStatus, saleStatus,approvalStatus):
     try:
-        image1 = convertToBinaryData(image)
-        qry = ("INSERT INTO ItemInfo(itemID, image, title, description, priceType, usedStates, saleStatus) VALUE (%s,%s,%s,%s,%s,%s, %s)"
-               "ON DUPLICATE KEY UPDATE image=%s, title=%s, description = %s, priceType=%s, usedStates = %s, saleStatus=%s;")
-        result = cursor.execute(qry, (itemID,image1,title,description,priceType,usedStates, saleStatus,
-                                      image1,title,description,priceType,usedStates, saleStatus))
+        image = convertToBinaryData(image)
+        qry = ("INSERT INTO ItemInfo(itemID, image, title, description, priceType, usedStatus, saleStatus,approvalStatus) "
+               "VALUE (%s,%s,%s,%s,%s,%s, %s,%s)"
+               "ON DUPLICATE KEY UPDATE "
+               "image=%s, title=%s, description = %s, priceType=%s, usedStatus = %s, saleStatus=%s,approvalStatus =%s;")
+        result = cursor.execute(qry, (itemID,image,title,description,priceType,usedStatus, saleStatus,approvalStatus,
+                                      image
+                                      ,title,description,priceType,usedStatus, saleStatus,approvalStatus))
         cnx.commit()
     except mysql.connector.Error as err:
         print("Error in insert item info to database")
@@ -52,12 +56,14 @@ def executeScriptsFromFile(cnx, cursor,filename):
             cnx.commit()
         except OperationalError:
             print("Command skipped: ")
+
+
 if __name__  == "__main__":
     config = {
         "user": '',                 # Enter your own username
         "password": '',             # Enter your own password
         "host": '127.0.0.1',
-        "database": 'eByMazon'
+        # "database": 'eByMazon'
     }
 
     try:
@@ -94,27 +100,27 @@ if __name__  == "__main__":
 
     # Insert Item info
     # Maximum size currently an image can have is 64KB
-    # insertItemInfo(cursor, itemID, image, title,description, priceType,usedStates, saleStatus)
+    # insertItemInfo(cursor, itemID, image, title,description, priceType,usedStatus, saleStatus)
     print("Insert Item Info")
     insertItemInfo(cursor, itemID=1,image="images/item1.jpg",title="SHE Forever CD",
                    description="New Song + Collection, released on 21 July 2006 by HIM International Music",
-                   priceType=False, usedStates=False, saleStatus=True)
-    insertItemInfo(cursor,itemID=2, image="images/item2.jpg",title="SHE Shero DVD",description = None,
-                   priceType=False, usedStates=False, saleStatus=True)
+                   priceType=False, usedStatus=False, saleStatus=True,approvalStatus=True)
+    insertItemInfo(cursor,itemID=2, image="images/item2.jpg",title="SHE Shero DVD",description = "DVD for concert",
+                   priceType=False, usedStatus=False, saleStatus=True,approvalStatus=True)
     insertItemInfo(cursor,itemID=3,image="images/item3.jpg",title="Harry Potter Book Series",
-                   description="Author: J. K. Rowling. Include The Philosopher's Stone. (1997), The Chamber of Secrets. (1998),"
-                   "The Prisoner of Azkaban. (1999),The Goblet of Fire. (2000),The Order of the Phoenix. (2003),"
+                   description="Author: J. K. Rowling. Include The Philosopher's Stone. (1997), The Chamber of Secrets. (1998),\n"
+                   "The Prisoner of Azkaban. (1999),The Goblet of Fire. (2000),The Order of the Phoenix. (2003),\n"
                    "The Half-Blood Prince. (2005),The Deathly Hallows. (2007)",
-                   priceType=False, usedStates=False, saleStatus=True)
+                   priceType=False, usedStatus=False, saleStatus=True,approvalStatus=True)
     insertItemInfo(cursor,itemID=4,image="images/item4.jpg",title="The Hunger Games",
                    description="2008 dystopian novel by the American writer Suzanne Collins.",
-                   priceType=False, usedStates=False, saleStatus=True)
+                   priceType=False, usedStatus=False, saleStatus=True,approvalStatus=True)
     insertItemInfo(cursor,itemID=5,image="images/item5.jpg",title="Samsung 17-Inch Series 7 Chronos Laptop",
                    description="Used a year, still in good condition, Bright and vivid display; Good JBL speakers; Long battery life",
-                   priceType=True, usedStates=True, saleStatus=True)
+                   priceType=True, usedStatus=True, saleStatus=True,approvalStatus=True)
     insertItemInfo(cursor,itemID=6,image="images/item6.jpg",title="Macbook Air 13-Inch",description="Used 2 year, early 2015 version. "
                     "1.8GHz dual-core Intel Core i5 processor,\n Turbo Boost up to 2.9GHz,\n128GB SSD storage",
-                   priceType=True, usedStates=True, saleStatus=True)
+                   priceType=True, usedStatus=True, saleStatus=True,approvalStatus=True)
     cnx.commit()        #Need to make sure everything push to database
 
 # Test get image
