@@ -1,4 +1,4 @@
-#:kivy(1.0)
+
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
 
 #Global Variable
@@ -123,11 +123,11 @@
                                 text: "My Account"
                                 color: 0, 0, 0, 1
                                 on_press: root.toProfile()
-                        BoxLayout:
-                            orientation: 'vertical'
-                            size_hint_y: .2
-                            Label:
-                                text: 
+                        # BoxLayout:
+                        #     orientation: 'vertical'
+                        #     size_hint_y: .2
+                        #     Label:
+                        #         text: 
                 BoxLayout:
                     RecycleView:
                         id: rv
@@ -202,7 +202,7 @@
             name: "signupPage"
             title: "Sign Up"
             BoxLayout:
-                pos_hint: {'center_y': 0.5, 'center_x': 0.6}
+                pos_hint: {'center_y': 0.6, 'center_x': 0.6}
                 orientation: "vertical"
                 BoldLabel:
                     id: userRepeat
@@ -294,7 +294,7 @@
                         color: 0,0,0,1
                     Button:
                         size_hint_x:0.1
-                        text:"Go BACK"
+                        text:"GO BACK"
                         on_press: root.tohome()
                 BoxLayout:
                     orientation: "horizontal"
@@ -416,37 +416,40 @@
             id: editProfile
             name: "editPage"
             title: "to edit profile"
-            GridLayout:
-                rows: 7
-                cols: 2
+            BoxLayout:
+                size_hint: (.6, .6)
+                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                GridLayout:
+                    rows: 7
+                    cols: 2
 
-                BoldLabel:
-                    text: 'name'
-                InfoInput:
-                    id: name
-                BoldLabel:
-                    text: 'Phone number'
-                InfoInput:
-                    id: phone_number
-                BoldLabel:
-                    text: 'Email'
-                InfoInput:
-                    id: email
-                BoldLabel:
-                    text: 'Address'
-                InfoInput:
-                    id: address
-                BoldLabel:
-                    text: 'State'
-                InfoInput:
-                    id: State
-                BoldLabel:
-                    text: 'Card Number'
-                InfoInput:
-                    id: cardNum
-                Button:
-                    text: "Go back"
-                    on_press: root.toProfile()
-                Button:
-                    text: "Save"
-                    on_press: root.toProfile()
+                    BoldLabel:
+                        text: 'name'
+                    InfoInput:
+                        id: name
+                    BoldLabel:
+                        text: 'Phone number'
+                    InfoInput:
+                        id: phone_number
+                    BoldLabel:
+                        text: 'Email'
+                    InfoInput:
+                        id: email
+                    BoldLabel:
+                        text: 'Address'
+                    InfoInput:
+                        id: address
+                    BoldLabel:
+                        text: 'State'
+                    InfoInput:
+                        id: State
+                    BoldLabel:
+                        text: 'Card Number'
+                    InfoInput:
+                        id: cardNum
+                    Button:
+                        text: "Go back"
+                        on_press: root.toProfile()
+                    Button:
+                        text: "Save"
+                        on_press: root.toProfile()
