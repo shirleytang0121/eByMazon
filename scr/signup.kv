@@ -2,6 +2,7 @@
 <Signup>:
     stateV: True
     cardV: True
+    nameV: True
     BoxLayout:
         pos_hint: {'center_y': 0.5, 'center_x': 0.6}
         orientation: "vertical"
@@ -16,6 +17,10 @@
                 WarningLabel:
                     id: warnUsername
                     text:""
+                WarningLabel:
+                    id: warnCard
+                    text: "Name Can't be Empty!!"
+                    opacity: 0 if root.nameV else 1
                 WarningLabel:
                     id: warnState
                     text: "Please Enter Valid State!!"
@@ -39,6 +44,7 @@
                     text: 'name'
                 InfoInput:
                     id: GUname
+                    on_text_validate: root.checkName(self.text)
                 BoldLabel:
                     text: 'Phone number'
                 InfoInput:

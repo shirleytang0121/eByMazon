@@ -46,14 +46,14 @@ class GU():
             return True    # found in state tax
         return False
 
-    def checkCard(self,card):
+    def checkInput(self,input):
         """
         :param card:
         :return:
-            - True                  card is empty string
-            - False                 card is not empty string
+            - True                  input is empty string
+            - False                 input is not empty string
         """
-        if card is None or card == "":
+        if input is None or input == "":
             return True
         return False
 
@@ -77,6 +77,6 @@ class GU():
             self.cnx.commit()
             return True
         except mysql.connector.Error as ERR:
-            print(ERR)
+            print("Error in Applying OU Account: %s" % ERR)
             return False
 

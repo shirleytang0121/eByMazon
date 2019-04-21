@@ -22,7 +22,7 @@ CREATE TABLE GUapplications(
   email VARCHAR(64),
   name VARCHAR(32) NOT NULL,
   cardNumber VARCHAR(32) NOT NULL,
-  address VARCHAR(64),
+  address VARCHAR(64) NOT NULL,
   state VARCHAR(32),    -- calculate tax during check out
   phone VARCHAR(32)
 );
@@ -32,7 +32,7 @@ CREATE TABLE OU(
   name VARCHAR(32) NOT NULL,
   cardNumber VARCHAR(32) NOT NULL,
   email VARCHAR (64),
-  address VARCHAR(64),
+  address VARCHAR(64) NOT NULL,
   state VARCHAR(32),    -- calculate tax during check out
   phone VARCHAR(32),
   FOREIGN KEY (ouID) REFERENCES User(ID) ON DELETE CASCADE
@@ -83,8 +83,10 @@ CREATE TABLE ItemInfo(
   description VARCHAR(256),
   priceType BOOLEAN,        -- False for fixed price, true for bidding
   usedStatus BOOLEAN,
-  saleStatus BOOLEAN,
-  approvalStatus BOOLEAN,   -- approval by SU
+  saleStatus BOOLEAN DEFAULT FALSE,
+  approvalStatus BOOLEAN DEFAULT FALSE,   -- approval by SU
+  likeness INTEGER DEFAULT 0,
+  dislike INTEGER DEFAULT 0,
   postTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
 );

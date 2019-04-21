@@ -39,9 +39,14 @@ class General():
         """
         Remove OU from DB, and add his/her username to blacklist
         """
-        self.cursor.execute("DELETE FROM User where ID = %s;"% ouID)
-        self.cursor.execute("INSERT INTO ouBlacklist VALUE ('%s');"%username)
-        self.cnx.commit()
+        try:
+            self.cursor.execute("DELETE FROM User where ID = %s;"% ouID)
+            self.cursor.execute("INSERT INTO ouBlacklist VALUE ('%s');"%username)
+            self.cnx.commit()
+            return True
+        except mysql.connector.Error as ERR:
+            print("Error in Remove OU: %s"%ERR)
+            return False
 
     def getItemInfo(self, itemID):
         try:

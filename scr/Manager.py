@@ -1,6 +1,7 @@
+# mysql
 import mysql.connector
 from mysql.connector import errorcode
-
+# kivy
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
@@ -8,6 +9,7 @@ from kivy.properties import BooleanProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
 
+# self define classes
 from scr.GeneralFunctions import General
 from scr.GU import GU
 from scr.SU import SU
@@ -17,10 +19,16 @@ from scr.otherClass import *
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
     def getItem(self):
-        root.toItem(self.itemID,self.title,self.image,self.priceType,self.description)
+        print(type(self.priceType))
+
+        if self.priceType:
+            root.tobidItem(self.itemID, self.title, self.image, self.priceType, self.description)
+        else:
+            root.tofixedItem(self.itemID,self.title,self.image,self.priceType,self.description)
 
 class Signup(Screen):
-    stateV,cardV = BooleanProperty(),BooleanProperty()
+    # sign up page implement in signup.kv
+    stateV,cardV,nameV = BooleanProperty(),BooleanProperty(),BooleanProperty()
 
     def tohome(self):
         root.tohome()
@@ -36,8 +44,7 @@ class Signup(Screen):
 
         self.ids['warnApplication'].text = ""
         self.ids['warnUsername'].text = ""
-        self.stateV = True
-        self.cardV = True
+        self.stateV, self.cardV, self.nameV = True, True,True
 
     def checkUsername(self,username):
         nameCheck = guest.checkUsername(username)
@@ -50,18 +57,22 @@ class Signup(Screen):
         elif nameCheck == 3:
             self.ids['warnUsername'].text = "Username are in system blacklist!"
 
+    def checkName(self,name):
+        self.nameV = not guest.checkInput(name)
+
     def checkState(self,state):
-        stateCheck = guest.checkState(state.upper())
-        self.stateV = stateCheck
+        self.stateV = guest.checkState(state.upper())
+
     def checkCard(self,card):
-        self.cardV = not guest.checkCard(card)
+        self.cardV = not guest.checkInput(card)
 
     def signUp(self,username, name, phone, email,address,state,card):
+        self.checkName(name)
         self.checkState(state)
         self.checkCard(card)
         self.checkUsername(username)
 
-        if guest.checkUsername(username) or not self.stateV or not self.cardV:
+        if guest.checkUsername(username) or not self.stateV or not self.cardV or not self.nameV:
             self.ids['warnApplication'].text = "Fail to Apply!!!"
         else:
             applied = guest.apply(username, name, email,card,address,state.upper(),phone)
@@ -70,6 +81,14 @@ class Signup(Screen):
                 self.ids['warnApplication'].text = ""
                 self.clearSignup()
                 root.tohome()
+
+class fixedItem(Screen):
+    def tohome(self):
+        root.tohome()
+
+class biddingItem(Screen):
+    def tohome(self):
+        root.tohome()
 
 class Manager(Screen):
     def __init__(self, **kwargs):
@@ -172,12 +191,18 @@ class Manager(Screen):
     def signup(self):
         self.ids['screenmanager'].current = "signupPage"
 
-    def toItem(self,itemID,title,image,priceType,description):
-        self.ids['itemImage'].texture = image
-        self.ids['itemTitle'].text = title
-        self.ids['itemDescription'].text=description
-        self.ids['screenmanager'].current = "itemPage"
 
+    def tofixedItem(self,itemID,title,image,priceType,description):
+        self.ids['fixedItem'].ids['itemImage'].texture = image
+        self.ids['fixedItem'].ids['itemTitle'].text = title
+        self.ids['fixedItem'].ids['itemDescription'].text=description
+        self.ids['screenmanager'].current = "fixedItem"
+
+    def tobidItem(self,itemID,title,image,priceType,description):
+        self.ids['biddingItem'].ids['itemImage'].texture = image
+        self.ids['biddingItem'].ids['itemTitle'].text = title
+        self.ids['biddingItem'].ids['itemDescription'].text=description
+        self.ids['screenmanager'].current = "biddingItem"
 
     def friendList(self):
         print('friendlist')
