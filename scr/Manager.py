@@ -106,6 +106,11 @@ class appealPop(Popup):
         root.tologin()
     def appeal(self):
         self.ids['appealManager'].current = "appealEntry"
+    def toconfirm(self):
+        self.ids['appealManager'].current = "removed"
+    def tohome(self):
+        appealPop.dismiss(self)
+        root.tohome()
 
 
 class friendList(Screen):
@@ -228,7 +233,7 @@ class Manager(Screen):
 
     def displayItem(self):
         self.ids['rv'].data = general.popularItem()
-
+        pass
 
     def tohome(self):
         self.ids['screenmanager'].current = "homepage"
@@ -279,8 +284,8 @@ class eByMazonApp(App):
 
 if __name__ == "__main__":
     config = {
-        "user": '',                 # Enter your own username
-        "password": '',             # Enter your own password
+        "user": 'eby',                 # Enter your own username
+        "password": 'ebypw',             # Enter your own password
         "host": '127.0.0.1',
         "database": 'eByMazon'
     }
