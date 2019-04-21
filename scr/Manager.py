@@ -10,11 +10,11 @@ from kivy.lang import Builder
 from kivy.core.window import Window
 
 # self define classes
-from scr.GeneralFunctions import General
-from scr.GU import GU
-from scr.SU import SU
-from scr.OU import OU
-from scr.otherClass import *
+from GeneralFunctions import General
+from GU import GU
+from SU import SU
+from OU import OU
+from otherClass import *
 
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
@@ -227,8 +227,8 @@ class eByMazonApp(App):
 
 if __name__ == "__main__":
     config = {
-        "user": '',                 # Enter your own username
-        "password": '',             # Enter your own password
+        "user": 'eby',                 # Enter your own username
+        "password": 'ebypw',             # Enter your own password
         "host": '127.0.0.1',
         "database": 'eByMazon'
     }

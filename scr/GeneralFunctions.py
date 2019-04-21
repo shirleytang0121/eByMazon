@@ -1,7 +1,7 @@
 import mysql.connector
 from kivy.core.image import Image as CoreImage
 from io import BytesIO
-from scr.GU import GU
+from GU import GU
 class General():
     def __init__(self,cursor,cnx):
         self.cnx = cnx

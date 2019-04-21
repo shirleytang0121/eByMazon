@@ -18,7 +18,7 @@ def write_file(data, filename):
 
 def insertItemInfo(cursor, itemID, image, title,description, priceType,usedStatus, saleStatus,approvalStatus):
     try:
-        image = convertToBinaryData('./'+image)
+        image = convertToBinaryData('DB_Create/'+image)
         qry = ("INSERT INTO ItemInfo(itemID, image, title, description, priceType, usedStatus, saleStatus,approvalStatus) "
                "VALUE (%s,%s,%s,%s,%s,%s, %s,%s)"
                "ON DUPLICATE KEY UPDATE "
@@ -44,7 +44,7 @@ def getItemInfo(cursor, itemID):
 
 def executeScriptsFromFile(cnx, cursor,filename):
     # Open and read the file as a single buffer
-    fd = open('./'+filename, 'r')
+    fd = open('DB_Create/'+filename, 'r')
     sqlFile = fd.read()
     fd.close()
     sqlCommands = sqlFile.split(';')
@@ -60,8 +60,8 @@ def executeScriptsFromFile(cnx, cursor,filename):
 
 if __name__  == "__main__":
     config = {
-        "user": '',                 # Enter your own username
-        "password": '',             # Enter your own password
+        "user": 'eby',                 # Enter your own username
+        "password": 'ebypw',             # Enter your own password
         "host": '127.0.0.1',
         # "database": 'eByMazon'
     }
