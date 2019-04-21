@@ -1,13 +1,19 @@
-DROP DATABASE IF EXISTS eByMazon;
-CREATE DATABASE eByMazon;
+-- DROP DATABASE IF EXISTS eByMazon;
+CREATE DATABASE IF NOT EXISTS eByMazon;
 USE eByMazon;
 
--- User
--- CREATE TABLE UserType(
---  userType BOOLEAN PRIMARY KEY,
---  typeName VARCHAR(32)
--- );
+-- Drop all tables if exists
+DROP TABLE IF EXISTS Taboo,ouBlacklist,itemBlackList,Notification,Tax;
+DROP TABLE IF EXISTS Complaint,Warning,OUlike,ItemView;
+DROP TABLE IF EXISTS BidRecord,Category,searchKeyword,ItemRate;
+DROP TABLE IF EXISTS FixedPrice,ItemBid;
+DROP TABLE IF EXISTS Transaction,KeywordRecord;
+DROP TABLE IF EXISTS MessageSent,Appeal,ItemInfo;
+DROP TABLE IF EXISTS GUapplications,OUstatus,ItemOwner,FriendList;
+DROP TABLE IF EXISTS OU;
+DROP TABLE IF EXISTS User;
 
+-- Create Table
 CREATE TABLE User(
   ID INTEGER PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(64) UNIQUE NOT NULL,
@@ -17,7 +23,7 @@ CREATE TABLE User(
 
 
 CREATE TABLE GUapplications(
-#   applicationID INTEGER PRIMARY KEY AUTO_INCREMENT,
+--   applicationID INTEGER PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(64) UNIQUE NOT NULL,
   email VARCHAR(64),
   name VARCHAR(32) NOT NULL,
@@ -90,12 +96,12 @@ CREATE TABLE ItemInfo(
   postTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
 );
-CREATE TABLE KeywordRecord(
-  keyword VARCHAR(64),
-  itemID  INTEGER,
-  PRIMARY KEY (keyword,itemID),
-  FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
-);
+-- CREATE TABLE KeywordRecord(
+--   keyword VARCHAR(64),
+--   itemID  INTEGER,
+--   PRIMARY KEY (keyword,itemID),
+--   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
+-- );
 
 CREATE TABLE FixedPrice(
   itemID INTEGER PRIMARY KEY,
@@ -181,8 +187,8 @@ CREATE TABLE Warning(
 -- Search
 CREATE TABLE searchKeyword(
   keyword VARCHAR(64) PRIMARY KEY ,
-  frequency INTEGER,
-  FOREIGN KEY (keyword) REFERENCES KeywordRecord(keyword)
+  frequency INTEGER
+--   FOREIGN KEY (keyword) REFERENCES KeywordRecord(keyword)
 );
 
 CREATE TABLE OUlike(
@@ -191,7 +197,7 @@ CREATE TABLE OUlike(
   frequency INTEGER,
   PRIMARY KEY (ouID, keyword),
   FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE,
-  FOREIGN KEY (keyword) REFERENCES KeywordRecord(keyword)
+  FOREIGN KEY (keyword) REFERENCES searchKeyword(keyword)
 );
 
 CREATE TABLE ItemView(

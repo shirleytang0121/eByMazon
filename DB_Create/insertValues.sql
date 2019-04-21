@@ -33,12 +33,12 @@ INSERT INTO MessageSent(senderID, receiverID, message) VALUES
 INSERT INTO ItemOwner(itemID, ownerID) VALUES
 (1,2),(2,2),(3,4),(4,4),(5,3),(6,5);
 
-INSERT INTO KeywordRecord(keyword, itemID) VALUES
-('CD',1),('SHE',1),('DVD',2),('SHE',2),
-('BOOK',3),('HARRY POTTER',3),('J. K. ROWLING',3),
-('BOOK',4),('THE HUNGER GAMES',4),('SUZANNE COLLINS',4),
-('LAPTOP',5),('SAMSUNG',5),('17 INCH',5),
-('APPLE',6),('MAC BOOK',6),('13 INCH',6);
+-- INSERT INTO KeywordRecord(keyword, itemID) VALUES
+-- ('CD',1),('SHE',1),('DVD',2),('SHE',2),
+-- ('BOOK',3),('HARRY POTTER',3),('J. K. ROWLING',3),
+-- ('BOOK',4),('THE HUNGER GAMES',4),('SUZANNE COLLINS',4),
+-- ('LAPTOP',5),('SAMSUNG',5),('17 INCH',5),
+-- ('APPLE',6),('MAC BOOK',6),('13 INCH',6);
 
 INSERT INTO FixedPrice(itemID, price, availableNum) VALUES
 (1,15.99,10),(2,17.79,20),(3,7.99,5),(4,12.50,20);
