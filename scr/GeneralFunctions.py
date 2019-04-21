@@ -1,14 +1,10 @@
 import mysql.connector
 from kivy.core.image import Image as CoreImage
 from io import BytesIO
-<<<<<<< HEAD
-from GU import GU
-=======
 try:
     from scr.GU import GU
 except ModuleNotFoundError:
     from GU import GU
->>>>>>> upstream/master
 class General():
     def __init__(self,cursor,cnx):
         self.cnx = cnx
