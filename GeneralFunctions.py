@@ -83,9 +83,9 @@ class General():
             if info[5]:
                 used = "Yes"
 
-            information = 'Description: ' + info[3] + '\nPrice Type: '+priceType +'\nUsed Status:'+used
+            information = 'Price Type: '+priceType +'\nUsed Status:'+used
             allItem.append({"itemID":info[0],"image":CoreImage(BytesIO(info[1]), ext="png").texture,"title":info[2],
-                            "priceType":info[4],"info":information})
+                            "priceType":info[4],"info":information,"description":info[3]})
         return allItem
 
     def checkStaus(self, ouID):

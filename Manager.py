@@ -2,6 +2,7 @@ import mysql.connector
 from mysql.connector import errorcode, OperationalError
 
 from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
 # from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 # from kivy.properties import StringProperty
 from kivy.lang import Builder
@@ -15,7 +16,11 @@ from OU import OU
 from Item import Item
 from otherClass import *
 
-
+class item(BoxLayout):
+    def getItem(self):
+        # print(self.itemID)
+        root.toItem(self.itemID,self.title,self.image,self.priceType,self.description)
+    pass
 class Manager(Screen):
     def __init__(self, **kwargs):
         super(Manager, self).__init__(**kwargs)
@@ -59,8 +64,6 @@ class Manager(Screen):
                     global ou
                     ou = OU(cursor=cursor,ouID = userInfo['ID'])
                     self.ids['screenmanager'].current = "homepage"
-
-
 
         else:   # Problem With Login
             self.login = False
@@ -139,14 +142,19 @@ class Manager(Screen):
     def signup(self):
         self.ids['screenmanager'].current = "signupPage"
 
-    def toItem(self):
+    def toItem(self,itemID,title,image,priceType,description):
+        self.ids['itemImage'].texture = image
+        self.ids['itemTitle'].text = title
+        self.ids['itemDescription'].text=description
         self.ids['screenmanager'].current = "itemPage"
 
 
 
-    def friendLst(self):
+    def friendList(self):
+        print('friendlist')
         self.ids['screenmanager'].current = "friendPage"
     def history(self):
+        print('history')
         self.ids['screenmanager'].current = "historyPage"
 
 
@@ -157,19 +165,16 @@ class Manager(Screen):
         print(word)
 
 
+    # def friendlist(self):
+    #     print('friendlist')
 
-
-    def friendlist(self):
-        print('friendlist')
-
-    # def history(self):
-    #     print('history')
 
 class eByMazonApp(App):
     # m = Manager()
     def build(self):
         Window.clearcolor = (1, 1, 1, 1)
         Builder.load_file("manage.kv")
+        global root
         root = Manager()
         return root
 
@@ -180,7 +185,6 @@ if __name__ == "__main__":
         "host": '127.0.0.1',
         "database": 'eByMazon'
     }
-
     try:
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor(buffered=True)

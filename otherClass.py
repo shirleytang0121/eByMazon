@@ -29,7 +29,7 @@ class Signup(Screen):
 
 class suHomepage(Screen):
     pass
-class Item(Screen):
+class Itempage(Screen):
     pass
 class OUprofile(Screen):
     pass

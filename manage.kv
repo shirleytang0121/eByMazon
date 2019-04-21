@@ -2,18 +2,20 @@
 #:include features.kv
 # include itemFrame.kv
 
-<Item@BoxLayout>:
+<item>:
     orientation: "horizontal"
     itemID:None
     image:None
     title: ""
     info:""
+    description:""
     priceType:None
+
 
     Button:
         size_hint_x: 0.4
         background_color: 255, 255, 255, 1
-        on_press: root.searchKeyword(search_id.text)
+        on_press: root.getItem()
         Image:
             texture: root.image
             y: self.parent.y
@@ -29,7 +31,11 @@
             size_hint_y: 0.2
             text: root.title
         SmallLabel:
-            size_hint_y: 0.8
+            size_hint_y: 0.3
+            text: root.description
+            multiline: True
+        SmallLabel:
+            size_hint_y: 0.5
             text: root.info
 <Manager>:
     login: False
@@ -139,7 +145,7 @@
                     RecycleView:
                         id: rv
                         data:[]
-                        viewclass: 'Item'
+                        viewclass: 'item'
                         RVL:
         Login:
 #            id: login
@@ -289,76 +295,52 @@
                     orientation: "horizontal"
                     BoxLayout:
                         padding: 30
-                        Button:
+                        BlueButton:
                             text: "GU Application"
-                            color: [0, 0, 0, 1]
-                            font_size: 33
-                            background_color: [2.04, 2.30, 2.55, 1]
             #                on_press: root.manager.current = ""
                     BoxLayout:
                         padding: 30
-                        Button:
+                        BlueButton:
                             text: "View Transactions"
-                            color: [0, 0, 0, 1]
-                            font_size: 33
-                            background_color: [2.04, 2.30, 2.55, 1]
             #                on_press: root.manager.current = ""
 
                 BoxLayout:
                     orientation: "horizontal"
                     BoxLayout:
                         padding: 30
-                        Button:
+                        BlueButton:
                             text: "OU Info"
-                            color: [0, 0, 0, 1]
-                            font_size: 33
-                            background_color: [2.04, 2.30, 2.55, 1]
             #                on_press: root.manager.current = ""
                     BoxLayout:
                         padding: 30
-                        Button:
+                        BlueButton:
                             text: "View Item Blacklist"
-                            color: [0, 0, 0, 1]
-                            font_size: 33
-                            background_color: [2.04, 2.30, 2.55, 1]
             #                on_press: root.manager.current = ""
 
                 BoxLayout:
                     orientation: "horizontal"
                     BoxLayout:
                         padding: 30
-                        Button:
+                        BlueButton:
                             text: "Process Complaint"
-                            color: [0, 0, 0, 1]
-                            font_size: 33
-                            background_color: [2.04, 2.30, 2.55, 1]
             #                on_press: root.manager.current = ""
                     BoxLayout:
                         padding: 30
-                        Button:
+                        BlueButton:
                             text: "View OU BlackList"
-                            color: [0, 0, 0, 1]
-                            font_size: 33
-                            background_color: [2.04, 2.30, 2.55, 1]
             #                on_press: root.manager.current = ""
 
                 BoxLayout:
                     orientation: "horizontal"
                     BoxLayout:
                         padding: 30
-                        Button:
+                        BlueButton:
                             text: "Item Post Request"
-                            color: [0, 0, 0, 1]
-                            font_size: 33
-                            background_color: [2.04, 2.30, 2.55, 1]
             #                on_press: root.manager.current = ""
                     BoxLayout:
                         padding: 30
-                        Button:
+                        BlueButton:
                             text: "Maintain Taboo List"
-                            color: [0, 0, 0, 1]
-                            font_size: 33
-                            background_color: [2.04, 2.30, 2.55, 1]
             #                on_press: root.manager.current = ""
 ########################
         OUprofile:
@@ -426,7 +408,7 @@
                         OrangeButton:
                             size_hint_y: 0.1
                             text: "Friend List"
-                            on_press: root.friendLst()
+                            on_press: root.friendList()
                         OrangeButton:
                             size_hint_y: 0.1
                             text: "History"
@@ -477,7 +459,6 @@
                 Button:
                     text: "Go back"
                     on_press: root.toProfile()
-
         EditProfile:
 #            id: editProfile
             name: "editPage"
@@ -487,7 +468,6 @@
                 size_hint: [0.8,0.8]
                 pos_hint: {'center_y': .3, 'center_x': 0.5}
                 GridLayout:
-#                    rows: 6
                     cols: 2
                     CenterLabel:
                         text: 'Name'
@@ -530,3 +510,145 @@
                         width: 500
                         text: "Save"
                         on_press: root.toProfile()
+############## Item page
+        Itempage:
+#            id: itemPage
+            name: "itemPage"
+            title: "Item Page"
+            BoxLayout:
+                orientation: "vertical"
+                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                BoxLayout:
+#                    size_hint: (0.8,0.5)
+                    orientation: "horizontal"
+                    padding:[50,0,50,0]
+#                    height: 50
+                    Image:
+                        id: itemImage
+                        size_hint:(0.5,1)
+#                        source: "logo3.png"
+                        y: self.parent.y
+                        x: self.parent.x
+                        size: self.parent.size
+                        allow_stretch: True
+
+                    GridLayout:
+                        cols: 2
+                        size_hint:(0.5,1)
+                        orientation: "vertical"
+
+                        LeftLabel:
+                            text: "Title: "
+                        LeftLabel:
+                            id: itemTitle
+                        LeftLabel:
+                            text: "Description: "
+                        LeftLabel:
+                            id: itemDescription
+#                            text: 'xxxxxxxx'
+                        LeftLabel:
+                            text: "Price: "
+                        LeftLabel:
+                            id: itemPrice
+                            text: '$##.##'
+                        LeftLabel:
+                            text: "Likes: "
+                        LeftLabel:
+                            id: itemLikeness
+                            text: '##'
+                        LeftLabel:
+                            text: "DisLike: "
+                        LeftLabel:
+                            id: itemLikeness
+                            text: "##"
+#                        Label:
+#                            size_hint_y: 0.2
+                # ------------- top half ------------#
+
+                BoxLayout:
+                    size_hint_y: 0.2
+                    orientation: 'horizontal'
+                    spacing: 20
+                    LeftLabel:
+                        font_size: 30
+                        text: 'Enter number of item you want buy: '
+                    ProfileInput:
+                        id: purchaseInfo
+                        text_size: self.size
+
+                    SkyBlueButton:
+                        text: "Purchase"
+                        orientation: 'horizontal'
+
+
+#                    BoxLayout:
+#                        # size_hint_y: 0.3
+#                        orientation: "horizontal"
+#                        height: 30
+#                        Button:
+#                            text: "I WANT TO BID"
+#                            size_hint_x: .80
+#                            background_color: [.19, .84, 1.19, 0.7]
+#                            border: (1, .1, 1, 1)
+#
+#                        TextInput:
+#                            id: bid_price
+#                            text_size: self.size
+#                            on_hint_text: "Enter Price"
+#                            multiline: False
+#                            # size: self.size
+#                            size_hint_x: .2
+#                            size_hint_y: .5
+
+                BoxLayout:
+                    height: 30
+                    orientation: 'vertical'
+                    LeftLabel:
+                        text: "Ratings:"
+                        font_size: 48
+                        bold: True
+
+                    GridLayout:
+                        cols: 2
+                        row_force_default: True
+                        row_default_height: 50
+                        padding: 20
+                        spacing: 10
+
+                        LeftLabel:
+                            text: "username"
+                            size_hint_x: .2
+
+                        LeftLabel:
+                            id: text_input
+                            markup: True
+                            text: 'this is my comment'
+                            font_size: 32
+                            size_hint: 1.8, .1
+                        LeftLabel:
+                            text: "username"
+                            size_hint_x: .2
+
+                        LeftLabel:
+                            id: text_input
+                            markup: True
+                            text: 'this is my comment'
+                            font_size: 32
+                            size_hint: 1.8, .1
+                        LeftLabel:
+                            text: "username"
+                            size_hint_x: .2
+
+                        LeftLabel:
+                            id: text_input
+                            markup: True
+                            text: 'this is my comment'
+                            font_size: 32
+                            size_hint: 1.8, .1
+                    RedButton:
+                        text: 'I WANT TO RATE'
+                        size_hint_y: .3
+                    Button:
+                        text: 'GO BACK'
+                        size_hint_y: .3
+                        on_press: root.tohome()
