@@ -106,6 +106,11 @@ class appealPop(Popup):
         root.tologin()
     def appeal(self):
         self.ids['appealManager'].current = "appealEntry"
+    def toconfirm(self):
+        self.ids['appealManager'].current = "removed"
+    def tohome(self):
+        appealPop.dismiss(self)
+        root.tohome()
 
 
 class friendList(Screen):
