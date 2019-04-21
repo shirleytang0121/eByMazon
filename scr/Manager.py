@@ -10,13 +10,6 @@ from kivy.lang import Builder
 from kivy.core.window import Window
 
 # self define classes
-<<<<<<< HEAD
-from GeneralFunctions import General
-from GU import GU
-from SU import SU
-from OU import OU
-from otherClass import *
-=======
 try:
     from scr.GeneralFunctions import General
     from scr.GU import GU
@@ -29,7 +22,6 @@ except ModuleNotFoundError:
     from SU import SU
     from OU import OU
     from otherClass import *
->>>>>>> upstream/master
 
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
@@ -197,7 +189,7 @@ class Manager(Screen):
 
     def displayItem(self):
         self.ids['rv'].data = general.popularItem()
-
+        pass
 
     def tohome(self):
         self.ids['screenmanager'].current = "homepage"
@@ -249,6 +241,7 @@ if __name__ == "__main__":
     }
     try:
         cnx = mysql.connector.connect(**config)
+        cnx.set_unicode(value=True)
         cursor = cnx.cursor(buffered=True)
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
