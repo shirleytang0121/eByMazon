@@ -21,10 +21,11 @@
             size: self.parent.size
             allow_stretch: True
     BoxLayout:
+        pos_hint: {'center_y': 0.4, 'center_x': 0.7}
         padding:[0,50,0,50]
         size_hint_x:0.6
         orientation: "vertical"
-        RegLabel:
+        CenterLabel:
             size_hint_y: 0.2
             text: root.title
         SmallLabel:
@@ -81,13 +82,11 @@
                                 size_hint_x: 0.1
                                 text: "Login"
                                 on_press: root.tologin()
-
                             SkyBlueButton:
                                 size_hint_x: 0.1
                                 text: "New User"
                                 on_press: root.signup()
                                 opacity: 0 if root.login else 1
-
                             SkyBlueButton:
                                 size_hint_x: 0.1
                                 text: "My Account"
@@ -116,22 +115,22 @@
                             CheckBox:
                                 group: "sort_feature"
                                 on_active: root.sortPop()
-                            RegLabel:
+                            LeftLabel:
                                 text: "popular"
                             CheckBox:
                                 group: "sort_feature"
                                 on_active: root.sortRating()
-                            RegLabel:
+                            LeftLabel:
                                 text: "rating"
                             CheckBox:
                                 group: "sort_feature"
                                 on_active: root.sortPricelh()
-                            RegLabel:
+                            LeftLabel:
                                 text: "price low to high"
                             CheckBox:
                                 group: "sort_feature"
                                 on_active: root.sortPricehl()
-                            RegLabel:
+                            LeftLabel:
                                 text: "price high to low"
                         Label:
                             size_hint_y: 0.4
@@ -159,22 +158,20 @@
                     BoldLabel:
                         text: "User Name"
                     InfoInput:
+                        id: loginUsername
                         size_hint_x: 1.5
                         size_hint_y: .3
                         pos_hint: {'center_y': 0.5, 'center_x': 0.5}
-                        id: username
                 BoxLayout:
                     size_hint: (0.5,0.4)
                     orientation: "horizontal"
-
                     BoldLabel:
                         pos_hint: {'center_y': 1, 'center_x': 0.5}
                         text: "Password"
                     InfoInput:
+                        id: loginPassword
                         size_hint: (1.5,.3)
                         pos_hint: {'center_y': 1, 'center_x': 0.5}
-                        id: password
-
                 BoxLayout:
                     orientation: "horizontal"
                     padding:(50,50)
@@ -184,20 +181,17 @@
                         pos_hint: {'center_y': 1.3, 'center_x': 0.5}
                         text: "Login"
                         on_press:
-                            root.checkLogin(username.text,password.text)
-
+                            root.checkLogin(loginUsername.text,loginPassword.text)
                     YellowButton:
                         size_hint_y: .15
                         pos_hint: {'center_y': 1.3, 'center_x': 0.5}
                         text: "Clear"
-                        on_press: username.text =""
-                        on_press: password.text =""
+                        on_press: root.clearLogin()
                     GrayButton:
                         size_hint_y: .15
                         pos_hint: {'center_y': 1.3, 'center_x': 0.5}
                         text: "Cancel"
-                        on_press: root.tohome()
-
+                        on_press: root.cancelLogin()
         Signup:
 #            id: signup
             name: "signupPage"
@@ -268,6 +262,105 @@
                         pos_hint: {'center_y': .7, 'center_x': 0}
                         size_hint_y: .15
 
+########################
+        suHomepage:
+            name: "suHomepage"
+            title: "SU homepage"
+            BoxLayout:
+                orientation: "vertical"
+                BoxLayout:
+                    size_hint_y: 0.4
+                    Label:
+                        size_hint_x: 0.9
+                    Button:
+                        text:"Sign Out"
+                        size_hint_x: 0.1
+                        size: 150, 100
+                        on_press: root.tohome()
+
+                BoxLayout:
+                    size_hint_y: 1.3
+                    BoxLayout:
+                        BoldLabel:
+                            text: "Welcome Manager!!!"
+                            font_size: 100
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    BoxLayout:
+                        padding: 30
+                        Button:
+                            text: "GU Application"
+                            color: [0, 0, 0, 1]
+                            font_size: 33
+                            background_color: [2.04, 2.30, 2.55, 1]
+            #                on_press: root.manager.current = ""
+                    BoxLayout:
+                        padding: 30
+                        Button:
+                            text: "View Transactions"
+                            color: [0, 0, 0, 1]
+                            font_size: 33
+                            background_color: [2.04, 2.30, 2.55, 1]
+            #                on_press: root.manager.current = ""
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    BoxLayout:
+                        padding: 30
+                        Button:
+                            text: "OU Info"
+                            color: [0, 0, 0, 1]
+                            font_size: 33
+                            background_color: [2.04, 2.30, 2.55, 1]
+            #                on_press: root.manager.current = ""
+                    BoxLayout:
+                        padding: 30
+                        Button:
+                            text: "View Item Blacklist"
+                            color: [0, 0, 0, 1]
+                            font_size: 33
+                            background_color: [2.04, 2.30, 2.55, 1]
+            #                on_press: root.manager.current = ""
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    BoxLayout:
+                        padding: 30
+                        Button:
+                            text: "Process Complaint"
+                            color: [0, 0, 0, 1]
+                            font_size: 33
+                            background_color: [2.04, 2.30, 2.55, 1]
+            #                on_press: root.manager.current = ""
+                    BoxLayout:
+                        padding: 30
+                        Button:
+                            text: "View OU BlackList"
+                            color: [0, 0, 0, 1]
+                            font_size: 33
+                            background_color: [2.04, 2.30, 2.55, 1]
+            #                on_press: root.manager.current = ""
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    BoxLayout:
+                        padding: 30
+                        Button:
+                            text: "Item Post Request"
+                            color: [0, 0, 0, 1]
+                            font_size: 33
+                            background_color: [2.04, 2.30, 2.55, 1]
+            #                on_press: root.manager.current = ""
+                    BoxLayout:
+                        padding: 30
+                        Button:
+                            text: "Maintain Taboo List"
+                            color: [0, 0, 0, 1]
+                            font_size: 33
+                            background_color: [2.04, 2.30, 2.55, 1]
+            #                on_press: root.manager.current = ""
+########################
         OUprofile:
 #            id: ouInfo
             name: "profilePage"
@@ -279,7 +372,7 @@
                     size_hint_y:0.10
                     height: 15
                     spacing: 10
-                    RegLabel:
+                    BoldLabel:
                         size_hint_x:0.9
                         text: "My Account"
                     PinkButton:
@@ -288,38 +381,42 @@
                         on_press: root.tohome()
                 BoxLayout:
                     orientation: "horizontal"
+                    pos_hint: {'center_y': .4, 'center_x': 0.5}
+                    size_hint: (0.8,0.9)
                     height: 15
-                    spacing: 10
-                    size_hint_y:0.90
-
                     BoxLayout:
                         orientation:"vertical"
-                        size_hint_x:0.4
-                        size_hint_y:0.8
+                        size_hint:(0.4,0.9)
                         padding: 50
-                        Label:
-                            size_hint_y: 0.3
-                        RegLabel:
-                            text:"name:xxx"
-                        RegLabel:
-                            text:"phone number:xxxxxxxx"
-                        RegLabel:
-                            text:"address:xxxxxxx"
-                        RegLabel:
-                            text:"State:xx"
-                        RegLabel:
-                            text:"Status:xx"
-                        RegLabel:
-                            text:"Rating:xx"
+                        LeftLabel:
+                            id: ouName
+                        LeftLabel:
+                            id: ouPhone
+                        LeftLabel:
+                            id: ouEmail
+                        LeftLabel:
+                            id: ouCard
+                        LeftLabel:
+                            id: ouAddress
+                        LeftLabel:
+                            id: ouState
+                        LeftLabel:
+                            id: ouRate
+                        LeftLabel:
+                            id: ouMoney
+                        LeftLabel:
+                            id: ouStatus
+                        LeftLabel:
+                            id: ouStatusTime
                         BlueButton:
-                            text: "Edit"
+                            text: "Edit Profile"
                             on_press: root.editInfo()
+                        YellowButton:
+                            text: "Change Password"
+                            on_press: root.changePassword()
                         Label:
                             size_hint_y: 0.2
-                    BoxLayout:
-                        orientation: "vertical"
-                        size_hint_x:0.2
-
+                    Vspace:
                     BoxLayout:
                         orientation: "vertical"
                         size_hint_x:0.3
@@ -340,9 +437,9 @@
                         OrangeButton:
                             size_hint_y: 0.1
                             text: "Warning"
-
+                        Label:
+                            size_hint_y: 0.1
         FriendList:
-#            id: friend
             name: "friendPage"
             title: "the friend list"
             BoxLayout:
@@ -350,7 +447,7 @@
                 orientation: "horizontal"
                 height: 15
                 spacing: 10
-                RegLabel:
+                BoldLabel:
                     text: "My friends"
             BoxLayout:
                 size_hint_y: 0.05
@@ -390,32 +487,32 @@
                 size_hint: [0.8,0.8]
                 pos_hint: {'center_y': .3, 'center_x': 0.5}
                 GridLayout:
-                    rows: 6
+#                    rows: 6
                     cols: 2
-                    BoldLabel:
-                        text: 'name'
+                    CenterLabel:
+                        text: 'Name'
                     InfoInput:
-                        id: name
-                    BoldLabel:
+                        id: editName
+                    centerBLabel:
                         text: 'Phone number'
                     InfoInput:
-                        id: phone_number
-                    BoldLabel:
+                        id: editPhone
+                    centerBLabel:
                         text: 'Email'
                     InfoInput:
-                        id: email
-                    BoldLabel:
+                        id: editEmail
+                    centerBLabel:
                         text: 'Address'
                     InfoInput:
-                        id: address
-                    BoldLabel:
+                        id: editAddress
+                    centerBLabel:
                         text: 'State'
                     InfoInput:
-                        id: State
-                    BoldLabel:
+                        id: editState
+                    centerBLabel:
                         text: 'Card Number'
                     InfoInput:
-                        id: cardNum
+                        id: editCard
                 BoxLayout:
                     orientation: "horizontal"
                     spacing: 50

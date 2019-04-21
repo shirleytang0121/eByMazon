@@ -17,7 +17,7 @@ CREATE TABLE User(
 
 
 CREATE TABLE GUapplications(
-  applicationID INTEGER PRIMARY KEY AUTO_INCREMENT,
+#   applicationID INTEGER PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(64) UNIQUE NOT NULL,
   email VARCHAR(64),
   name VARCHAR(32) NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE Transaction(
   singlePrice FLOAT,    --  If multi available, price will be single price
   priceTotal FLOAT,
   numDeal INTEGER,    --  Need for multi-available
-  shippingStatus BOOLEAN,
+  shippingStatus BOOLEAN,  -- False for not ship, True for shipped
   dealTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (itemID,buyerID),
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
@@ -170,7 +170,7 @@ CREATE TABLE Complaint(
 --  );
 CREATE TABLE Warning(
   itemID INTEGER,
-  warningID INTEGER,
+  warningID INTEGER, -- 0 for low rating, 1 for 2 complaints, 2 for decline deal, 3 for removed item, 4 for taboo word
   warnTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (itemID,warningID),
   FOREIGN KEY (itemID) REFERENCES Transaction(itemID) ON DELETE CASCADE

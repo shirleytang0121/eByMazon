@@ -2,22 +2,62 @@ import mysql.connector
 from kivy.core.image import Image as CoreImage
 from io import BytesIO
 class General():
-    def __init__(self,cursor):
+    def __init__(self,cursor,cnx):
+        self.cnx = cnx
         self.cursor = cursor
 
     def login_check(self, username, password):
-        # check login info with DB
-        # still need to implement for check OU status if is OU and GU application
+        '''
+        function: check login info with DB
+        :param username:
+        :param password:
+        :return:
+            -   dict{'ID','userType','status'}  for correct login OU
+            -   dict{'ID','userType'}           for correct login SU
+            -   1                               for password not match
+            -   2                               for in GU application
+            -   3                               for in blacklist
+            -   False                           nothing found
+        '''
         qry = "SELECT ID, userType FROM User WHERE username=%s AND password=%s;"
         self.cursor.execute(qry,(username,password))
-        ID, userType = -1, -1
-        for user in self.cursor:
-            ID = user[0]
-            userType = user[1]
 
-        if ID == -1:
-            return False
-        return {'ID':ID, 'userType':userType}
+        user = self.cursor.fetchone()
+        if user:
+            if not user[1]:     # For OU
+                self.cursor.execute("SELECT status FROM OUstatus WHERE ouID = %s;" % user[0])
+                return {'ID': user[0], 'userType': user[1],'status':self.cursor.fetchone()[0]}
+            return {'ID': user[0], 'userType': user[1]}  # For SU
+
+        # check for not match password
+        qry = "SELECT EXISTS(SELECT * from User WHERE username='%s');" % username
+        self.cursor.execute(qry)
+        # k = self.cursor.fetchone()
+        if self.cursor.fetchone()[0]:
+            return 1    # 1 for password not match
+
+        # check for application waiting
+        qry = "SELECT EXISTS(SELECT * from GUapplications WHERE username='%s');" % username
+        self.cursor.execute(qry)
+        if self.cursor.fetchone()[0]:
+            return 2    # 2 for application waiting
+
+        # check if in blacklist
+        qry = "SELECT EXISTS(SELECT * from ouBlacklist WHERE ouName='%s');" % username
+        self.cursor.execute(qry)
+        if self.cursor.fetchone()[0]:
+            return 3    # 3 for in blacklist
+
+        return False # Nothing found
+
+
+    def removeOU(self,ouID,username):
+        """
+        Remove OU from DB, and add his/her username to blacklist
+        """
+        self.cursor.execute("DELETE FROM User where ID = %s;"% ouID)
+        self.cursor.execute("INSERT INTO ouBlacklist VALUE ('%s');"%username)
+        self.cnx.commit()
 
     def getItemInfo(self, itemID):
         try:

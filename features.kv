@@ -7,9 +7,29 @@
     font_size: 48
     bold: True
 
-<RegLabel@Label>:
+<CenterLabel@Label>:
     color: 0, 0, 0, 1
     font_size: 33
+<LeftLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 33
+    text_size: self.size
+    halign: 'left'
+    valign:'middle'
+<RightLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 33
+    text_size: self.size
+    halign: 'right'
+    valign:'middle'
+
+<centerBLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 33
+    text_size: self.size
+    halign: 'center'
+    valign:'bottom'
+
 <SmallLabel@Label>:
     color: 0, 0, 0, 1
     font_size: 25
@@ -48,6 +68,9 @@
     color: [0, 0, 0, 1]
     background_color: [2.04, 2.30, 2.55, 1]
     font_size: 33
+<RedButton@Button>:
+    background_color: [2.06, .18, .24, .7]
+    font_size: 33
 
 # Inputs
 <InfoInput@TextInput>:
@@ -69,3 +92,8 @@
     size_hint_y: None
     height: self.minimum_height
     orientation: 'vertical'
+# Vertical Space
+<Vspace@BoxLayout>:
+    orientation: "vertical"
+    size_hint_x:0.1
+

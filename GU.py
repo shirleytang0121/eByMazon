@@ -1,6 +1,7 @@
 import mysql.connector
 class GU():
-    def __init__(self,cursor):
+    def __init__(self,cnx,cursor):
+        self.cnx = cnx
         self.cursor = cursor
 
     def checkUsername(self,username):
@@ -26,6 +27,7 @@ class GU():
             qry = ("INSERT INTO GUapplications( username, email, name, cardNumber, address, state, phone) "
                    "VALUE (%s,%s,%s,%s,%s,%s,%s);")
             self.cursor.execute(qry,(username, email, name, card, address, state, phone))
+            self.cnx.commit()
             return True
         except mysql.connector.Error as ERR:
             print(ERR)

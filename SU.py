@@ -1,7 +1,7 @@
 class SU():
-    def __init__(self,cursor,userID):
+    def __init__(self,cursor,suID):
         self.cursor = cursor
-        self.ID = userID
+        self.ID = suID
 
     def manageApplication(self, applicationID, action):
         # action == True: approve: register GU to OU account and delete application, set password same as username
