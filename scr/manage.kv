@@ -51,18 +51,21 @@
                             SkyBlueButton:
                                 id: loginB
                                 size_hint_x: 0.1
-                                text: "Login"
+                                text: "Login" if not root.login else "Logout"
                                 on_press: root.tologin()
                             SkyBlueButton:
                                 size_hint_x: 0.1
-                                text: "New User"
-                                on_press: root.signup()
-                                opacity: 0 if root.login else 1
-                            SkyBlueButton:
-                                size_hint_x: 0.1
-                                text: "My Account"
-                                on_press: root.toProfile()
-                                opacity: 1 if root.login else 0
+                                text: "My Account" if root.login else "Sign Up"
+                                on_press: root.signProfile()
+#                                opacity: 0 if root.login else 1
+#                                disabled: root.login
+
+#                            SkyBlueButton:
+#                                size_hint_x: 0.1
+#                                text: "My Account"
+#                                on_press: root.toProfile()
+#                                opacity: 1 if root.login else 0
+#                                disabled: not root.login
                         BoxLayout:
                             orientation: 'vertical'
                             size_hint_y: .2

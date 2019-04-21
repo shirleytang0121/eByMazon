@@ -98,9 +98,21 @@ class biddingItem(Screen):
         root.tohome()
 
 class Manager(Screen):
+    login = BooleanProperty()
     def __init__(self, **kwargs):
         super(Manager, self).__init__(**kwargs)
         self.displayItem()
+
+    def tologin(self):
+        if self.login:
+            self.login = False
+        else:
+            self.ids['screenmanager'].current = "loginpage"
+    def signProfile(self):
+        if self.login:
+            self.toProfile()
+        else:
+            self.signup()
 
     # Login Page
     def clearLogin(self):
@@ -193,8 +205,8 @@ class Manager(Screen):
 
     def tohome(self):
         self.ids['screenmanager'].current = "homepage"
-    def tologin(self):
-        self.ids['screenmanager'].current = "loginpage"
+
+
     def signup(self):
         self.ids['screenmanager'].current = "signupPage"
 
@@ -241,6 +253,7 @@ if __name__ == "__main__":
     }
     try:
         cnx = mysql.connector.connect(**config)
+        cnx.set_unicode(value=True)
         cursor = cnx.cursor(buffered=True)
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
