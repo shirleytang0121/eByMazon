@@ -12,13 +12,13 @@ def convertToBinaryData(filename):
 
 def write_file(data, filename):
     # Convert binary data to proper format and write it on Hard Disk
-    with open(filename, 'wb') as file:
+    with open('./'+filename, 'wb') as file:
         file.write(data)
         # file.write(data.decode('base64'))
 
 def insertItemInfo(cursor, itemID, image, title,description, priceType,usedStatus, saleStatus,approvalStatus):
     try:
-        image = convertToBinaryData(image)
+        image = convertToBinaryData('./'+image)
         qry = ("INSERT INTO ItemInfo(itemID, image, title, description, priceType, usedStatus, saleStatus,approvalStatus) "
                "VALUE (%s,%s,%s,%s,%s,%s, %s,%s)"
                "ON DUPLICATE KEY UPDATE "
@@ -44,7 +44,7 @@ def getItemInfo(cursor, itemID):
 
 def executeScriptsFromFile(cnx, cursor,filename):
     # Open and read the file as a single buffer
-    fd = open(filename, 'r')
+    fd = open('./'+filename, 'r')
     sqlFile = fd.read()
     fd.close()
     sqlCommands = sqlFile.split(';')
