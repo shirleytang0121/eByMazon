@@ -3,6 +3,7 @@ import mysql.connector
 from mysql.connector import errorcode
 # kivy
 from kivy.app import App
+from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
 from kivy.properties import BooleanProperty
@@ -89,6 +90,30 @@ class Signup(Screen):
                 self.clearSignup()
                 root.tohome()
 
+class GUapplication(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class ouInfo(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class itemPost(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+
+class appealPop(Popup):
+    def tologin(self):
+        appealPop.dismiss(self)
+        root.tologin()
+    def appeal(self):
+        self.ids['appealManager'].current = "appealEntry"
+
+
+class friendList(Screen):
+    def backProfile(self):
+        root.toProfile()
+class transactionHistory(Screen):
+    def backProfile(self):
+        root.toProfile()
 class fixedItem(Screen):
     def tohome(self):
         root.tohome()
@@ -141,6 +166,8 @@ class Manager(Screen):
                     self.login = False
                     print("Suspend OU")
                     self.ids['loginCheck'].text = "You have receive 2 warning!!!\nYou are suspend by our system"
+                    appeal = appealPop()
+                    appeal.open()
                 # need a pop up page for appeal message
                 elif userInfo['status'] == 3:
                     self.login = False
@@ -233,7 +260,13 @@ class Manager(Screen):
     def searchKeyword(self, word):
         self.displayItem()
         print(word)
-
+    def toguApply(self):
+        self.ids['screenmanager'].current = "GUapplication"
+        print("In GU")
+    def toouInfo(self):
+        self.ids['screenmanager'].current = "ouInfo"
+    def toitemPost(self):
+        self.ids['screenmanager'].current = "itemPost"
 
 class eByMazonApp(App):
     # m = Manager()

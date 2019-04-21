@@ -1,0 +1,21 @@
+#:include features.kv
+<appealPop>:
+    ScreenManager:
+        id: appealManager
+        Screen:
+            name:"askdecision"
+            BoxLayout:
+
+                GrayButton:
+                    text: "Appeal"
+                    on_press: root.appeal()
+                BlueButton:
+                    text: "Resign"
+                    on_press: root.tologin()
+
+        Screen:
+            name: "appealEntry"
+            BoxLayout:
+                BlueButton:
+                    text: "Submit"
+                    on_press: root.tologin()
