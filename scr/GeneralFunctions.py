@@ -37,13 +37,13 @@ class General():
         return tempGU.checkUsername(username)
 
 
-
-    def removeOU(self,ouID,username):
+    def removeOU(self,username):
         """
         Remove OU from DB, and add his/her username to blacklist
         """
         try:
-            self.cursor.execute("DELETE FROM User where ID = %s;"% ouID)
+            qry = "DELETE FROM User WHERE username = '%s';" % username
+            self.cursor.execute(qry)
             self.cursor.execute("INSERT INTO ouBlacklist VALUE ('%s');"%username)
             self.cnx.commit()
             return True
@@ -55,7 +55,6 @@ class General():
         try:
             qry = "SELECT * FROM ItemInfo WHERE itemID = %s;" % itemID
             self.cursor.execute(qry, (itemID))
-
 
         except mysql.connector.Error as err:
             print("Error in getting item info to database")
@@ -79,6 +78,14 @@ class General():
             allItem.append({"itemID":info[0],"image":CoreImage(BytesIO(info[1]), ext="png").texture,"title":info[2],
                             "priceType":info[4],"info":information,"description":info[3]})
         return allItem
+
+    def appeal(self,ouID,message):
+        qry = "INSERT INTO Appeal VALUE (%s,'%s');" %(ouID,message)
+        try:
+            self.cursor.execute(qry)
+            self.cnx.commit()
+        except mysql.connector.Error as err:
+            print("Error in submit appeal: %s" % err)
 
     def checkStaus(self, ouID):
         # return status of the select OU

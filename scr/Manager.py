@@ -6,7 +6,7 @@ from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
-from kivy.properties import BooleanProperty
+from kivy.properties import BooleanProperty,StringProperty,ObjectProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
 
@@ -59,9 +59,9 @@ class Signup(Screen):
         if not nameCheck:
             self.ids['warnUsername'].text = "Username can be used"
         elif nameCheck == 1:
-            self.ids['warnUsername'].text = "Username existed in system"
+            self.ids['warnUsername'].text = "Username already existed in system"
         elif nameCheck == 2:
-            self.ids['warnUsername'].text = "Username existed in system"
+            self.ids['warnUsername'].text = "Username already existed in system"
         elif nameCheck == 3:
             self.ids['warnUsername'].text = "Username are in system blacklist!"
 
@@ -79,7 +79,6 @@ class Signup(Screen):
         self.checkState(state)
         self.checkCard(card)
         self.checkUsername(username)
-
         if guest.checkUsername(username) or not self.stateV or not self.cardV or not self.nameV:
             self.ids['warnApplication'].text = "Fail to Apply!!!"
         else:
@@ -101,17 +100,21 @@ class itemPost(Screen):
         root.ids['screenmanager'].current = "suHomepage"
 
 class appealPop(Popup):
-    def tologin(self):
+    def homepage(self):
         appealPop.dismiss(self)
-        root.tologin()
-    def appeal(self):
-        self.ids['appealManager'].current = "appealEntry"
-    def toconfirm(self):
-        self.ids['appealManager'].current = "removed"
-    def tohome(self):
-        appealPop.dismiss(self)
+        root.clearLogin()
         root.tohome()
 
+    def switchScreen(self, screenName):
+        self.ids['appealManager'].current = screenName
+
+    def removeOU(self):
+        general.removeOU(username=root.ids['loginUsername'].text)
+        self.homepage()
+
+    def appeal(self,message):
+        general.appeal(ouID=root.ouID,message=message)
+        self.homepage()
 
 class friendList(Screen):
     def backProfile(self):
@@ -122,13 +125,13 @@ class transactionHistory(Screen):
 class fixedItem(Screen):
     def tohome(self):
         root.tohome()
-
 class biddingItem(Screen):
     def tohome(self):
         root.tohome()
 
 class Manager(Screen):
     login = BooleanProperty()
+    ouID = ObjectProperty()
     def __init__(self, **kwargs):
         super(Manager, self).__init__(**kwargs)
         self.displayItem()
@@ -160,30 +163,24 @@ class Manager(Screen):
         if isinstance(userInfo, dict): # Success Login
             self.login = True
             self.ids['loginCheck'].text = ""
-            self.clearLogin()  # clear login info for potential next user
-
             if userInfo['userType']:   # Create SU
                 global su
                 su = SU(cursor=cursor,suID=userInfo['ID'])
                 self.ids['screenmanager'].current = "suHomepage"
+                self.clearLogin()  # clear login info for potential next user
             else:
-                if userInfo['status'] == 2:
+                self.ouID = userInfo['ID']
+                if userInfo['status'] >= 2: # suspend or in blacklist
                     self.login = False
-                    print("Suspend OU")
-                    self.ids['loginCheck'].text = "You have receive 2 warning!!!\nYou are suspend by our system"
                     appeal = appealPop()
+                    if userInfo['status'] == 3: # in blacklist
+                        appeal.ids["appealManager"].current = 'removed'
                     appeal.open()
-                # need a pop up page for appeal message
-                elif userInfo['status'] == 3:
-                    self.login = False
-                    general.removeOU(ouID=userInfo['ID'],username=username)
-                    self.ids['loginCheck'].text = "You have be removed by SU!!!\nYour information is now be delete"
-                    print("Remove OU")
-                # need to function to delete the OU in DB
                 else:                   # Create OU
                     global ou
-                    ou = OU(cursor=cursor,ouID = userInfo['ID'])
+                    ou = OU(cursor=cursor,ouID = self.ouID)
                     self.ids['screenmanager'].current = "homepage"
+                    self.clearLogin()  # clear login info for potential next user
 
         else:   # Problem With Login
             self.login = False
