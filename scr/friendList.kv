@@ -1,0 +1,17 @@
+#:include features.kv
+<friendList>:
+    BoxLayout:
+        size_hint_y:1.92
+        orientation: "horizontal"
+        height: 15
+        spacing: 10
+        BoldLabel:
+            text: "My friends"
+    BoxLayout:
+        size_hint_y: 0.05
+        orientation: "horizontal"
+        height: 30
+        spacing: 10
+        Button:
+            text: "Go back"
+            on_press: root.backProfile()

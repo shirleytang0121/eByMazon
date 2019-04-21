@@ -3,6 +3,12 @@
 #:include signup.kv
 #:include itemFixedPrice.kv
 #:include itemBidding.kv
+#:include GUapplication.kv
+#:include itemPost.kv
+#:include ouInfo.kv
+#:include friendList.kv
+#:include transactionHistory.kv
+#:include appealPop.kv
 <Manager>:
     login: False
     userID: None
@@ -51,10 +57,11 @@
                             SkyBlueButton:
                                 id: loginB
                                 size_hint_x: 0.1
-                                text: "Login"
+                                text: "Login" if not root.login else "Logout"
                                 on_press: root.tologin()
                             SkyBlueButton:
                                 size_hint_x: 0.1
+<<<<<<< HEAD
                                 text: "New User"
                                 on_press: root.signup()
                                 opacity: 0 if root.login else 1
@@ -68,6 +75,15 @@
                         #     size_hint_y: .2
                         #     Label:
                         #         text:
+=======
+                                text: "My Account" if root.login else "Sign Up"
+                                on_press: root.signProfile()
+                        BoxLayout:
+                            orientation: 'vertical'
+                            size_hint_y: .2
+                            Label:
+                                text:
+>>>>>>> upstream/master
                 BoxLayout:
                     orientation: "horizontal"
                     BoxLayout:
@@ -197,7 +213,7 @@
                         padding: 30
                         BlueButton:
                             text: "GU Application"
-            #                on_press: root.manager.current = ""
+                            on_press: root.toguApply()
                     BoxLayout:
                         padding: 30
                         BlueButton:
@@ -210,7 +226,7 @@
                         padding: 30
                         BlueButton:
                             text: "OU Info"
-            #                on_press: root.manager.current = ""
+                            on_press: root.toouInfo()
                     BoxLayout:
                         padding: 30
                         BlueButton:
@@ -236,7 +252,7 @@
                         padding: 30
                         BlueButton:
                             text: "Item Post Request"
-            #                on_press: root.manager.current = ""
+                            on_press: root.toitemPost()
                     BoxLayout:
                         padding: 30
                         BlueButton:
@@ -321,44 +337,13 @@
                             text: "Warning"
                         Label:
                             size_hint_y: 0.1
-        FriendList:
+        friendList:
             name: "friendPage"
             title: "the friend list"
-            BoxLayout:
-                size_hint_y:1.92
-                orientation: "horizontal"
-                height: 15
-                spacing: 10
-                BoldLabel:
-                    text: "My friends"
-            BoxLayout:
-                size_hint_y: 0.05
-                orientation: "horizontal"
-                height: 30
-                spacing: 10
-                Button:
-                    text: "Go back"
-                    on_press: root.toProfile()
-        History:
+        transactionHistory:
             id: history
             name: "historyPage"
             title: "the history"
-            BoxLayout:
-                size_hint_y:1.92
-                orientation: "horizontal"
-                height: 15
-                spacing: 10
-                Label:
-                    text: "My Transition History"
-                    color: 0,0,0,1
-            BoxLayout:
-                size_hint_y: 0.05
-                orientation: "horizontal"
-                height: 30
-                spacing: 10
-                Button:
-                    text: "Go back"
-                    on_press: root.toProfile()
         EditProfile:
 #            id: editProfile
             name: "editPage"
@@ -418,3 +403,13 @@
             id: biddingItem
             name: "biddingItem"
             title: "Bidding Item Page"
+        GUapplication:
+            id: guApply
+            name: "GUapplication"
+            title: "GU application Page"
+        ouInfo:
+            id: ouInfo
+            name: "ouInfo"
+        itemPost:
+            id: itemPost
+            name: "itemPost"
