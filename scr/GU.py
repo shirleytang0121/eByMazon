@@ -5,24 +5,71 @@ class GU():
         self.cursor = cursor
 
     def checkUsername(self,username):
-        # check if username not exist in DB and not in blacklist return False else return True
-        self.cursor.execute("SELECT * from User;")
-        k1 = self.cursor.fetchone()
+        '''
+        :param username: username for check if exist in account DB, application DB, blacklist
+        :return:
+            -   1                               found in accountDB
+            -   2                               found in GU application
+            -   3                               found in blacklist
+            -   False                           nothing found
+        '''
+        # check for not match password
         qry = "SELECT EXISTS(SELECT * from User WHERE username='%s');" % username
         self.cursor.execute(qry)
+        if self.cursor.fetchone()[0]:
+            return 1    # found in accountDB
 
-        k = self.cursor.fetchone()[0]
-        if k:
-            return False
-        return True
-        # pass
+        # check for application waiting
+        qry = "SELECT EXISTS(SELECT * from GUapplications WHERE username='%s');" % username
+        self.cursor.execute(qry)
+        if self.cursor.fetchone()[0]:
+            return 2    # found in GU application
+
+        # check if in blacklist
+        qry = "SELECT EXISTS(SELECT * from ouBlacklist WHERE ouName='%s');" % username
+        self.cursor.execute(qry)
+        if self.cursor.fetchone()[0]:
+            return 3    # found in blacklist
+
+        return False        # nothing found
+
+    def checkState(self,state):
+        '''
+        :param state:
+        :return: bool
+            -   True               Found in Tax DB
+            -   False              Not Found in Tax DB
+        '''
+        qry = "SELECT EXISTS(SELECT * from Tax WHERE state='%s');" % state
+        self.cursor.execute(qry)
+        if self.cursor.fetchone()[0]:
+            return True    # found in state tax
+        return False
+
+    def checkCard(self,card):
+        """
+        :param card:
+        :return:
+            - True                  card is empty string
+            - False                 card is not empty string
+        """
+        if card is None or card == "":
+            return True
+        return False
 
     def apply(self, username, name, email, card, address, state, phone):
-        # check if username is already exist, not allow for duplicate username
-        # If unique username, save the application to DB
-        unique = self.checkUsername(username)
-        if not unique:
-            return False
+        '''
+        :param username:
+        :param name:
+        :param email:
+        :param card:
+        :param address:
+        :param state:
+        :param phone:
+        :return:
+            -   True               Success apply
+            -   False              Fail to apply
+        '''
         try:
             qry = ("INSERT INTO GUapplications( username, email, name, cardNumber, address, state, phone) "
                    "VALUE (%s,%s,%s,%s,%s,%s,%s);")
@@ -32,5 +79,4 @@ class GU():
         except mysql.connector.Error as ERR:
             print(ERR)
             return False
-
 

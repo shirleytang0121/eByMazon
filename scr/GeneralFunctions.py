@@ -1,6 +1,7 @@
 import mysql.connector
 from kivy.core.image import Image as CoreImage
 from io import BytesIO
+from scr.GU import GU
 class General():
     def __init__(self,cursor,cnx):
         self.cnx = cnx
@@ -29,26 +30,9 @@ class General():
                 return {'ID': user[0], 'userType': user[1],'status':self.cursor.fetchone()[0]}
             return {'ID': user[0], 'userType': user[1]}  # For SU
 
-        # check for not match password
-        qry = "SELECT EXISTS(SELECT * from User WHERE username='%s');" % username
-        self.cursor.execute(qry)
-        # k = self.cursor.fetchone()
-        if self.cursor.fetchone()[0]:
-            return 1    # 1 for password not match
+        tempGU = GU(cnx=self.cnx,cursor=self.cursor)
+        return tempGU.checkUsername(username)
 
-        # check for application waiting
-        qry = "SELECT EXISTS(SELECT * from GUapplications WHERE username='%s');" % username
-        self.cursor.execute(qry)
-        if self.cursor.fetchone()[0]:
-            return 2    # 2 for application waiting
-
-        # check if in blacklist
-        qry = "SELECT EXISTS(SELECT * from ouBlacklist WHERE ouName='%s');" % username
-        self.cursor.execute(qry)
-        if self.cursor.fetchone()[0]:
-            return 3    # 3 for in blacklist
-
-        return False # Nothing found
 
 
     def removeOU(self,ouID,username):

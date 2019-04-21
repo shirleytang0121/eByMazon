@@ -4,7 +4,7 @@ from mysql.connector import errorcode
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
-# from kivy.properties import StringProperty
+from kivy.properties import BooleanProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
 
@@ -15,11 +15,13 @@ from scr.OU import OU
 from scr.otherClass import *
 
 class item(BoxLayout):
+    # the item frame in homepage, implemented in feature.kv
     def getItem(self):
-        # print(self.itemID)
         root.toItem(self.itemID,self.title,self.image,self.priceType,self.description)
 
 class Signup(Screen):
+    stateV,cardV = BooleanProperty(),BooleanProperty()
+
     def tohome(self):
         root.tohome()
 
@@ -31,19 +33,43 @@ class Signup(Screen):
         self.ids['GUaddress'].text = ""
         self.ids['GUState'].text = ""
         self.ids['GUcard'].text = ""
+
+        self.ids['warnApplication'].text = ""
+        self.ids['warnUsername'].text = ""
+        self.stateV = True
+        self.cardV = True
+
     def checkUsername(self,username):
         nameCheck = guest.checkUsername(username)
-        self.ids['userRepeat'].text = "Username already Existed!!!"if not nameCheck else "Username can be used "
+        if not nameCheck:
+            self.ids['warnUsername'].text = "Username can be used"
+        elif nameCheck == 1:
+            self.ids['warnUsername'].text = "Username existed in system"
+        elif nameCheck == 2:
+            self.ids['warnUsername'].text = "Username existed in system"
+        elif nameCheck == 3:
+            self.ids['warnUsername'].text = "Username are in system blacklist!"
+
+    def checkState(self,state):
+        stateCheck = guest.checkState(state.upper())
+        self.stateV = stateCheck
+    def checkCard(self,card):
+        self.cardV = not guest.checkCard(card)
 
     def signUp(self,username, name, phone, email,address,state,card):
-        applied = guest.apply(username, name, email,card,address,state,phone)
+        self.checkState(state)
+        self.checkCard(card)
+        self.checkUsername(username)
 
-        self.ids['userRepeat'].text = "Fail to Apply!!!" # for not approve application
-        if applied:                                      # save on DB
-            self.ids['userRepeat'].text = ""
-            self.clearSignup()
-            root.tohome()
-
+        if guest.checkUsername(username) or not self.stateV or not self.cardV:
+            self.ids['warnApplication'].text = "Fail to Apply!!!"
+        else:
+            applied = guest.apply(username, name, email,card,address,state.upper(),phone)
+            self.ids['warnApplication'].text = "Fail to Apply!!!" # for not approve application
+            if applied:                                      # save on DB
+                self.ids['warnApplication'].text = ""
+                self.clearSignup()
+                root.tohome()
 
 class Manager(Screen):
     def __init__(self, **kwargs):
@@ -99,7 +125,6 @@ class Manager(Screen):
                 self.ids['loginCheck'].text = "You are in the Blacklist!!!"
             else:
                 self.ids['loginCheck'].text ="No User Found"
-
 
     # Go to OU Account
     def toProfile(self):
@@ -161,16 +186,9 @@ class Manager(Screen):
         print('history')
         self.ids['screenmanager'].current = "historyPage"
 
-
-
-
     def searchKeyword(self, word):
         self.displayItem()
         print(word)
-
-
-    # def friendlist(self):
-    #     print('friendlist')
 
 
 class eByMazonApp(App):

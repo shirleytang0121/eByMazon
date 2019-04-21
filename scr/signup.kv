@@ -1,13 +1,30 @@
 #:include features.kv
 <Signup>:
-#    name: "signupPage"
-#    title: "Sign Up"
+    stateV: True
+    cardV: True
     BoxLayout:
         pos_hint: {'center_y': 0.5, 'center_x': 0.6}
         orientation: "vertical"
-        WarningLabel:
-            id: userRepeat
-            text: ""
+        BoxLayout:
+            orientation: 'horizontal'
+            WarningLabel:
+                id: warnApplication
+                text: ""
+            BoxLayout:
+                size_hint_y: 0.8
+                orientation: 'vertical'
+                WarningLabel:
+                    id: warnUsername
+                    text:""
+                WarningLabel:
+                    id: warnState
+                    text: "Please Enter Valid State!!"
+                    opacity: 0 if root.stateV else 1
+                WarningLabel:
+                    id: warnCard
+                    text: "Card Num Can't be Empty!!"
+                    opacity: 0 if root.cardV else 1
+
         BoxLayout:
             orientation: 'horizontal'
             GridLayout:
@@ -17,7 +34,7 @@
                     text: 'username'
                 InfoInput:
                     id: GUusername
-                    on_text_validate: root.checkUsername(GUusername.text)
+                    on_text_validate: root.checkUsername(self.text)
                 BoldLabel:
                     text: 'name'
                 InfoInput:
@@ -38,10 +55,12 @@
                     text: 'State'
                 InfoInput:
                     id: GUState
+                    on_text_validate: root.checkState(self.text)
                 BoldLabel:
                     text: 'Card Number'
                 InfoInput:
                     id: GUcard
+                    on_text_validate: root.checkCard(self.text)
             BoxLayout:
                 size_hint_x: .5
         BoxLayout:
