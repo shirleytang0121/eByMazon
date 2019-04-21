@@ -10,22 +10,9 @@ class Home(Screen):
 
 
 class Login(Screen):
-    # def setText(self):
-    #     self.ids['button1'].text="Now"
-    #     self.ids['screenmanager'].current ="testy_screen"
     pass
 
-class Signup(Screen):
-    # def get(self):
-    #     print(self.ids['userRepeat'].text)
-    #     return self.ids['userRepeat'].text
-    # def checkUsername(self, username):
-    #     # self.ids['userRepeat'].text = "Username already "
-    #     self.ids['show'] = True
-    #     print("SU username : %s"% username)
-    #
-    #     pass
-    pass
+
 
 class suHomepage(Screen):
     pass

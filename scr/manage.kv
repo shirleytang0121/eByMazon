@@ -1,42 +1,7 @@
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
 #:include features.kv
-# include itemFrame.kv
+#:include signup.kv
 
-<item>:
-    orientation: "horizontal"
-    itemID:None
-    image:None
-    title: ""
-    info:""
-    description:""
-    priceType:None
-
-
-    Button:
-        size_hint_x: 0.4
-        background_color: 255, 255, 255, 1
-        on_press: root.getItem()
-        Image:
-            texture: root.image
-            y: self.parent.y
-            x: self.parent.x
-            size: self.parent.size
-            allow_stretch: True
-    BoxLayout:
-        pos_hint: {'center_y': 0.4, 'center_x': 0.7}
-        padding:[0,50,0,50]
-        size_hint_x:0.6
-        orientation: "vertical"
-        CenterLabel:
-            size_hint_y: 0.2
-            text: root.title
-        SmallLabel:
-            size_hint_y: 0.3
-            text: root.description
-            multiline: True
-        SmallLabel:
-            size_hint_y: 0.5
-            text: root.info
 <Manager>:
     login: False
     userID: None
@@ -55,7 +20,7 @@
                     size_hint_y: 0.3
                     Image:
                         size_hint_x: 0.2
-                        source: "logo3.png"
+                        source: "images/logo3.png"
                         size: self.parent.size
                         allow_stretch: True
                     BoxLayout:
@@ -72,13 +37,12 @@
                                 multiline: False
                                 on_hint_text: "Search Keyword"
                                 on_text_validate: root.searchKeyword(search_id.text)
-
                             Button:
                                 size_hint_x: 0.05
                                 background_color: 255, 255, 255, 1
                                 on_press: root.searchKeyword(search_id.text)
                                 Image:
-                                    source: "search.png"
+                                    source: "images/search.png"
                                     y: self.parent.y
                                     x: self.parent.x
                                     size: self.parent.size
@@ -198,75 +162,10 @@
                         pos_hint: {'center_y': 1.3, 'center_x': 0.5}
                         text: "Cancel"
                         on_press: root.cancelLogin()
-        Signup:
-#            id: signup
+        Signup:             # implemented in signup.kv
+            id: signup
             name: "signupPage"
             title: "Sign Up"
-            BoxLayout:
-                pos_hint: {'center_y': 0.5, 'center_x': 0.6}
-                orientation: "vertical"
-                WarningLabel:
-                    id: userRepeat
-                    text: ""
-                BoxLayout:
-                    orientation: 'horizontal'
-                    GridLayout:
-                        rows: 7
-                        cols: 2
-                        BoldLabel:
-                            text: 'username'
-                        InfoInput:
-                            id: GUusername
-                            on_text_validate: root.checkUsername(GUusername.text)
-                        BoldLabel:
-                            text: 'name'
-                        InfoInput:
-                            id: GUname
-                        BoldLabel:
-                            text: 'Phone number'
-                        InfoInput:
-                            id: GUphone
-                        BoldLabel:
-                            text: 'Email'
-                        InfoInput:
-                            id: GUemail
-                        BoldLabel:
-                            text: 'Address'
-                        InfoInput:
-                            id: GUaddress
-                        BoldLabel:
-                            text: 'State'
-                        InfoInput:
-                            id: GUState
-                        BoldLabel:
-                            text: 'Card Number'
-                        InfoInput:
-                            id: GUcard
-                    BoxLayout:
-                        size_hint_x: .5
-                BoxLayout:
-                    orientation: "horizontal"
-                    size_hint_x: 0.7
-                    Label:
-                        size_hint_x: .2
-                    OrangeButton:
-                        text: "Sign Up"
-                        on_press:root.signUp(GUusername.text, GUname.text, GUphone.text,GUemail.text, GUaddress.text,GUState.text,GUcard.text)
-                        pos_hint: {'center_y': .7, 'center_x': 0}
-                        size_hint_y: .15
-                    YellowButton:
-                        text: "Clear"
-                        pos_hint: {'center_y': .7, 'center_x': 0}
-                        size_hint_y: .15
-                        on_press: firstName.text =""
-                        on_press: lastName.text =""
-                        on_press: email.text =""
-                        on_press: username.text =""
-                    GrayButton:
-                        text: "Cancel"
-                        on_press:root.tohome()
-                        pos_hint: {'center_y': .7, 'center_x': 0}
-                        size_hint_y: .15
 
 ########################
         suHomepage:

@@ -1,26 +1,50 @@
 import mysql.connector
-from mysql.connector import errorcode, OperationalError
+from mysql.connector import errorcode
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-# from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
 # from kivy.properties import StringProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
 
-
-from GeneralFunctions import General
-from GU import GU
-from SU import SU
-from OU import OU
-from Item import Item
-from otherClass import *
+from scr.GeneralFunctions import General
+from scr.GU import GU
+from scr.SU import SU
+from scr.OU import OU
+from scr.otherClass import *
 
 class item(BoxLayout):
     def getItem(self):
         # print(self.itemID)
         root.toItem(self.itemID,self.title,self.image,self.priceType,self.description)
-    pass
+
+class Signup(Screen):
+    def tohome(self):
+        root.tohome()
+
+    def clearSignup(self):
+        self.ids['GUusername'].text = ""
+        self.ids['GUname'].text = ""
+        self.ids['GUphone'].text = ""
+        self.ids['GUemail'].text = ""
+        self.ids['GUaddress'].text = ""
+        self.ids['GUState'].text = ""
+        self.ids['GUcard'].text = ""
+    def checkUsername(self,username):
+        nameCheck = guest.checkUsername(username)
+        self.ids['userRepeat'].text = "Username already Existed!!!"if not nameCheck else "Username can be used "
+
+    def signUp(self,username, name, phone, email,address,state,card):
+        applied = guest.apply(username, name, email,card,address,state,phone)
+
+        self.ids['userRepeat'].text = "Fail to Apply!!!" # for not approve application
+        if applied:                                      # save on DB
+            self.ids['userRepeat'].text = ""
+            self.clearSignup()
+            root.tohome()
+
+
 class Manager(Screen):
     def __init__(self, **kwargs):
         super(Manager, self).__init__(**kwargs)
@@ -76,24 +100,6 @@ class Manager(Screen):
             else:
                 self.ids['loginCheck'].text ="No User Found"
 
-    # Sign up Page
-    def signUp(self,username, name, phone, email,address,state,card):
-        applied = guest.apply(username, name, email,card,address,state,phone)
-        if applied:
-            self.ids['userRepeat'].text = ""
-            self.ids['screenmanager'].current = "homepage"
-        else:
-            self.ids['userRepeat'].text = "Fail to Apply!!!"
-
-
-
-    def checkUsername(self, username):
-        nameCheck = guest.checkUsername(username)
-        if not nameCheck:
-            self.ids['userRepeat'].text = "Username already Existed!!!"
-        else:
-            self.ids['userRepeat'].text = "Username can be used "
-
 
     # Go to OU Account
     def toProfile(self):
@@ -132,7 +138,6 @@ class Manager(Screen):
 
     def displayItem(self):
         self.ids['rv'].data = general.popularItem()
-            # [{'value': "Button " + str(x), 'cool': str(x)} for x in range(3)]
 
 
     def tohome(self):
@@ -147,7 +152,6 @@ class Manager(Screen):
         self.ids['itemTitle'].text = title
         self.ids['itemDescription'].text=description
         self.ids['screenmanager'].current = "itemPage"
-
 
 
     def friendList(self):
