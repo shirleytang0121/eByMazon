@@ -51,9 +51,9 @@
         BoxLayout:
             size_hint_y: 0.3
             orientation: 'horizontal'
-#            spacing: 20
+            spacing: 40
             Button:
-                size_hint_x: 0.2
+                size_hint_x: 0.3
                 background_color: 255, 255, 255, 1
                 on_press: root.likeItem("fixedItem")
                 on_press: self.background_color = 100,100,100,1
@@ -64,10 +64,10 @@
                     size: self.parent.size
                     allow_stretch: True
             Button:
-                size_hint_x: 0.2
+                size_hint_x: 0.3
                 background_color: 255, 255, 255, 1
-                on_press: root.dislikeItem("fixedItem")
                 on_press: self.background_color = 100,100,100,1
+                on_press: root.dislikeItem("fixedItem")
                 Image:
                     source: "images/dislikeButton.png"
                     y: self.parent.y
@@ -75,19 +75,20 @@
                     size: self.parent.size
                     allow_stretch: True
             Label:
-                size_hint_x: 0.2
+                size_hint_x: 0.5
             LeftLabel:
-                font_size: 30
+
+                font_size: 36
                 text: 'Enter number of item you want buy: '
             ProfileInput:
-                size_hint_y: 0.5
+                size_hint: (0.2,0.5)
                 id: purchaseInfo
                 text_size: self.size
 
             SkyBlueButton:
-                size_hint_y: 0.5
+                size_hint: (0.2,0.5)
                 text: "Purchase"
-                orientation: 'horizontal'
+#                orientation: 'horizontal'
 
 
 #                    BoxLayout:

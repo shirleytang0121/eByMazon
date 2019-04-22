@@ -44,16 +44,16 @@ INSERT INTO FixedPrice(itemID, price, availableNum) VALUES
 (1,15.99,10),(2,17.79,20),(3,7.99,5),(4,12.50,20);
 
 INSERT INTO ItemBid(itemID, startPrice) VALUES (5,300),(6,800);
-
+INSERT INTO BidRecord (itemID,bidderID, bidPrice) VALUES (5,4,320),(5,2,330),(5,5,350);
 INSERT INTO Transaction(itemID, buyerID, singlePrice, priceTotal, numDeal, shippingStatus)
 VALUES (1,7,15.99,16.40,1,TRUE),(1,6,15.99,17.30,1,TRUE);
-
 INSERT INTO Complaint(itemID, complainerID, description, justified) VALUES
 (1,7,'Arrive Too Late',TRUE);
-# Electronic, Home, Grocery, Clothes,Furniture,Education,Music
+INSERT INTO ItemRate(itemID,raterID, rating,description) VALUES
+(1,6,4,'Good Product'),(1,7,3,'Nice Sound');
+-- Electronic, Home, Grocery, Clothes,Furniture,Education,Music
 INSERT INTO Category(category, itemID) VALUES
 ('Music',1),('Music',2),('Education',3),('Education',4),('Electronic',5),('Electronic',6);
-
 INSERT INTO Taboo(word) VALUES ('subway'),('CSC'),('TG'),('super'),('winner');
-
 INSERT INTO ouBlacklist VALUES ('block123'),('test123');
+

@@ -58,20 +58,19 @@ class General():
         """
         :return: list of dict{itemID,image,title,priceType,info,description}
         """
-        qry = "SELECT itemID, image, title, description, priceType, usedStatus FROM ItemInfo WHERE saleStatus = True;"
+        qry = "SELECT itemID, image, title, description, priceType FROM ItemInfo WHERE saleStatus = True;"
         self.cursor.execute(qry)
         allItem = []
         for info in self.cursor:
             # print(type(info[1]))
 
             # data = BytesIO(info[1])
-            used,priceType = "No","FixedPrice"
+            priceType = "FixedPrice"
             if info[4]:
                 priceType="Bidding"
-            if info[5]:
-                used = "Yes"
 
-            information = 'Price Type: '+priceType +'\nUsed Status:'+used
+
+            information = 'Price Type: '+priceType
             allItem.append({"itemID":info[0],"image":CoreImage(BytesIO(info[1]), ext="png").texture,"title":info[2],
                             "priceType":info[4],"info":information,"description":info[3]})
         return allItem

@@ -112,7 +112,7 @@ CREATE TABLE FixedPrice(
 CREATE TABLE ItemBid(
   itemID INTEGER PRIMARY KEY,
   startPrice FLOAT,
-  usedStatus BOOLEAN,
+  usedStatus BOOLEAN DEFAULT TRUE, -- true for used, false for new
 --  bid_high FLOAT,
   endDay TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
@@ -122,7 +122,6 @@ CREATE TABLE BidRecord(
   itemID INTEGER,
   bidderID INTEGER,
   bidPrice FLOAT,
-
   bidTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (itemID, bidderID),
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE,
@@ -145,8 +144,8 @@ CREATE TABLE Transaction(
   buyerID INTEGER REFERENCES OU(ouID) ON DELETE SET NULL,
   singlePrice FLOAT,    --  If multi available, price will be single price
   priceTotal FLOAT,
-  numDeal INTEGER,    --  Need for multi-available
-  shippingStatus BOOLEAN,  -- False for not ship, True for shipped
+  numDeal INTEGER DEFAULT 1,    --  Need for multi-available
+  shippingStatus BOOLEAN DEFAULT FALSE,  -- False for not ship, True for shipped
   dealTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (itemID,buyerID),
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
@@ -166,9 +165,9 @@ CREATE TABLE ItemRate(
 CREATE TABLE Complaint(
   itemID  INTEGER,
   complainerID  INTEGER REFERENCES Transaction(buyerID) ON DELETE SET NULL,
-  description VARCHAR(128),
+  description VARCHAR(128) NOT NULL,
   compliantTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  justified BOOLEAN,
+  justified BOOLEAN DEFAULT FALSE, -- false for not view by su yet, true for justified by su
   PRIMARY KEY (itemID, complainerID),
   FOREIGN KEY (itemID) REFERENCES Transaction(itemID) ON DELETE CASCADE
 );
@@ -188,14 +187,14 @@ CREATE TABLE Warning(
 -- Search
 CREATE TABLE searchKeyword(
   keyword VARCHAR(64) PRIMARY KEY ,
-  frequency INTEGER
+  frequency INTEGER DEFAULT 1
 --   FOREIGN KEY (keyword) REFERENCES KeywordRecord(keyword)
 );
 
 CREATE TABLE OUlike(
   ouID INTEGER,
   keyword VARCHAR(64),
-  frequency INTEGER,
+  frequency INTEGER DEFAULT 1,
   PRIMARY KEY (ouID, keyword),
   FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE,
   FOREIGN KEY (keyword) REFERENCES searchKeyword(keyword)
@@ -203,7 +202,7 @@ CREATE TABLE OUlike(
 
 CREATE TABLE ItemView(
   itemID INTEGER PRIMARY KEY,
-  frequency INTEGER,
+  frequency INTEGER DEFAULT 0,
   FOREIGN KEY (itemID) REFERENCES itemOwner(itemID) ON DELETE CASCADE
 );
 

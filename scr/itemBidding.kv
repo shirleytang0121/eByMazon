@@ -37,28 +37,29 @@
                     text: "Current Bid: "
                 LeftLabel:
                     id: itemBid
-                    text: '$##.##'
+                LeftLabel:
+                    text: "UsedStatus: "
+                LeftLabel:
+                    id: itemUsed
                 LeftLabel:
                     text: "Likes: "
                 LeftLabel:
                     id: itemLike
-                    text: '##'
                 LeftLabel:
                     text: "DisLike: "
                 LeftLabel:
                     id: itemDislike
-                    text: "##"
 #                        Label:
 #                            size_hint_y: 0.2
         # ------------- top half ------------#
 
         BoxLayout:
-            size_hint_y: 0.2
+            size_hint_y: 0.3
             orientation: 'horizontal'
             spacing: 20
 
             Button:
-                size_hint_x: 0.05
+                size_hint_x: 0.25
                 background_color: 255, 255, 255, 1
                 on_press: root.likeItem("biddingItem")
                 on_press: self.background_color= 100,100,100,0.5
@@ -69,7 +70,7 @@
                     size: self.parent.size
                     allow_stretch: True
             Button:
-                size_hint_x: 0.05
+                size_hint_x: 0.25
                 background_color: 255, 255, 255, 1
                 on_press: root.dislikeItem("biddingItem")
                 on_press: self.background_color= 100,100,100,0.5
@@ -79,14 +80,18 @@
                     x: self.parent.x
                     size: self.parent.size
                     allow_stretch: True
+            Vspace:
+                size_hint_x: 0.4
             LeftLabel:
-                font_size: 30
+                font_size: 36
                 text: 'Enter price you want bid: '
             ProfileInput:
+                size_hint: (0.3,0.5)
                 id: purchaseInfo
                 text_size: self.size
 
             SkyBlueButton:
+                size_hint: (0.2,0.5)
                 text: "Bid"
                 orientation: 'horizontal'
 
@@ -109,52 +114,52 @@
 #                            # size: self.size
 #                            size_hint_x: .2
 #                            size_hint_y: .5
-
+#
         BoxLayout:
             height: 30
             orientation: 'vertical'
-            LeftLabel:
-                text: "Ratings:"
-                font_size: 48
-                bold: True
-
-            GridLayout:
-                cols: 2
-                row_force_default: True
-                row_default_height: 50
-                padding: 20
-                spacing: 10
-
-                LeftLabel:
-                    text: "username"
-                    size_hint_x: .2
-
-                LeftLabel:
-                    id: text_input
-                    markup: True
-                    text: 'this is my comment'
-                    font_size: 32
-                    size_hint: 1.8, .1
-                LeftLabel:
-                    text: "username"
-                    size_hint_x: .2
-
-                LeftLabel:
-                    id: text_input
-                    markup: True
-                    text: 'this is my comment'
-                    font_size: 32
-                    size_hint: 1.8, .1
-                LeftLabel:
-                    text: "username"
-                    size_hint_x: .2
-
-                LeftLabel:
-                    id: text_input
-                    markup: True
-                    text: 'this is my comment'
-                    font_size: 32
-                    size_hint: 1.8, .1
+#            LeftLabel:
+#                text: "Ratings:"
+#                font_size: 48
+#                bold: True
+#
+#            GridLayout:
+#                cols: 2
+#                row_force_default: True
+#                row_default_height: 50
+#                padding: 20
+#                spacing: 10
+#
+#                LeftLabel:
+#                    text: "username"
+#                    size_hint_x: .2
+#
+#                LeftLabel:
+#                    id: text_input
+#                    markup: True
+#                    text: 'this is my comment'
+#                    font_size: 32
+#                    size_hint: 1.8, .1
+#                LeftLabel:
+#                    text: "username"
+#                    size_hint_x: .2
+#
+#                LeftLabel:
+#                    id: text_input
+#                    markup: True
+#                    text: 'this is my comment'
+#                    font_size: 32
+#                    size_hint: 1.8, .1
+#                LeftLabel:
+#                    text: "username"
+#                    size_hint_x: .2
+#
+#                LeftLabel:
+#                    id: text_input
+#                    markup: True
+#                    text: 'this is my comment'
+#                    font_size: 32
+#                    size_hint: 1.8, .1
             RedButton:
                 text: 'I WANT TO RATE'
                 size_hint_y: .3

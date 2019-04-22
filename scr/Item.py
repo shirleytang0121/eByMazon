@@ -16,12 +16,12 @@ class Item():
         # return image, title, priceType, saleStatus, postTime
         # need for view item action
 
-        qry = "SELECT image, title, description, priceType, usedStatus,likeness,dislike FROM ItemInfo WHERE itemID = %s;"%self.itemID
+        qry = "SELECT image, title, description, priceType,likeness,dislike FROM ItemInfo WHERE itemID = %s;"%self.itemID
         self.cursor.execute(qry)
         profile = self.cursor.fetchone()
         self.image= CoreImage(BytesIO(profile[0]), ext="png").texture
         self.title, self.descrpition, self.priceType = profile[1],profile[2],profile[3]
-        self.usedStatus,self.likeness,self.dislike = profile[4],profile[5],profile[6]
+        self.likeness,self.dislike = profile[4],profile[5]
 
         if self.priceType:      # for bidding
             self.getBiddingInfo()
@@ -38,12 +38,13 @@ class Item():
             self.price,self.available = info[0],info[1]
 
     def getBiddingInfo(self):
-        qry = "SELECT startPrice, endDay FROM ItemBid WHERE itemID = %s;"%self.itemID
+        qry = "SELECT startPrice, usedStatus,endDay FROM ItemBid WHERE itemID = %s;"%self.itemID
 
         self.cursor.execute(qry)
         info = self.cursor.fetchone()
         if info:
-            self.price,self.endDay = info[0], "{:%b %d, %Y}".format(info[1])
+            self.price, self.endDay = info[0], "{:%b %d, %Y}".format(info[2])
+            self.usedStatus = "True" if info[1] else "False"
 
     def getBiddings(self):
         qry = "SELECT bidderID, bidPrice,bidTime FROM BidRecord WHERE itemID = %s ORDER BY bidPrice DESC;"%self.itemID

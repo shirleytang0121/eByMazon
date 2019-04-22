@@ -271,6 +271,7 @@ class Manager(Screen):
         self.ids['biddingItem'].ids['itemPrice'].text="$"+str(item.price)
         self.ids['biddingItem'].ids['itemLike'].text = str(item.likeness)
         self.ids['biddingItem'].ids['itemDislike'].text = str(item.dislike)
+        self.ids['biddingItem'].ids['itemUsed'].text = str(item.usedStatus)
         try:
             self.ids['biddingItem'].ids['itemBid'].text = "$" + str(item.highestPrice)
         except AttributeError:
