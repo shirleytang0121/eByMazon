@@ -33,6 +33,8 @@ INSERT INTO MessageSent(senderID, receiverID, message) VALUES
 INSERT INTO ItemOwner(itemID, ownerID) VALUES
 (1,2),(2,2),(3,4),(4,4),(5,3),(6,5);
 
+INSERT INTO ItemView(itemID) VALUES (1),(2),(3),(4),(5),(6);
+
 -- INSERT INTO KeywordRecord(keyword, itemID) VALUES
 -- ('CD',1),('SHE',1),('DVD',2),('SHE',2),
 -- ('BOOK',3),('HARRY POTTER',3),('J. K. ROWLING',3),

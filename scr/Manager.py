@@ -32,9 +32,9 @@ class item(BoxLayout):
         print(type(self.priceType))
 
         if self.priceType:
-            root.tobidItem(self.itemID)
+            root.tobidItem(self.itemIndex)
         else:
-            root.tofixedItem(self.itemID)
+            root.tofixedItem(self.itemIndex)
 
 class Signup(Screen):
     # sign up page implement in signup.kv
@@ -139,12 +139,29 @@ class biddingItem(Screen):
         root.dislikeItem(name)
     def likeItem(self,name):
         root.likeItem(name)
+
 class Manager(Screen):
     login = BooleanProperty()
     ouID = ObjectProperty()
     def __init__(self, **kwargs):
         super(Manager, self).__init__(**kwargs)
         self.displayItem()
+
+    # ###### Display Item
+    def displayItem(self):
+        global items
+        items = general.popularItem()
+        returndict = []
+        i = 0
+        for item in items:
+            typeStr = "Bidding" if item.priceType else "Fixed Price"
+            print(item.price)
+            returndict.append({"itemIndex": i,"image": item.image,"title":item.title, "priceType":item.priceType,
+                               "price":str(item.price),"reviews": str(item.views), "likes": str(item.likeness),
+                               "typeStr": typeStr})
+            i+= 1
+        self.ids['rv'].data = returndict
+
 
     def tologin(self):
         if self.login:
@@ -227,6 +244,10 @@ class Manager(Screen):
         self.ids['editState'].text = ou.state
         self.ids['screenmanager'].current = "editPage"
 
+
+
+
+
     def changePassword(self):
         print("Change Password")
     def sortPop(self):
@@ -238,9 +259,7 @@ class Manager(Screen):
     def sortPricehl(self):
         print("Sort by price high to low")
 
-    def displayItem(self):
-        self.ids['rv'].data = general.popularItem()
-        pass
+
 
     def tohome(self):
         self.ids['screenmanager'].current = "homepage"
@@ -250,9 +269,9 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "signupPage"
 
 
-    def tofixedItem(self,itemID):
-        global item
-        item = Item(cursor=cursor,itemID=itemID)
+    def tofixedItem(self,itemIndex):
+        item = items[itemIndex]
+        # item = Item(cursor=cursor,itemID=itemID)
         self.ids['fixedItem'].ids['itemImage'].texture = item.image
         self.ids['fixedItem'].ids['itemTitle'].text = item.title
         self.ids['fixedItem'].ids['itemDescription'].text=item.descrpition
@@ -262,9 +281,10 @@ class Manager(Screen):
         self.ids['fixedItem'].ids['itemDislike'].text = str(item.dislike)
         self.ids['screenmanager'].current = "fixedItem"
 
-    def tobidItem(self,itemID):
-        global item
-        item = Item(cursor=cursor,itemID=itemID)
+    def tobidItem(self,itemIndex):
+    #     global item
+    #     item = Item(cursor=cursor,itemID=itemID)
+        item = items[itemIndex]
         self.ids['biddingItem'].ids['itemImage'].texture = item.image
         self.ids['biddingItem'].ids['itemTitle'].text = item.title
         self.ids['biddingItem'].ids['itemDescription'].text=item.descrpition
@@ -335,5 +355,5 @@ if __name__ == "__main__":
 
     general = General(cnx=cnx,cursor=cursor)
     guest = GU(cnx=cnx,cursor=cursor)
-    ou,su,item = None,None,None
+    ou,su,items = None,None,None
     eByMazonApp().run()

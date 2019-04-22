@@ -23,6 +23,10 @@ class Item():
         self.title, self.descrpition, self.priceType = profile[1],profile[2],profile[3]
         self.likeness,self.dislike = profile[4],profile[5]
 
+        qry = "SELECT frequency from ItemView WHERE itemID = %s;"% self.itemID
+        self.cursor.execute(qry)
+        self.views = self.cursor.fetchone()[0]
+
         if self.priceType:      # for bidding
             self.getBiddingInfo()
             self.getBiddings()
@@ -84,6 +88,15 @@ class Item():
             self.dislike+=1
         except mysql.connector.errors as err:
             print("Update dislike error: %s"%err)
+
+
+    def addView(self):
+        qry = "UPDATE ItemView SET frequency = frequency+1 WHERE itemID = %s;"% self.itemID
+        try:
+            self.cursor.execute(qry)
+            self.views +=1
+        except mysql.connector.errors as err:
+            print("Update views error: %s"%err)
 
     def searchItem(self,keywords):
         # look through all items' title, compare with all capitalize letters

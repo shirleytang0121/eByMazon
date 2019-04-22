@@ -3,8 +3,10 @@ from kivy.core.image import Image as CoreImage
 from io import BytesIO
 try:
     from scr.GU import GU
+    from scr.Item import Item
 except ModuleNotFoundError:
     from GU import GU
+    from Item import Item
 
 class General():
     def __init__(self,cursor,cnx):
@@ -53,26 +55,16 @@ class General():
             return False
 
 
-
     def popularItem(self):
         """
-        :return: list of dict{itemID,image,title,priceType,info,description}
+        :return: list of Item()
         """
-        qry = "SELECT itemID, image, title, description, priceType FROM ItemInfo WHERE saleStatus = True;"
+        qry = "SELECT itemID FROM ItemInfo WHERE saleStatus = True;"
         self.cursor.execute(qry)
         allItem = []
-        for info in self.cursor:
-            # print(type(info[1]))
-
-            # data = BytesIO(info[1])
-            priceType = "FixedPrice"
-            if info[4]:
-                priceType="Bidding"
-
-
-            information = 'Price Type: '+priceType
-            allItem.append({"itemID":info[0],"image":CoreImage(BytesIO(info[1]), ext="png").texture,"title":info[2],
-                            "priceType":info[4],"info":information,"description":info[3]})
+        allItems = self.cursor.fetchall()
+        for info in allItems:
+            allItem.append(Item(cursor=self.cursor,itemID=info[0]))
         return allItem
 
     def appeal(self,ouID,message):

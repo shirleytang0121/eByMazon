@@ -46,9 +46,9 @@ CREATE TABLE OU(
 
 CREATE TABLE OUstatus(
   ouID INTEGER PRIMARY KEY,
-  moneySpend FLOAT,
-  aveRate FLOAT,
-  status INTEGER ,    -- 0 for OU, 1 for VIP, 2 for Suspended, 3 for remove
+  moneySpend FLOAT DEFAULT 0,
+  aveRate FLOAT DEFAULT 0,
+  status INTEGER DEFAULT 0,    -- 0 for OU, 1 for VIP, 2 for Suspended, 3 for remove
   statusTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- ON UPDATE CURRENT_TIMESTAMP, -- check for changing status
   FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE
 );
@@ -155,7 +155,7 @@ CREATE TABLE Transaction(
 CREATE TABLE ItemRate(
   itemID  INTEGER,
   raterID  INTEGER REFERENCES Transaction(buyerID) ON DELETE SET NULL,
-  rating INTEGER,     -- From 0 to 5
+  rating INTEGER NOT NULL,     -- From 0 to 5
   description VARCHAR(128),
   postTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(itemID, raterID),
@@ -221,3 +221,15 @@ CREATE TABLE ouBlacklist (ouName VARCHAR(64));    -- for blockOU, sold item will
 -- ouName is the username
 
 CREATE TABLE itemBlackList(itemID INTEGER);
+
+-- Trigger
+-- delimiter #
+-- CREATE TRIGGER ouTrigger AFTER INSERT ON OU
+--   FOR EACH ROW
+--   BEGIN
+--     INSERT INTO OUstatus(ouID, moneySpend, aveRate, status) VALUES (new.ouID,0,0,0);
+--  end #
+
+
+-- INSERT INTO User(id, username, password, usertype) VALUE (13,'fdas','dsafa',0);
+-- INSERT INTO OU (ouID, name, cardNumber, email, address, state, phone) VALUES (13,'ds','sad','asdf','ad','sa','sad');
