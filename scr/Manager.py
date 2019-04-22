@@ -6,7 +6,7 @@ from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
-from kivy.properties import BooleanProperty,StringProperty,ObjectProperty
+from kivy.properties import BooleanProperty,NumericProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
 
@@ -125,20 +125,22 @@ class transactionHistory(Screen):
     def backProfile(self):
         root.toProfile()
 class fixedItem(Screen):
+    itemIndex = NumericProperty()
     def tohome(self):
         root.tohome()
     def dislikeItem(self,name):
-        root.dislikeItem(name)
+        root.dislikeItem(name,self.itemIndex)
     def likeItem(self,name):
-        root.likeItem(name)
+        root.likeItem(name,self.itemIndex)
 
 class biddingItem(Screen):
+    itemIndex = NumericProperty()
     def tohome(self):
         root.tohome()
     def dislikeItem(self,name):
-        root.dislikeItem(name)
+        root.dislikeItem(name,self.itemIndex)
     def likeItem(self,name):
-        root.likeItem(name)
+        root.likeItem(name,self.itemIndex)
 
 class Manager(Screen):
     login = BooleanProperty()
@@ -262,6 +264,7 @@ class Manager(Screen):
 
 
     def tohome(self):
+        self.displayItem()
         self.ids['screenmanager'].current = "homepage"
 
 
@@ -271,7 +274,9 @@ class Manager(Screen):
 
     def tofixedItem(self,itemIndex):
         item = items[itemIndex]
+        item.addView()
         # item = Item(cursor=cursor,itemID=itemID)
+        self.ids['fixedItem'].itemIndex = itemIndex
         self.ids['fixedItem'].ids['itemImage'].texture = item.image
         self.ids['fixedItem'].ids['itemTitle'].text = item.title
         self.ids['fixedItem'].ids['itemDescription'].text=item.descrpition
@@ -285,6 +290,9 @@ class Manager(Screen):
     #     global item
     #     item = Item(cursor=cursor,itemID=itemID)
         item = items[itemIndex]
+        item.addView()
+
+        self.ids['biddingItem'].itemIndex = itemIndex
         self.ids['biddingItem'].ids['itemImage'].texture = item.image
         self.ids['biddingItem'].ids['itemTitle'].text = item.title
         self.ids['biddingItem'].ids['itemDescription'].text=item.descrpition
@@ -298,13 +306,14 @@ class Manager(Screen):
             self.ids['biddingItem'].ids['itemBid'].text = "None"
         self.ids['screenmanager'].current = "biddingItem"
 
-    def likeItem(self,pagename):
-        item.likeItem()
-        self.ids[pagename].ids['itemLike'].text = str(item.likeness)
+    # ###############
+    def likeItem(self,pagename,itemIndex):
+        items[itemIndex].likeItem()
+        self.ids[pagename].ids['itemLike'].text = str(items[itemIndex].likeness)
 
-    def dislikeItem(self,pagename):
-        item.dislikeItem()
-        self.ids[pagename].ids['itemDislike'].text = str(item.dislike)
+    def dislikeItem(self,pagename,itemIndex):
+        items[itemIndex].dislikeItem()
+        self.ids[pagename].ids['itemDislike'].text = str(items[itemIndex].dislike)
 
     def friendList(self):
         print('friendlist')
