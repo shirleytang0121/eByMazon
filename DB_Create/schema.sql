@@ -3,8 +3,10 @@ CREATE DATABASE IF NOT EXISTS eByMazon;
 USE eByMazon;
 
 -- Drop all tables if exists
+
 DROP TABLE IF EXISTS Taboo,ouBlacklist,itemBlackList,Notification,Tax;
-DROP TABLE IF EXISTS Complaint,Warning,OUlike,ItemView;
+DROP TABLE IF EXISTS Complaint,Warning,OUlike;
+DROP TABLE IF EXISTS ItemLike,ItemView;
 DROP TABLE IF EXISTS BidRecord,Category,searchKeyword,ItemRate;
 DROP TABLE IF EXISTS FixedPrice,ItemBid;
 DROP TABLE IF EXISTS Transaction,KeywordRecord;
@@ -102,6 +104,10 @@ CREATE TABLE ItemInfo(
 --   PRIMARY KEY (keyword,itemID),
 --   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
 -- );
+CREATE TABLE ItemLike(
+  itemID INTEGER REFERENCES ItemOwner(itemID) ON DELETE CASCADE,
+  ouID INTEGER REFERENCES OU(ouID) ON DELETE CASCADE
+);
 
 CREATE TABLE FixedPrice(
   itemID INTEGER PRIMARY KEY,

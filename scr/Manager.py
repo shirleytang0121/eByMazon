@@ -29,7 +29,6 @@ except ModuleNotFoundError:
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
     def getItem(self):
-        print(type(self.priceType))
 
         if self.priceType:
             root.tobidItem(self.itemIndex)
@@ -159,7 +158,6 @@ class Manager(Screen):
         i = 0
         for item in items:
             typeStr = "Bidding" if item.priceType else "Fixed Price"
-            print(item.price)
             returndict.append({"itemIndex": i,"image": item.image,"title":item.title, "priceType":item.priceType,
                                "price":str(item.price),"reviews": str(item.views), "likes": str(item.likeness),
                                "typeStr": typeStr})
@@ -311,11 +309,11 @@ class Manager(Screen):
 
     # ###############
     def likeItem(self,pagename,itemIndex):
-        items[itemIndex].likeItem()
+        items[itemIndex].likeItem(ou.ID)
         self.ids[pagename].ids['itemLike'].text = str(items[itemIndex].likeness)
 
     def dislikeItem(self,pagename,itemIndex):
-        items[itemIndex].dislikeItem()
+        items[itemIndex].dislikeItem(ou.ID)
         self.ids[pagename].ids['itemDislike'].text = str(items[itemIndex].dislike)
 
     def friendList(self):

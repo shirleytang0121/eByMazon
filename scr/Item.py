@@ -74,23 +74,46 @@ class Item():
             self.ratings.append({"Rating": info[0],"Comment": info[1], "Time": info[2]})
 
 
-    def likeItem(self):
-        qry = "UPDATE ItemInfo SET likeness = likeness+1 WHERE itemID = %s;"% self.itemID
-        try:
-            self.cursor.execute(qry)
-            self.likeness+=1
-            self.cnx.commit()
-        except mysql.connector.errors as err:
-            print("Update likeness error: %s"%err)
+    def checkLiked(self,ouID):
+        qry = "SELECT EXISTS(SELECT * from ItemOwner WHERE itemID=%s AND ownerID =%s);" % (self.itemID,ouID)
+        self.cursor.execute(qry)
 
-    def dislikeItem(self):
-        qry = "UPDATE ItemInfo SET dislike = dislike+1 WHERE itemID = %s;"% self.itemID
-        try:
-            self.cursor.execute(qry)
-            self.dislike+=1
-            self.cnx.commit()
-        except mysql.connector.errors as err:
-            print("Update dislike error: %s"%err)
+        if self.cursor.fetchone()[0]:
+            return False
+
+        qry = "SELECT EXISTS(SELECT * from ItemLike WHERE itemID=%s AND ouID =%s);" % (self.itemID,ouID)
+        self.cursor.execute(qry)
+        if self.cursor.fetchone()[0]:
+            return False
+        return True
+
+    def addLiked(self,ouID):
+        qry = "INSERT INTO ItemLike(itemID,ouID) VALUES (%s,%s);" %  (self.itemID,ouID)
+        self.cursor.execute(qry)
+        # self.cnx.commit()
+
+    def likeItem(self,ouID):
+        if self.checkLiked(ouID):
+            qry = "UPDATE ItemInfo SET likeness = likeness+1 WHERE itemID = %s;" % self.itemID
+            try:
+                self.cursor.execute(qry)
+                self.likeness+=1
+                self.addLiked(ouID)
+                self.cnx.commit()
+
+            except mysql.connector.errors as err:
+                print("Update likeness error: %s"%err)
+
+    def dislikeItem(self,ouID):
+        if self.checkLiked(ouID):
+            qry = "UPDATE ItemInfo SET dislike = dislike+1 WHERE itemID = %s;"% self.itemID
+            try:
+                self.cursor.execute(qry)
+                self.dislike+=1
+                self.addLiked(ouID)
+                self.cnx.commit()
+            except mysql.connector.errors as err:
+                print("Update dislike error: %s"%err)
 
 
     def addView(self):
