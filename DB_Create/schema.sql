@@ -89,7 +89,6 @@ CREATE TABLE ItemInfo(
   title VARCHAR(64),
   description VARCHAR(256),
   priceType BOOLEAN,        -- False for fixed price, true for bidding
-  usedStatus BOOLEAN,
   saleStatus BOOLEAN DEFAULT FALSE,
   approvalStatus BOOLEAN DEFAULT FALSE,   -- approval by SU
   likeness INTEGER DEFAULT 0,
@@ -113,6 +112,7 @@ CREATE TABLE FixedPrice(
 CREATE TABLE ItemBid(
   itemID INTEGER PRIMARY KEY,
   startPrice FLOAT,
+  usedStatus BOOLEAN,
 --  bid_high FLOAT,
   endDay TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
@@ -122,6 +122,7 @@ CREATE TABLE BidRecord(
   itemID INTEGER,
   bidderID INTEGER,
   bidPrice FLOAT,
+
   bidTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (itemID, bidderID),
   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE,
@@ -157,7 +158,6 @@ CREATE TABLE ItemRate(
   raterID  INTEGER REFERENCES Transaction(buyerID) ON DELETE SET NULL,
   rating INTEGER,     -- From 0 to 5
   description VARCHAR(128),
-  likes INTEGER,      --  Not need for second hand
   postTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(itemID, raterID),
   FOREIGN KEY (itemID) REFERENCES Transaction(itemID) ON DELETE CASCADE

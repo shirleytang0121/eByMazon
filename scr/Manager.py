@@ -16,12 +16,14 @@ try:
     from scr.GU import GU
     from scr.SU import SU
     from scr.OU import OU
+    from scr.Item import Item
     from scr.otherClass import *
 except ModuleNotFoundError:
     from GeneralFunctions import General
     from GU import GU
     from SU import SU
     from OU import OU
+    from Item import Item
     from otherClass import *
 
 class item(BoxLayout):
@@ -30,9 +32,9 @@ class item(BoxLayout):
         print(type(self.priceType))
 
         if self.priceType:
-            root.tobidItem(self.itemID, self.title, self.image, self.priceType, self.description)
+            root.tobidItem(self.itemID)
         else:
-            root.tofixedItem(self.itemID,self.title,self.image,self.priceType,self.description)
+            root.tofixedItem(self.itemID)
 
 class Signup(Screen):
     # sign up page implement in signup.kv
@@ -125,10 +127,18 @@ class transactionHistory(Screen):
 class fixedItem(Screen):
     def tohome(self):
         root.tohome()
+    def dislikeItem(self,name):
+        root.dislikeItem(name)
+    def likeItem(self,name):
+        root.likeItem(name)
+
 class biddingItem(Screen):
     def tohome(self):
         root.tohome()
-
+    def dislikeItem(self,name):
+        root.dislikeItem(name)
+    def likeItem(self,name):
+        root.likeItem(name)
 class Manager(Screen):
     login = BooleanProperty()
     ouID = ObjectProperty()
@@ -240,17 +250,40 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "signupPage"
 
 
-    def tofixedItem(self,itemID,title,image,priceType,description):
-        self.ids['fixedItem'].ids['itemImage'].texture = image
-        self.ids['fixedItem'].ids['itemTitle'].text = title
-        self.ids['fixedItem'].ids['itemDescription'].text=description
+    def tofixedItem(self,itemID):
+        global item
+        item = Item(cursor=cursor,itemID=itemID)
+        self.ids['fixedItem'].ids['itemImage'].texture = item.image
+        self.ids['fixedItem'].ids['itemTitle'].text = item.title
+        self.ids['fixedItem'].ids['itemDescription'].text=item.descrpition
+        self.ids['fixedItem'].ids['itemPrice'].text="$"+str(item.price)
+        self.ids['fixedItem'].ids['itemAvailable'].text = str(item.available)
+        self.ids['fixedItem'].ids['itemLike'].text = str(item.likeness)
+        self.ids['fixedItem'].ids['itemDislike'].text = str(item.dislike)
         self.ids['screenmanager'].current = "fixedItem"
 
-    def tobidItem(self,itemID,title,image,priceType,description):
-        self.ids['biddingItem'].ids['itemImage'].texture = image
-        self.ids['biddingItem'].ids['itemTitle'].text = title
-        self.ids['biddingItem'].ids['itemDescription'].text=description
+    def tobidItem(self,itemID):
+        global item
+        item = Item(cursor=cursor,itemID=itemID)
+        self.ids['biddingItem'].ids['itemImage'].texture = item.image
+        self.ids['biddingItem'].ids['itemTitle'].text = item.title
+        self.ids['biddingItem'].ids['itemDescription'].text=item.descrpition
+        self.ids['biddingItem'].ids['itemPrice'].text="$"+str(item.price)
+        self.ids['biddingItem'].ids['itemLike'].text = str(item.likeness)
+        self.ids['biddingItem'].ids['itemDislike'].text = str(item.dislike)
+        try:
+            self.ids['biddingItem'].ids['itemBid'].text = "$" + str(item.highestPrice)
+        except AttributeError:
+            self.ids['biddingItem'].ids['itemBid'].text = "None"
         self.ids['screenmanager'].current = "biddingItem"
+
+    def likeItem(self,pagename):
+        item.likeItem()
+        self.ids[pagename].ids['itemLike'].text = str(item.likeness)
+
+    def dislikeItem(self,pagename):
+        item.dislikeItem()
+        self.ids[pagename].ids['itemDislike'].text = str(item.dislike)
 
     def friendList(self):
         print('friendlist')
@@ -301,6 +334,5 @@ if __name__ == "__main__":
 
     general = General(cnx=cnx,cursor=cursor)
     guest = GU(cnx=cnx,cursor=cursor)
-    ou = None
-    su = None
+    ou,su,item = None,None,None
     eByMazonApp().run()

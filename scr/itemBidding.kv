@@ -29,26 +29,24 @@
                     text: "Description: "
                 LeftLabel:
                     id: itemDescription
-#                            text: 'xxxxxxxx'
                 LeftLabel:
                     text: "Start Bidding Price: "
                 LeftLabel:
-                    id: itemLikeness
-                    text: '##'
+                    id: itemPrice
                 LeftLabel:
                     text: "Current Bid: "
                 LeftLabel:
-                    id: itemPrice
+                    id: itemBid
                     text: '$##.##'
                 LeftLabel:
                     text: "Likes: "
                 LeftLabel:
-                    id: itemLikeness
+                    id: itemLike
                     text: '##'
                 LeftLabel:
                     text: "DisLike: "
                 LeftLabel:
-                    id: itemLikeness
+                    id: itemDislike
                     text: "##"
 #                        Label:
 #                            size_hint_y: 0.2
@@ -58,6 +56,29 @@
             size_hint_y: 0.2
             orientation: 'horizontal'
             spacing: 20
+
+            Button:
+                size_hint_x: 0.05
+                background_color: 255, 255, 255, 1
+                on_press: root.likeItem("biddingItem")
+                on_press: self.background_color= 100,100,100,0.5
+                Image:
+                    source: "images/likeButton.png"
+                    y: self.parent.y
+                    x: self.parent.x
+                    size: self.parent.size
+                    allow_stretch: True
+            Button:
+                size_hint_x: 0.05
+                background_color: 255, 255, 255, 1
+                on_press: root.dislikeItem("biddingItem")
+                on_press: self.background_color= 100,100,100,0.5
+                Image:
+                    source: "images/dislikeButton.png"
+                    y: self.parent.y
+                    x: self.parent.x
+                    size: self.parent.size
+                    allow_stretch: True
             LeftLabel:
                 font_size: 30
                 text: 'Enter price you want bid: '

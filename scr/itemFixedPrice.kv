@@ -30,38 +30,62 @@
                     text: "Description: "
                 LeftLabel:
                     id: itemDescription
-#                            text: 'xxxxxxxx'
                 LeftLabel:
                     text: "Price: "
                 LeftLabel:
                     id: itemPrice
-                    text: '$##.##'
+                LeftLabel:
+                    text: "Number Available: "
+                LeftLabel:
+                    id: itemAvailable
                 LeftLabel:
                     text: "Likes: "
                 LeftLabel:
-                    id: itemLikeness
-                    text: '##'
+                    id: itemLike
                 LeftLabel:
                     text: "DisLike: "
                 LeftLabel:
-                    id: itemLikeness
-                    text: "##"
-#                        Label:
-#                            size_hint_y: 0.2
+                    id: itemDislike
         # ------------- top half ------------#
 
         BoxLayout:
-            size_hint_y: 0.2
+            size_hint_y: 0.3
             orientation: 'horizontal'
-            spacing: 20
+#            spacing: 20
+            Button:
+                size_hint_x: 0.2
+                background_color: 255, 255, 255, 1
+                on_press: root.likeItem("fixedItem")
+                on_press: self.background_color = 100,100,100,1
+                Image:
+                    source: "images/likeButton.png"
+                    y: self.parent.y
+                    x: self.parent.x
+                    size: self.parent.size
+                    allow_stretch: True
+            Button:
+                size_hint_x: 0.2
+                background_color: 255, 255, 255, 1
+                on_press: root.dislikeItem("fixedItem")
+                on_press: self.background_color = 100,100,100,1
+                Image:
+                    source: "images/dislikeButton.png"
+                    y: self.parent.y
+                    x: self.parent.x
+                    size: self.parent.size
+                    allow_stretch: True
+            Label:
+                size_hint_x: 0.2
             LeftLabel:
                 font_size: 30
                 text: 'Enter number of item you want buy: '
             ProfileInput:
+                size_hint_y: 0.5
                 id: purchaseInfo
                 text_size: self.size
 
             SkyBlueButton:
+                size_hint_y: 0.5
                 text: "Purchase"
                 orientation: 'horizontal'
 

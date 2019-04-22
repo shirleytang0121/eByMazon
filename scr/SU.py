@@ -27,3 +27,8 @@ class SU():
         #                  check for two justified compliant that will cause warning
         pass
 
+
+    def itemBlacklist(self,itemID):
+        # remove all the occurance of this item in DB
+        # add to itBlacklist
+        pass

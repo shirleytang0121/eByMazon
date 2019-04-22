@@ -5,6 +5,7 @@ try:
     from scr.GU import GU
 except ModuleNotFoundError:
     from GU import GU
+
 class General():
     def __init__(self,cursor,cnx):
         self.cnx = cnx
@@ -51,16 +52,12 @@ class General():
             print("Error in Remove OU: %s"%ERR)
             return False
 
-    def getItemInfo(self, itemID):
-        try:
-            qry = "SELECT * FROM ItemInfo WHERE itemID = %s;" % itemID
-            self.cursor.execute(qry, (itemID))
 
-        except mysql.connector.Error as err:
-            print("Error in getting item info to database")
-            print(err)
 
     def popularItem(self):
+        """
+        :return: list of dict{itemID,image,title,priceType,info,description}
+        """
         qry = "SELECT itemID, image, title, description, priceType, usedStatus FROM ItemInfo WHERE saleStatus = True;"
         self.cursor.execute(qry)
         allItem = []
@@ -87,6 +84,10 @@ class General():
         except mysql.connector.Error as err:
             print("Error in submit appeal: %s" % err)
 
+
+
+
+
     def checkStaus(self, ouID):
         # return status of the select OU
         pass
@@ -102,13 +103,10 @@ class General():
         # else make sure that ou is not VIP
         pass
 
-    def ouBlacklist(self,ouID):
-        # remove the ou from all DB and all active sale item post by that ou,
-        # but not the sold item by he/she, the seller will be None
-        # add the username to ouBlacklist
-        pass
+    # def ouBlacklist(self,ouID):
+    #     # remove the ou from all DB and all active sale item post by that ou,
+    #     # but not the sold item by he/she, the seller will be None
+    #     # add the username to ouBlacklist
+    #     pass
 
-    def itemBlacklist(self,itemID):
-        # remove all the occurance of this item in DB
-        # add to itBlacklist
-        pass
+
