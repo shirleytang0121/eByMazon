@@ -3,7 +3,8 @@ from kivy.core.image import Image as CoreImage
 from io import BytesIO
 
 class Item():
-    def __init__(self,cursor, itemID):
+    def __init__(self,cnx,cursor, itemID):
+        self.cnx = cnx
         self.cursor = cursor
         self.itemID = itemID
         self.itemProfile()
@@ -78,6 +79,7 @@ class Item():
         try:
             self.cursor.execute(qry)
             self.likeness+=1
+            self.cnx.commit()
         except mysql.connector.errors as err:
             print("Update likeness error: %s"%err)
 
@@ -86,6 +88,7 @@ class Item():
         try:
             self.cursor.execute(qry)
             self.dislike+=1
+            self.cnx.commit()
         except mysql.connector.errors as err:
             print("Update dislike error: %s"%err)
 
@@ -95,6 +98,7 @@ class Item():
         try:
             self.cursor.execute(qry)
             self.views +=1
+            self.cnx.commit()
         except mysql.connector.errors as err:
             print("Update views error: %s"%err)
 

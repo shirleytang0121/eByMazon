@@ -64,7 +64,7 @@ class General():
         allItem = []
         allItems = self.cursor.fetchall()
         for info in allItems:
-            allItem.append(Item(cursor=self.cursor,itemID=info[0]))
+            allItem.append(Item(cnx=self.cnx,cursor=self.cursor,itemID=info[0]))
         return allItem
 
     def appeal(self,ouID,message):

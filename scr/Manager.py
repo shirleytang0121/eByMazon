@@ -126,6 +126,7 @@ class transactionHistory(Screen):
         root.toProfile()
 class fixedItem(Screen):
     itemIndex = NumericProperty()
+    user = BooleanProperty()
     def tohome(self):
         root.tohome()
     def dislikeItem(self,name):
@@ -135,6 +136,7 @@ class fixedItem(Screen):
 
 class biddingItem(Screen):
     itemIndex = NumericProperty()
+    user = BooleanProperty()
     def tohome(self):
         root.tohome()
     def dislikeItem(self,name):
@@ -275,8 +277,9 @@ class Manager(Screen):
     def tofixedItem(self,itemIndex):
         item = items[itemIndex]
         item.addView()
-        # item = Item(cursor=cursor,itemID=itemID)
+
         self.ids['fixedItem'].itemIndex = itemIndex
+        self.ids['fixedItem'].user = not self.login
         self.ids['fixedItem'].ids['itemImage'].texture = item.image
         self.ids['fixedItem'].ids['itemTitle'].text = item.title
         self.ids['fixedItem'].ids['itemDescription'].text=item.descrpition
@@ -291,7 +294,7 @@ class Manager(Screen):
     #     item = Item(cursor=cursor,itemID=itemID)
         item = items[itemIndex]
         item.addView()
-
+        self.ids['biddingItem'].user = not self.login
         self.ids['biddingItem'].itemIndex = itemIndex
         self.ids['biddingItem'].ids['itemImage'].texture = item.image
         self.ids['biddingItem'].ids['itemTitle'].text = item.title

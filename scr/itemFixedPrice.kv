@@ -1,5 +1,7 @@
 #:include features.kv
 <fixedItem>:
+    itemIndex: -1
+    user: False
     BoxLayout:
         orientation: "vertical"
         pos_hint: {'center_y': 0.5, 'center_x': 0.5}
@@ -55,8 +57,9 @@
             Button:
                 size_hint_x: 0.3
                 background_color: 255, 255, 255, 1
+                disabled: 1 if root.user else 0
                 on_press: root.likeItem("fixedItem")
-                on_press: self.background_color = 100,100,100,1
+#                on_press: self.background_color = 100,100,100,1
                 Image:
                     source: "images/likeButton.png"
                     y: self.parent.y
@@ -66,7 +69,8 @@
             Button:
                 size_hint_x: 0.3
                 background_color: 255, 255, 255, 1
-                on_press: self.background_color = 100,100,100,1
+                disabled: 1 if root.user else 0
+#                on_press: self.background_color = 100,100,100,1
                 on_press: root.dislikeItem("fixedItem")
                 Image:
                     source: "images/dislikeButton.png"
@@ -84,6 +88,7 @@
                 size_hint: (0.2,0.5)
                 id: purchaseInfo
                 text_size: self.size
+                disabled: 1 if root.user else 0
 
             SkyBlueButton:
                 size_hint: (0.2,0.5)
