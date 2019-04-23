@@ -1,0 +1,45 @@
+#:include features.kv
+<ouItem>:
+    ScreenManager:
+        id: ouItemManager
+        Screen:
+            id: itemHome
+            name: "itemHome"
+            BoxLayout:
+                GrayButton:
+                    text: "Profile"
+                    on_press: root.backProfile()
+                BlueButton:
+                    text: "addBid"
+                    on_press: root.ids["ouItemManager"].current = "biddingItem"
+                OrangeButton:
+                    text: "addFixed"
+                    on_press: root.ids["ouItemManager"].current = "fixedItem"
+        Screen:
+            name: "biddingItem"
+            BoxLayout:
+                Label:
+                    text: "Bid Item"
+                YellowButton:
+                    text: "Go back"
+                    on_press: root.ids["ouItemManager"].current = "itemHome"
+                PinkButton:
+                    text: "Submit"
+                    on_press: root.submit()
+
+        Screen:
+            name: "fixedItem"
+            BoxLayout:
+                Label:
+                    text: "Fixed Item"
+                YellowButton:
+                    text: "Go back"
+                    on_press: root.ids["ouItemManager"].current = "itemHome"
+                PinkButton:
+                    text: "Submit"
+                    on_press: root.submit()
+
+
+
+
+

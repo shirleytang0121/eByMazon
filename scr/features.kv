@@ -125,23 +125,26 @@
         padding:[0,50,0,50]
         size_hint_x:0.6
         orientation: "vertical"
-        CenterLabel:
+        BoldLabel:
             size_hint_y: 0.2
             text: root.title
         GridLayout:
             cols: 2
+            size_hint_x:0.4
+            pos_hint: {'center_y': 0.5, 'center_x': 0.5}
             SmallLabel:
                 text: "Price Type: "
             SmallLabel:
                 text: root.typeStr
             SmallLabel:
+                text: "Price: "
+            SmallLabel:
+                text: "$"+root.price
+            SmallLabel:
                 text: "Views: "
             SmallLabel:
                 text: root.reviews
-            SmallLabel:
-                text: "Price: $"
-            SmallLabel:
-                text: root.price
+
             SmallLabel:
                 text: "Likes: "
             SmallLabel:

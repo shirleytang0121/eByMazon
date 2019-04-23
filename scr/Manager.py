@@ -96,7 +96,7 @@ class GUapplication(Screen):
 class ouInfo(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
-class itemPost(Screen):
+class itemManage(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
 
@@ -116,6 +116,16 @@ class appealPop(Popup):
     def appeal(self,message):
         general.appeal(ouID=root.ouID,message=message)
         self.homepage()
+
+
+class ouItem(Screen):
+    def backProfile(self):
+        root.toProfile()
+    def submit(self):
+        print("Submit Item")
+
+
+
 
 class friendList(Screen):
     def backProfile(self):
@@ -183,6 +193,9 @@ class Manager(Screen):
 
     def cancelLogin(self):
         self.clearLogin()
+        self.ids['screenmanager'].current = "homepage"
+    def suLogout(self):
+        self.login = False
         self.ids['screenmanager'].current = "homepage"
 
     def checkLogin(self,username,password):
@@ -331,9 +344,11 @@ class Manager(Screen):
         print("In GU")
     def toouInfo(self):
         self.ids['screenmanager'].current = "ouInfo"
-    def toitemPost(self):
-        self.ids['screenmanager'].current = "itemPost"
+    def toitemManage(self):
+        self.ids['screenmanager'].current = "itemManage"
 
+    def toOuItem(self):
+        self.ids['screenmanager'].current = "ouItem"
 class eByMazonApp(App):
     # m = Manager()
     def build(self):
