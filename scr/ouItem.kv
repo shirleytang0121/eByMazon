@@ -1,43 +1,241 @@
 #:include features.kv
 <ouItem>:
+    isDate: True
+    isTitle: True
+    isDescription: True
+    isNumber: True
+    isImage: True
+    isPrice: True
+    isNew: True
+    isUsed: True
     ScreenManager:
         id: ouItemManager
         Screen:
             id: itemHome
             name: "itemHome"
             BoxLayout:
+                orientation: 'vertical'
+                size_hint: (.5, .5)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                spacing: 20
+                BoxLayout:
+                    size_hint_y: .8
+                    orientation: 'horizontal'
+                    spacing: 20
+                    BlueButton:
+                        text: "addBid Item"
+                        on_press: root.ids["ouItemManager"].current = "biddingItem"
+                    OrangeButton:
+                        text: "addFixed Item"
+                        on_press: root.ids["ouItemManager"].current = "fixedItem"
                 GrayButton:
-                    text: "Profile"
+                    size_hint_y: .2
+                    text: "Go Back To Profile"
                     on_press: root.backProfile()
-                BlueButton:
-                    text: "addBid"
-                    on_press: root.ids["ouItemManager"].current = "biddingItem"
-                OrangeButton:
-                    text: "addFixed"
-                    on_press: root.ids["ouItemManager"].current = "fixedItem"
         Screen:
             name: "biddingItem"
             BoxLayout:
+                orientation: 'vertical'
+                size_hint: (.5, .8)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                spacing: 20
                 Label:
                     text: "Bid Item"
-                YellowButton:
-                    text: "Go back"
-                    on_press: root.ids["ouItemManager"].current = "itemHome"
-                PinkButton:
-                    text: "Submit"
-                    on_press: root.submit()
+                    color: 0,0,0,1
+                    bold: True
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Title: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: itemTitle 
+                        size_hint_x: .6
+                        on_text_validate: root.checkTitle(self.text)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Description: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: itemDescription 
+                        size_hint_x: .6
+                        on_text_validate: root.checkDescription(self.text)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Start Price: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: itemPrice 
+                        size_hint_x: .6
+                        on_text_validate: root.checkPrice(self.text)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Bid Day: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: itemBidDay 
+                        size_hint_x: .6
+                        on_text_validate: root.checkDate(self.text)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Image: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: image
+                        text: 
+                        size_hint_x: .6
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Used Status: '
+                        color: 0,0,0,1
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            spacing: 10
+                            Label:
+                                text: 'New'
+                                color: 0,0,0,1
+                                text_size: self.size
+                                halign: 'right'
+                            CheckBox:
+                                id: new
+                                active: 
+                                on_active: root.updateStatus('new')
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            spacing: 10
+                            Label:
+                                text: 'Used'
+                                color: 0,0,0,1
+                                text_size: self.size
+                                halign: 'right'
+                            CheckBox:
+                                id: used
+                                active:
+                                on_active: root.updateStatus('used')
+                            
+                            
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    YellowButton:
+                        text: "Go back"
+                        size_hint_x: .5
+                        # on_press: root.ids["ouItemManager"].current = "itemHome"
+                        on_press: root.backPostItemPage()
+                    PinkButton:
+                        size_hint_x: .5
+                        text: "Submit"
+                        # on_press: root.submitBidingItem()
+                        on_press: root.submitBidingItem(itemTitle.text,itemDescription.text, itemPrice.text, itemBidDay.text)
+
+                Label:
+                    id: bidItemWarning
+                    text:''
+                    color: 1,0,1,1
 
         Screen:
             name: "fixedItem"
             BoxLayout:
+                orientation: 'vertical'
+                size_hint: (.5, .8)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                spacing: 20
                 Label:
                     text: "Fixed Item"
-                YellowButton:
-                    text: "Go back"
-                    on_press: root.ids["ouItemManager"].current = "itemHome"
-                PinkButton:
-                    text: "Submit"
-                    on_press: root.submit()
+                    color: 0,0,0,1
+                    bold: True
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Title: '
+                        color: 0,0,0,1
+                        
+                    TextInput:
+                        id: itemTitle1 
+                        size_hint_x: .6
+                        on_text_validate: root.checkTitle(self.text)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Description: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: itemDescription1
+                        size_hint_x: .6
+                        on_text_validate: root.checkDescription(self.text)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Price: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: itemPrice1 
+                        size_hint_x: .6
+                        on_text_validate: root.checkPrice(self.text)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Number Available: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: itemNumbers1 
+                        size_hint_x: .6
+                        on_text_validate: root.checkNumber(self.text)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Label:
+                        size_hint_x: .3
+                        text: 'Image: '
+                        color: 0,0,0,1
+                    TextInput:
+                        id: image1
+                        text: 
+                        size_hint_x: .6
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    YellowButton:
+                        size_hint_x: .5
+                        text: "Go back"
+                        # on_press: root.ids["ouItemManager"].current = "itemHome"
+                        on_press: root.backPostItemPage()
+                    PinkButton:
+                        size_hint_x: .5
+                        text: "Submit"
+                        # on_press: root.submitFixedItem()
+                        on_press: root.submitFixedItem(itemTitle1.text,itemDescription1.text, itemPrice1.text, itemNumbers1.text,)
+                Label:
+                    id: fixedItemWarning
+                    text:''
+                    color: 1,0,1,1
 
 
 
