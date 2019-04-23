@@ -1,5 +1,7 @@
 # mysql
 import mysql.connector
+import numbers
+import datetime
 from mysql.connector import errorcode
 # kivy
 from kivy.app import App
@@ -119,14 +121,133 @@ class appealPop(Popup):
 
 
 class ouItem(Screen):
+    '''global variables: 
+    isDate(true), isTitle(true),
+    isDescription(true), isNumber(True), isImage(True), isPrice(True)
+    isNew(False), isUsed(False)
+    '''
     def backProfile(self):
         root.toProfile()
-    def submit(self):
-        print("Submit Item")
+    def backPostItemPage(self):
+        self.ids["ouItemManager"].current = "itemHome"
+        self.clearBidItemInput()
+        self.clearFixedItemInput()
+ 
+    def checkTitle(self,input):
+        self.isTitle = not self.checkEmpty(input)
+    def checkDescription(self,input):
+        self.isDescription = not self.checkEmpty(input)
+    def checkDate(self,input):
+        self.isDate = self.checkDateTime(input)
+        # self.isDate = not self.checkEmpty(input)
+    def checkNumber(self,input):
+        self.isNumber = self.checkInt(input)
+    def checkImage(self,input):
+        self.isImage = not self.checkEmpty(input)
+    def checkPrice(self,input):
+        self.isPrice = self.checkFloat(input)
+    def updateStatus(self, input):
+        if input=='used':
+            self.isNew = False
+            # self.isUsed = True
+        elif input == 'new':
+            # self.isNew = True
+            self.isUsed = False
+        
+    def submitBidingItem(self,title,description, itemPrice, itemBidDay):
+        self.checkTitle(title)
+        self.checkDescription(description)
+        self.checkPrice(itemPrice)
+        self.checkDate(itemBidDay)
+        # self.checkImage(image)
 
+        result = self.isTitle and self.isDescription and self.isDate and self.isPrice and (self.isNew != self.isUsed)
 
+        if not result:
+            self.ids['bidItemWarning'].text = "Fail to Submit!!! Input should not be empty\
+            \nStart Price should be integer or decimal, one checkbox should be checked\
+            \nBid Day should follow format of YYYY-MM-DD"
+            self.clearBidItemInput()
+        else:
+            self.ids['bidItemWarning'].text = ""
+            print("submitted")
+            self.clearBidItemInput()
+            root.toProfile()
 
+    def submitFixedItem(self,title, description, itemPrice, number_available):
+        self.checkTitle(title)
+        self.checkDescription(description)
+        self.checkPrice(itemPrice)
+        self.checkNumber(number_available)
+        # self.checkImage(image)
 
+        result = self.isTitle and self.isDescription and self.isNumber and self.isPrice
+        if not result:
+            self.ids['fixedItemWarning'].text = "Fail to Submit!!!\nInput should not be Empty\
+            \nPrice should be integer or decimal\
+            \nNumber available should be integer"
+        else:
+            self.ids['fixedItemWarning'].text = ""
+            print("submitted")
+            self.clearFixedItemInput()
+            root.toProfile()
+################### HELPER FUNCTIONS ################
+    def checkEmpty(self,input):
+        if input is None or input=='':
+            return True
+        return False
+    def checkInt(self, input):
+        try:
+            int(input)
+            return True
+        except ValueError:
+            return False
+    def checkFloat(self,input):
+        return isinstance(input, float) or self.checkInt(input)
+    def checkDateTime(self,input):
+        try:
+            datetime.datetime.strptime(input, '%Y-%m-%d')
+            return True
+        except ValueError:
+            print('date not accepted')
+            return False
+    def clearBidItemInput(self):
+        self.ids['itemTitle'].text = ""
+        self.ids['itemDescription'].text = ""
+        self.ids['itemPrice'].text = ""
+        self.ids['itemBidDay'].text = ""
+        self.ids['new'].active = False
+        self.ids['used'].active = False
+
+        self.isTitle, self.isDescription, self.isPrice,self.isDate,self.isNew, self.isUsed = True,True,True,True,True,True
+    def clearFixedItemInput(self):
+        self.ids['itemTitle1'].text = ""
+        self.ids['itemDescription1'].text = ""
+        self.ids['itemPrice1'].text = ""
+        self.ids['itemNumbers1'].text = ""
+        self.isTitle, self.isDescription, self.isPrice, self.isNumber = True,True,True,True
+
+######################### QUERY #############################
+    def postBidItem(self,title, description, itemPrice, itemBidDay):
+        try:
+            query()
+            self.cursor.execute(query())
+            self.cnx.commit()
+            return True
+        except mysql.connector.Error as ERR:
+            print("Error in Applying OU Account: %s" % ERR)
+            return False
+    def postFixedItem(self,title, description, itemPrice, number_available):
+        try:
+            query()
+            self.cursor.execute(query())
+            self.cnx.commit()
+            return True
+        except mysql.connector.Error as ERR:
+            print("Error in Applying OU Account: %s" % ERR)
+            return False
+
+####################### TO BE FILLED #################
 class friendList(Screen):
     def backProfile(self):
         root.toProfile()
