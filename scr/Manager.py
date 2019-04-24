@@ -7,7 +7,9 @@ from mysql.connector import errorcode
 from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
+
 from kivy.uix.floatlayout import FloatLayout
+
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
 from kivy.properties import BooleanProperty,NumericProperty
 from kivy.lang import Builder
@@ -29,6 +31,7 @@ except ModuleNotFoundError:
     from Item import Item
     from otherClass import *
 
+
 ################### Home Page Item Recycle View ################################
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
@@ -38,6 +41,7 @@ class item(BoxLayout):
             root.tobidItem(self.itemIndex)
         else:
             root.tofixedItem(self.itemIndex)
+
 
 ################################### Sign Up Page ################################
 class Signup(Screen):
@@ -114,6 +118,7 @@ class appealPop(Popup):
         general.appeal(ouID=root.ouID,message=message)
         self.homepage()
 
+
 ########################## OU Item Page ################################
 class LoadImage(FloatLayout):
     load = ObjectProperty(None)
@@ -125,6 +130,7 @@ class ouItem(Screen):
     isDescription(true), isNumber(True), isImage(True), isPrice(True)
     isNew(False), isUsed(False)
     '''
+
 
     def backProfile(self):
         root.toProfile()
@@ -291,9 +297,23 @@ class editPassword(FloatLayout):
     back = ObjectProperty(None)
     submit = ObjectProperty(None)
 
+def convert_data(data):
+    l = []
+    for item in data:
+        for key, value in item.items():
+            l.append({'text': key, 'value': str(value)})
+    return l
+
 class friendList(Screen):
     def backProfile(self):
         root.toProfile()
+
+    def displayFriend(self):
+        #fetching from database
+        arr = ({'Item1': 5000},{'Item2': 1000})
+        # convert to [{'text': 'Item1', 'value': 5000}, {'text': 'Item2', 'value': 1000}]
+        self.ids['rv'].data = convert_data(arr)
+
 class transactionHistory(Screen):
     def backProfile(self):
         root.toProfile()
@@ -317,7 +337,9 @@ class biddingItem(Screen):
     def likeItem(self,name):
         root.likeItem(name,self.itemIndex)
 
+
 ####################### Main Class #############################
+
 class Manager(Screen):
     login = BooleanProperty()
     ouID = ObjectProperty()
@@ -325,7 +347,9 @@ class Manager(Screen):
         super(Manager, self).__init__(**kwargs)
         self.displayItem()
 
+
     ####################### Display Homepage Item #############################
+
     def displayItem(self):
         global items
         items = general.popularItem()
@@ -339,7 +363,9 @@ class Manager(Screen):
             i+= 1
         self.ids['rv'].data = returndict
 
+
     ####################### Homepage Two Button #############################
+
     def tologin(self):
         if self.login:
             self.login = False
@@ -351,7 +377,9 @@ class Manager(Screen):
         else:
             self.signup()
 
+
     ####################### Login Page Function #############################
+
     def clearLogin(self):
         self.ids['loginUsername'].text = ""
         self.ids['loginPassword'].text = ""
@@ -400,7 +428,9 @@ class Manager(Screen):
             else:
                 self.ids['loginCheck'].text ="No User Found"
 
+
     ####################### Goto OU Profile #############################
+
     def toProfile(self):
         status = "VIP" if ou.status else "Ordinary User"
         self.ids['ouName'].text = "Name: %s" % ou.name
@@ -482,7 +512,6 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "fixedItem"
 
     def tobidItem(self,itemIndex):
-
         item = items[itemIndex]
         item.addView()
         self.ids['biddingItem'].user = not self.login
@@ -535,11 +564,13 @@ class Manager(Screen):
                                  "currentBid": highestPrice, "typeStr": typeStr,
                                  "description": item.descrpition, "reviews": str(item.views),
                                  "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
+
                 else:
                     fixedI.append({"image": item.image, "title": item.title,"price": str(item.price),
                                  "numLeft": str(item.available), "typeStr": typeStr,
                                  "description": item.descrpition, "reviews": str(item.views),
                                  "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
+
         self.ids["ouItem"].ids["waitItem"].data = waitI
         self.ids["ouItem"].ids["itemFixed"].data = fixedI
         self.ids["ouItem"].ids["itemBid"].data = bidI
@@ -566,6 +597,7 @@ class Manager(Screen):
         self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
 class eByMazonApp(App):
+
     def build(self):
         Window.clearcolor = (1, 1, 1, 1)
         Builder.load_file("manage.kv")

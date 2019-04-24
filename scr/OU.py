@@ -1,5 +1,7 @@
+
 import datetime
 import mysql.connector
+
 try:
     from scr.Item import Item
 except ModuleNotFoundError:
@@ -12,6 +14,8 @@ class OU():
         self.ID = ouID
         self.getOUInfo()
         self.getItem()
+
+
 
     def changePassword(self,password):
         #update password in DB
@@ -54,6 +58,7 @@ class OU():
 
     def getItem(self):
         '''Get items that own by current OU, in list of Item class '''
+
         qry = "SELECT itemID FROM ItemOwner WHERE ownerID = %s;" % self.ID
         self.cursor.execute(qry)
         self.items = []
@@ -117,10 +122,12 @@ class OU():
             print(ERR)
             return False
 
+
     def editFriend(self,ownID,friendID,discount = 0.05):
         # add friend relation to DB,
         # each friend can have customer discount, if not provide, default is 5%
         pass
+
 
     # def submitFixedPrice(self,itemID, price, numAvailable):
     #     # add price for fixed price item
