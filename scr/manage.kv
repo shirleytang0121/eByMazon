@@ -1,0 +1,408 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#:include features.kv
+#:include signup.kv
+#:include itemFixedPrice.kv
+#:include itemBidding.kv
+#:include GUapplication.kv
+#:include suManageItem.kv
+#:include ouInfo.kv
+#:include friendList.kv
+#:include transactionHistory.kv
+#:include appealPop.kv
+#:include ouItem.kv
+<Manager>:
+    login: False
+    userID: None
+    userType: -1
+    ScreenManager:
+        id: screenmanager
+        transition: FadeTransition()
+
+        Home:
+#            id: home
+            name: 'homepage'
+            title: "Home Page"
+            BoxLayout:
+                orientation: "vertical"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: 0.3
+                    Image:
+                        size_hint_x: 0.2
+                        source: "images/logo3.png"
+                        size: self.parent.size
+                        allow_stretch: True
+                    BoxLayout:
+                        orientation: "vertical"
+                        BoldLabel:
+                            id: header
+                            text: "Welcome to EbayMazon"
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            orientation: "horizontal"
+                            TextInput:
+                                id: search_id
+                                size_hint_x: 0.3
+                                multiline: False
+                                on_hint_text: "Search Keyword"
+                                on_text_validate: root.searchKeyword(search_id.text)
+                            Button:
+                                size_hint_x: 0.05
+                                background_color: 255, 255, 255, 1
+                                on_press: root.searchKeyword(search_id.text)
+                                Image:
+                                    source: "images/search.png"
+                                    y: self.parent.y
+                                    x: self.parent.x
+                                    size: self.parent.size
+                                    allow_stretch: True
+                            SkyBlueButton:
+                                id: loginB
+                                size_hint_x: 0.1
+                                text: "Login" if not root.login else "Logout"
+                                on_press: root.tologin()
+                            SkyBlueButton:
+                                size_hint_x: 0.1
+                                text: "My Account" if root.login else "Sign Up"
+                                on_press: root.signProfile()
+                        BoxLayout:
+                            orientation: 'vertical'
+                            size_hint_y: .2
+                            Label:
+                                text:
+                BoxLayout:
+                    orientation: "horizontal"
+                    BoxLayout:
+                        id: sort_feature
+                        name: "sortNow"
+                        sort: ""
+                        orientation:"vertical"
+                        size_hint_x: 0.3
+                        pos_hint: {'center_y': 0.4, 'center_x': 0.7}
+                        BoldLabel:
+                            size_hint_y: 0.2
+                            text: "Sort Features"
+                        GridLayout:
+                            cols: 2
+                            row_default_height: '20dp'
+                            CheckBox:
+                                group: "sort_feature"
+                                on_active: root.sortPop()
+                            LeftLabel:
+                                text: "popular"
+                            CheckBox:
+                                group: "sort_feature"
+                                on_active: root.sortRating()
+                            LeftLabel:
+                                text: "rating"
+                            CheckBox:
+                                group: "sort_feature"
+                                on_active: root.sortPricelh()
+                            LeftLabel:
+                                text: "price low to high"
+                            CheckBox:
+                                group: "sort_feature"
+                                on_active: root.sortPricehl()
+                            LeftLabel:
+                                text: "price high to low"
+                        Label:
+                            size_hint_y: 0.4
+                    Label:
+                        size_hint_x: 0.1
+                    RecycleView:
+                        id: rv
+                        data:[]
+                        viewclass: 'item'
+                        RVL:
+        Login:
+#            id: login
+            name: 'loginpage'
+            title: "Login Page"
+            BoxLayout:
+                orientation: "vertical"
+                pos_hint: {'center_y': 0.3, 'center_x': 0.7}
+                WarningLabel:
+                    id: loginCheck
+                    text:""
+                    size_hint_y: 0.2
+                BoxLayout:
+                    size_hint: (0.5,0.4)
+                    orientation: "horizontal"
+                    BoldLabel:
+                        text: "User Name"
+                    InfoInput:
+                        id: loginUsername
+                        size_hint_x: 1.5
+                        size_hint_y: .3
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                BoxLayout:
+                    size_hint: (0.5,0.4)
+                    orientation: "horizontal"
+                    BoldLabel:
+                        pos_hint: {'center_y': 1, 'center_x': 0.5}
+                        text: "Password"
+                    InfoInput:
+                        id: loginPassword
+                        size_hint: (1.5,.3)
+                        pos_hint: {'center_y': 1, 'center_x': 0.5}
+                BoxLayout:
+                    orientation: "horizontal"
+                    padding:(50,50)
+                    size_hint: (0.6,1)
+                    OrangeButton:
+                        size_hint_y: .15
+                        pos_hint: {'center_y': 1.3, 'center_x': 0.5}
+                        text: "Login"
+                        on_press:
+                            root.checkLogin(loginUsername.text,loginPassword.text)
+                    YellowButton:
+                        size_hint_y: .15
+                        pos_hint: {'center_y': 1.3, 'center_x': 0.5}
+                        text: "Clear"
+                        on_press: root.clearLogin()
+                    GrayButton:
+                        size_hint_y: .15
+                        pos_hint: {'center_y': 1.3, 'center_x': 0.5}
+                        text: "Cancel"
+                        on_press: root.cancelLogin()
+        Signup:             # implemented in signup.kv
+            id: signup
+            name: "signupPage"
+            title: "Sign Up"
+
+########################
+        suHomepage:
+            name: "suHomepage"
+            title: "SU homepage"
+            BoxLayout:
+                orientation: "vertical"
+                BoxLayout:
+                    size_hint_y: 0.4
+                    Label:
+                        size_hint_x: 0.9
+                    Button:
+                        text:"Sign Out"
+                        size_hint_x: 0.1
+                        size: 150, 100
+                        on_press: root.suLogout()
+
+                BoxLayout:
+                    size_hint_y: 1.3
+                    BoxLayout:
+                        BoldLabel:
+                            text: "Welcome Manager!!!"
+                            font_size: 100
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    BoxLayout:
+                        padding: 30
+                        BlueButton:
+                            text: "GU Application"
+                            on_press: root.toguApply()
+                    BoxLayout:
+                        padding: 30
+                        BlueButton:
+                            text: "View Transactions"
+            #                on_press: root.manager.current = ""
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    BoxLayout:
+                        padding: 30
+                        BlueButton:
+                            text: "OU Info"
+                            on_press: root.toouInfo()
+                    BoxLayout:
+                        padding: 30
+                        BlueButton:
+                            text: "Manage Items"
+                            on_press: root.toitemManage()
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    BoxLayout:
+                        padding: 30
+                        BlueButton:
+                            text: "Process Complaint"
+            #                on_press: root.manager.current = ""
+                    BoxLayout:
+                        padding: 30
+                        BlueButton:
+                            text: "Manage BlackList and Taboo List"
+            #                on_press: root.manager.current = ""
+
+#                BoxLayout:
+#                    orientation: "horizontal"
+#                    BoxLayout:
+#                        padding: 30
+#                        BlueButton:
+#                            text: "Process Complaint"
+#                            on_press: root.toitemManage()
+#                    BoxLayout:
+#                        padding: 30
+#                        BlueButton:
+#                            text: "Maintain Taboo List"
+#            #                on_press: root.manager.current = ""
+########################
+        OUprofile:
+#            id: ouInfo
+            name: "profilePage"
+            title: "The OS Profile"
+            BoxLayout:
+                orientation: "vertical"
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y:0.10
+                    height: 15
+                    spacing: 10
+                    BoldLabel:
+                        size_hint_x:0.9
+                        text: "My Account"
+                    PinkButton:
+                        size_hint_x:0.1
+                        text:"go back"
+                        on_press: root.tohome()
+                BoxLayout:
+                    orientation: "horizontal"
+                    pos_hint: {'center_y': .4, 'center_x': 0.5}
+                    size_hint: (0.8,0.9)
+                    height: 15
+                    BoxLayout:
+                        orientation:"vertical"
+                        size_hint:(0.4,0.9)
+                        padding: 50
+                        LeftLabel:
+                            id: ouName
+                        LeftLabel:
+                            id: ouPhone
+                        LeftLabel:
+                            id: ouEmail
+                        LeftLabel:
+                            id: ouCard
+                        LeftLabel:
+                            id: ouAddress
+                        LeftLabel:
+                            id: ouState
+                        LeftLabel:
+                            id: ouRate
+                        LeftLabel:
+                            id: ouMoney
+                        LeftLabel:
+                            id: ouStatus
+                        LeftLabel:
+                            id: ouStatusTime
+                        BlueButton:
+                            text: "Edit Profile"
+                            on_press: root.editInfo()
+                        YellowButton:
+                            text: "Change Password"
+                            on_press: root.changePassword()
+                        Label:
+                            size_hint_y: 0.2
+                    Vspace:
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_x:0.3
+                        spacing: 10
+                        Label:
+                            size_hint_y:0.1
+                        OrangeButton:
+                            size_hint_y: 0.1
+                            text: "Friend List"
+                            on_press: root.friendList()
+                        OrangeButton:
+                            size_hint_y: 0.1
+                            text: "History"
+                            on_press: root.history()
+                        OrangeButton:
+                            size_hint_y: 0.1
+                            text: "My item"
+                            on_press: root.toOuItem()
+                        OrangeButton:
+                            size_hint_y: 0.1
+                            text: "Warning"
+                        Label:
+                            size_hint_y: 0.1
+        friendList:
+            name: "friendPage"
+            title: "the friend list"
+        transactionHistory:
+            id: history
+            name: "historyPage"
+            title: "the history"
+        EditProfile:
+#            id: editProfile
+            name: "editPage"
+            title: "to edit profile"
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: [0.8,0.8]
+                pos_hint: {'center_y': .3, 'center_x': 0.5}
+                GridLayout:
+                    cols: 2
+                    CenterLabel:
+                        text: 'Name'
+                    InfoInput:
+                        id: editName
+                    centerBLabel:
+                        text: 'Phone number'
+                    InfoInput:
+                        id: editPhone
+                    centerBLabel:
+                        text: 'Email'
+                    InfoInput:
+                        id: editEmail
+                    centerBLabel:
+                        text: 'Address'
+                    InfoInput:
+                        id: editAddress
+                    centerBLabel:
+                        text: 'State'
+                    InfoInput:
+                        id: editState
+                    centerBLabel:
+                        text: 'Card Number'
+                    InfoInput:
+                        id: editCard
+                BoxLayout:
+                    orientation: "horizontal"
+                    spacing: 50
+                    Label:
+                        size_hint_x: 0.2
+                    GrayButton:
+                        pos_hint: {'center_y': .7, 'center_x': 0.5}
+                        size_hint:(None, .25)
+                        width: 500
+                        text: "Go back"
+                        on_press: root.toProfile()
+                    OrangeButton:
+                        pos_hint: {'center_y': .7, 'center_x': 0.5}
+                        size_hint:(None, .25)
+                        width: 500
+                        text: "Save"
+                        on_press: root.toProfile()
+        fixedItem:
+            id: fixedItem
+            name: "fixedItem"
+            title: "Fixed Price Item Page"
+        biddingItem:
+            id: biddingItem
+            name: "biddingItem"
+            title: "Bidding Item Page"
+        GUapplication:
+            id: guApply
+            name: "GUapplication"
+            title: "GU application Page"
+        ouInfo:
+            id: ouInfo
+            name: "ouInfo"
+        itemManage:
+            id: itemManage
+            name: "itemManage"
+        ouItem:
+            id: ouItem
+            name: "ouItem"
+
+

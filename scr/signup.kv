@@ -1,0 +1,91 @@
+#:include features.kv
+<Signup>:
+    stateV: True
+    cardV: True
+    nameV: True
+    BoxLayout:
+        pos_hint: {'center_y': 0.5, 'center_x': 0.6}
+        orientation: "vertical"
+        BoxLayout:
+            orientation: 'horizontal'
+            WarningLabel:
+                id: warnApplication
+                text: ""
+            BoxLayout:
+                size_hint_y: 0.8
+                orientation: 'vertical'
+                WarningLabel:
+                    id: warnUsername
+                    text:""
+                WarningLabel:
+                    id: warnCard
+                    text: "Name Can't be Empty!!"
+                    opacity: 0 if root.nameV else 1
+                WarningLabel:
+                    id: warnState
+                    text: "Please Enter Valid State!!"
+                    opacity: 0 if root.stateV else 1
+                WarningLabel:
+                    id: warnCard
+                    text: "Card Num Can't be Empty!!"
+                    opacity: 0 if root.cardV else 1
+
+        BoxLayout:
+            orientation: 'horizontal'
+            GridLayout:
+                rows: 7
+                cols: 2
+                BoldLabel:
+                    text: 'username'
+                InfoInput:
+                    id: GUusername
+                    on_text_validate: root.checkUsername(self.text)
+                BoldLabel:
+                    text: 'name'
+                InfoInput:
+                    id: GUname
+                    on_text_validate: root.checkName(self.text)
+                BoldLabel:
+                    text: 'Phone number'
+                InfoInput:
+                    id: GUphone
+                BoldLabel:
+                    text: 'Email'
+                InfoInput:
+                    id: GUemail
+                BoldLabel:
+                    text: 'Address'
+                InfoInput:
+                    id: GUaddress
+                BoldLabel:
+                    text: 'State'
+                InfoInput:
+                    id: GUState
+                    on_text_validate: root.checkState(self.text)
+                BoldLabel:
+                    text: 'Card Number'
+                InfoInput:
+                    id: GUcard
+                    on_text_validate: root.checkCard(self.text)
+            BoxLayout:
+                size_hint_x: .5
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_x: 0.7
+            Label:
+                size_hint_x: .2
+            OrangeButton:
+                text: "Sign Up"
+                on_press:root.signUp(GUusername.text, GUname.text, GUphone.text,GUemail.text, GUaddress.text,GUState.text,GUcard.text)
+                pos_hint: {'center_y': .7, 'center_x': 0}
+                size_hint_y: .15
+            YellowButton:
+                text: "Clear"
+                pos_hint: {'center_y': .7, 'center_x': 0}
+                size_hint_y: .15
+                on_press: root.clearSignup()
+            GrayButton:
+                text: "Cancel"
+                on_press:root.tohome()
+                pos_hint: {'center_y': .7, 'center_x': 0}
+                size_hint_y: .15

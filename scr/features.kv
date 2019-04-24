@@ -1,0 +1,151 @@
+#Global Variable
+
+
+#Labels
+<BoldLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 48
+    bold: True
+
+<CenterLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 33
+<LeftLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 33
+    text_size: self.size
+    halign: 'left'
+    valign:'middle'
+<RightLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 33
+    text_size: self.size
+    halign: 'right'
+    valign:'middle'
+
+<centerBLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 33
+    text_size: self.size
+    halign: 'center'
+    valign:'bottom'
+
+<SmallLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: 25
+<WarningLabel@Label>
+    color: 1, 0, 1, 1
+    font_size: 48
+    bold: True
+    pos_hint: {'center_x': 0.2}
+#Buttons
+<SkyBlueButton@Button>:
+    color: 0, 0, 0, 1
+    background_color: 0, 100, 255, 0.5
+    font_size: 33
+
+<OrangeButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.37, 1.13, .68, 0.7]
+    font_size: 33
+
+<GrayButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.17, 2.17, 2.17, 0.7]
+    font_size: 33
+
+<YellowButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.44, 2.14, 1.24, .8]
+    font_size: 33
+
+<PinkButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.55, 2.04, 2.55, 0.7]
+    font_size: 33
+
+<BlueButton@Button>:
+    color: [0, 0, 0, 1]
+    background_color: [2.04, 2.30, 2.55, 1]
+    font_size: 33
+<RedButton@Button>:
+    background_color: [2.06, .18, .24, .7]
+    font_size: 33
+
+# Inputs
+<InfoInput@TextInput>:
+    font_size:36
+    multiline: False
+    size_hint: (None, None)
+    height: 60
+    width: 500
+
+<ProfileInput@TextInput>:
+    font_size:33
+    size_hint_x: 0.8
+    multiline: False
+
+#Recycle views
+<RVL@RecycleBoxLayout>:
+    default_size: None, dp(200)
+    default_size_hint: 1, None
+    size_hint_y: None
+    height: self.minimum_height
+    orientation: 'vertical'
+
+# Vertical Space
+<Vspace@BoxLayout>:
+    orientation: "vertical"
+    size_hint_x:0.1
+
+# Image Boxlayout of Homepage
+<item>:
+    orientation: "horizontal"
+    itemIndex:-1
+    image:None
+    title: ""
+    priceType:None
+    price: ""
+    reviews: ""
+    likes: ""
+    typeStr: ""
+
+    Button:
+        size_hint_x: 0.4
+        background_color: 255, 255, 255, 1
+        on_press: root.getItem()
+        Image:
+            texture: root.image
+            y: self.parent.y
+            x: self.parent.x
+            size: self.parent.size
+            allow_stretch: True
+    BoxLayout:
+        pos_hint: {'center_y': 0.4, 'center_x': 0.7}
+        padding:[0,50,0,50]
+        size_hint_x:0.6
+        orientation: "vertical"
+        BoldLabel:
+            size_hint_y: 0.2
+            text: root.title
+        GridLayout:
+            cols: 2
+            size_hint_x:0.4
+            pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+            SmallLabel:
+                text: "Price Type: "
+            SmallLabel:
+                text: root.typeStr
+            SmallLabel:
+                text: "Price: "
+            SmallLabel:
+                text: "$"+root.price
+            SmallLabel:
+                text: "Views: "
+            SmallLabel:
+                text: root.reviews
+
+            SmallLabel:
+                text: "Likes: "
+            SmallLabel:
+                text: root.likes

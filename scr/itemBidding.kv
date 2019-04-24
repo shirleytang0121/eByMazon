@@ -1,0 +1,174 @@
+#:include features.kv
+<biddingItem>:
+    itemIndex: -1
+    user: False
+    BoxLayout:
+        orientation: "vertical"
+        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+        BoxLayout:
+#                    size_hint: (0.8,0.5)
+            orientation: "horizontal"
+            padding:[50,0,50,0]
+#                    height: 50
+            Image:
+                id: itemImage
+                size_hint:(0.5,1)
+                y: self.parent.y
+                x: self.parent.x
+                size: self.parent.size
+                allow_stretch: True
+
+            GridLayout:
+                cols: 2
+                size_hint:(0.5,1)
+                orientation: "vertical"
+
+                LeftLabel:
+                    text: "Title: "
+                LeftLabel:
+                    id: itemTitle
+                LeftLabel:
+                    text: "Description: "
+                LeftLabel:
+                    id: itemDescription
+                LeftLabel:
+                    text: "Start Bidding Price: "
+                LeftLabel:
+                    id: itemPrice
+                LeftLabel:
+                    text: "Current Bid: "
+                LeftLabel:
+                    id: itemBid
+                LeftLabel:
+                    text: "UsedStatus: "
+                LeftLabel:
+                    id: itemUsed
+                LeftLabel:
+                    text: "Likes: "
+                LeftLabel:
+                    id: itemLike
+                LeftLabel:
+                    text: "DisLike: "
+                LeftLabel:
+                    id: itemDislike
+
+#                        Label:
+#                            size_hint_y: 0.2
+        # ------------- top half ------------#
+
+        BoxLayout:
+            size_hint_y: 0.3
+            orientation: 'horizontal'
+            spacing: 20
+
+            Button:
+                size_hint_x: 0.25
+                background_color: 255, 255, 255, 1
+                disabled: 1 if root.user else 0
+                on_press: root.likeItem("biddingItem")
+                on_press: self.background_color= 100,100,100,0.5
+                Image:
+                    source: "images/likeButton.png"
+                    y: self.parent.y
+                    x: self.parent.x
+                    size: self.parent.size
+                    allow_stretch: True
+            Button:
+                size_hint_x: 0.25
+                background_color: 255, 255, 255, 1
+                disabled: 1 if root.user else 0
+                on_press: root.dislikeItem("biddingItem")
+                on_press: self.background_color= 100,100,100,0.5
+                Image:
+                    source: "images/dislikeButton.png"
+                    y: self.parent.y
+                    x: self.parent.x
+                    size: self.parent.size
+                    allow_stretch: True
+            Vspace:
+                size_hint_x: 0.4
+            LeftLabel:
+                font_size: 36
+                text: 'Enter price you want bid: '
+            ProfileInput:
+                size_hint: (0.3,0.5)
+                id: purchaseInfo
+                text_size: self.size
+
+            SkyBlueButton:
+                size_hint: (0.2,0.5)
+                text: "Bid"
+                orientation: 'horizontal'
+
+
+#                    BoxLayout:
+#                        # size_hint_y: 0.3
+#                        orientation: "horizontal"
+#                        height: 30
+#                        Button:
+#                            text: "I WANT TO BID"
+#                            size_hint_x: .80
+#                            background_color: [.19, .84, 1.19, 0.7]
+#                            border: (1, .1, 1, 1)
+#
+#                        TextInput:
+#                            id: bid_price
+#                            text_size: self.size
+#                            on_hint_text: "Enter Price"
+#                            multiline: False
+#                            # size: self.size
+#                            size_hint_x: .2
+#                            size_hint_y: .5
+#
+        BoxLayout:
+            height: 30
+            orientation: 'vertical'
+#            LeftLabel:
+#                text: "Ratings:"
+#                font_size: 48
+#                bold: True
+#
+#            GridLayout:
+#                cols: 2
+#                row_force_default: True
+#                row_default_height: 50
+#                padding: 20
+#                spacing: 10
+#
+#                LeftLabel:
+#                    text: "username"
+#                    size_hint_x: .2
+#
+#                LeftLabel:
+#                    id: text_input
+#                    markup: True
+#                    text: 'this is my comment'
+#                    font_size: 32
+#                    size_hint: 1.8, .1
+#                LeftLabel:
+#                    text: "username"
+#                    size_hint_x: .2
+#
+#                LeftLabel:
+#                    id: text_input
+#                    markup: True
+#                    text: 'this is my comment'
+#                    font_size: 32
+#                    size_hint: 1.8, .1
+#                LeftLabel:
+#                    text: "username"
+#                    size_hint_x: .2
+#
+#                LeftLabel:
+#                    id: text_input
+#                    markup: True
+#                    text: 'this is my comment'
+#                    font_size: 32
+#                    size_hint: 1.8, .1
+            RedButton:
+                text: 'I WANT TO RATE'
+                size_hint_y: .3
+            Button:
+                text: 'GO BACK'
+                size_hint_y: .3
+                on_press: root.tohome()

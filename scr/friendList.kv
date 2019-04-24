@@ -1,0 +1,122 @@
+<friendInfo@GridLayout>:
+    cols: 2
+    text: ""
+    value: 0
+    padding : 5, 0
+    spacing: 10, 0
+    Button:
+        size_hint_x: .35
+        text: root.text
+        halign: 'left'
+        valign: 'middle'
+        canvas.before:
+            Color:
+                rgb: .6, .6, .6
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    Button:
+        size_hint_x: .15
+        text: str(root.value)
+        halign: 'right'
+        valign: 'middle'
+        canvas.before:
+            Color:
+                rgb: .6, .6, .6
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+<friendList>:
+    BoxLayout:
+        orientation:"vertical"
+        BoxLayout:
+            orientation:"horizontal"
+            size_hint_y:0.1
+            Label:
+                size_hint_x:0.9
+                text:"my friend list"
+                color:0,0,0,1
+            Button:
+                size_hint_x:0.1
+                text:"go back"
+                on_press:root.backProfile()
+        BoxLayout:
+            size_hint_x:0.9
+            orientation:"horizontal"
+            BoxLayout:
+                orientation: "vertical"
+                padding : 15, 15
+
+                BoxLayout:
+                    orientation: "vertical"
+                    padding : 5, 5
+                    size_hint: .6, None
+                    pos_hint: {'x': .18,}
+
+
+                    BoxLayout:
+                        orientation: "horizontal"
+                        padding : 5, 5
+                        spacing: 10, 10
+                        size: 800, 40
+                        size_hint: 1, None
+
+                        Button:
+                            text: "Show My friend List"
+                            size_hint_x: .05
+                            spacing_x: 30
+                            on_press:root.displayFriend()
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint: 1, 1
+
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint: .5, 1
+                        padding : 0, 15
+                        spacing: 10, 10
+                        size: 500, 30
+
+                        BoxLayout:
+                            RecycleView:
+                                id: rv
+                                viewclass: 'friendInfo'
+                                RecycleBoxLayout:
+                                    default_size: None, dp(30)
+                                    default_size_hint: 1, None
+                                    size_hint_y: None
+                                    height: self.minimum_height
+                                    orientation: 'vertical'
+                        BoxLayout:
+                            orientation:"vertical"
+                            size_hint_y:0.1
+                            Button:
+                                text:"+"
+            BoxLayout:
+                size_hint_y:0.1
+            BoxLayout:
+                size_hint_x:1
+                orientation:"vertical"
+                Label:
+                    size_hint_y:0.1
+                    text:"name"
+                BoxLayout:
+                    size_hint_y:0.6
+                BoxLayout:
+                    orientation:"horizontal"
+                    size_hint_y:0.4
+                    TextInput:
+                        size_hint_x:0.8
+                        id: chat
+                        multiline: False
+                    BoxLayout:
+                        size_hint_x:0.1
+                    BoxLayout:
+                        size_hint_x:0.2
+                        Button:
+                            size_hint_y:0.2
+                            text:"send"
+            
