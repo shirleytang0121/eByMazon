@@ -1,123 +1,118 @@
-
 <friendInfo@GridLayout>:
-    cols: 2
-    text: ""
-    value: 0
+    friendID : -1
+    discount: 0
+    username:""
+    cols: 3
     padding : 5, 0
     spacing: 10, 0
-    Button:
-        size_hint_x: .35
-        text: root.text
-        halign: 'left'
-        valign: 'middle'
-        canvas.before:
-            Color:
-                rgb: .6, .6, .6
-            Rectangle:
-                pos: self.pos
-                size: self.size
-
-    Button:
+    BlueButton:
+        size_hint: (.35,0.5)
+        text: root.username
+        on_press: root.getFriendMessage()
+    CenterLabel:
         size_hint_x: .15
-        text: str(root.value)
+        text: str(root.discount*100)+'%'
+    RedButton:
+        size_hint: (.35,0.5)
+        text: "Delete"
+        on_press: root.deleteFriend()
+
+<messageBox@GridLayout>:
+    send:True
+    message:""
+    sendTime:""
+    cols: 2
+    canvas.before:
+        Color:
+            rgb: (255, 204, 255)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        size_hint_x: 0.8
+        text: root.message
+        text_size: self.size
+        halign: 'right' if root.send else 'left'
+        valign: 'middle'
+        color: [0, 100, 255, 0.5] if root.send else [2.17, 2.17, 2.17, 0.7]
+    centerBLabel:
+        text:root.sendTime
         halign: 'right'
         valign: 'middle'
-        canvas.before:
-            Color:
-                rgb: .6, .6, .6
-            Rectangle:
-                pos: self.pos
-                size: self.size
-
+        text_size: self.size
 <friendList>:
     BoxLayout:
         orientation:"vertical"
         BoxLayout:
             orientation:"horizontal"
             size_hint_y:0.1
-            Label:
+            BoldLabel:
                 size_hint_x:0.9
-                text:"my friend list"
-                color:0,0,0,1
-            Button:
+                text:"My Friend List"
+            PinkButton:
                 size_hint_x:0.1
-                text:"go back"
+                text:"Go Back"
                 on_press:root.backProfile()
         BoxLayout:
-            size_hint_x:0.9
+            size_hint_y:0.9
             orientation:"horizontal"
             BoxLayout:
                 orientation: "vertical"
-                padding : 15, 15
-
-                BoxLayout:
-                    orientation: "vertical"
-                    padding : 5, 5
-                    size_hint: .6, None
-                    pos_hint: {'x': .18,}
-
-
-                    BoxLayout:
-                        orientation: "horizontal"
-                        padding : 5, 5
-                        spacing: 10, 10
-                        size: 800, 40
-                        size_hint: 1, None
-
-                        Button:
-                            text: "Show My friend List"
-                            size_hint_x: .05
-                            spacing_x: 30
-                            on_press:root.displayFriend()
-
-                BoxLayout:
-                    orientation: "horizontal"
-                    size_hint: 1, 1
-
-                    BoxLayout:
-                        orientation: "vertical"
-                        size_hint: .5, 1
-                        padding : 0, 15
-                        spacing: 10, 10
-                        size: 500, 30
-
-                        BoxLayout:
-                            RecycleView:
-                                id: rv
-                                viewclass: 'friendInfo'
-                                RecycleBoxLayout:
-                                    default_size: None, dp(30)
-                                    default_size_hint: 1, None
-                                    size_hint_y: None
-                                    height: self.minimum_height
-                                    orientation: 'vertical'
-                        BoxLayout:
-                            orientation:"vertical"
-                            size_hint_y:0.1
-                            Button:
-                                text:"+"
-            BoxLayout:
-                size_hint_y:0.1
-            BoxLayout:
-                size_hint_x:1
-                orientation:"vertical"
-                Label:
-                    size_hint_y:0.1
-                    text:"name"
-                BoxLayout:
-                    size_hint_y:0.6
+                size_hint: (0.4,1)
+                pos_hint: {'center_y': .5, 'center_x': 0.8}
+                GridLayout:
+                    size_hint_y: 0.2
+                    cols: 3
+                    CenterLabel:
+                        size_hint_x: .25
+                        text: 'username'
+                    CenterLabel:
+                        size_hint_x: .25
+                        text: 'discount'
+                    CenterLabel:
+                        size_hint_x: .15
+                RecycleView:
+                    size_hint_y: 0.8
+                    id: friends
+                    data: []
+                    viewclass: 'friendInfo'
+                    VRVL:
+                        default_size: None, dp(50)
                 BoxLayout:
                     orientation:"horizontal"
-                    size_hint_y:0.4
+                    size_hint_y: 0.1
+                    OrangeButton:
+                        size_hint:(0.5,0.8)
+                        text:"Add New Friend"
+                        on_press: root.addFriend()
+                    SkyBlueButton:
+                        size_hint:(0.5,0.8)
+                        text:"Refresh List"
+                        on_press:root.displayFriend()
+            Vspace:
+            BoxLayout:
+                size_hint:(0.7,0.8)
+                orientation:"vertical"
+                pos_hint: {'center_y': .5, 'center_x': 0.3}
+                CenterLabel:
+                    size_hint_y:0.2
+                    text:"Messages"
+                RecycleView:
+                    size_hint_y: 0.7
+                    id: messages
+                    data: []
+                    viewclass: 'messageBox'
+                    VRVL:
+                        default_size: None, dp(30)
+                BoxLayout:
+                    orientation:"horizontal"
+                    size_hint_y:0.2
                     TextInput:
-                        size_hint_x:0.8
                         id: chat
-                        multiline: False
-                    BoxLayout:
-                        size_hint_x:0.1
-                    BoxLayout:
-                        size_hint_x:0.2
-                        Button:
-                            size_hint_y:0.2
-                            text:"send"
+                        size_hint: (0.8,0.5)
+                        multiline: True
+                    SkyBlueButton:
+                        size_hint_y:0.5
+                        text:"send"
+                        on_press: root.sentMessage(chat.text)
             

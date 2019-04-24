@@ -327,6 +327,7 @@
                         Label:
                             size_hint_y: 0.1
         friendList:
+            id: friendPage
             name: "friendPage"
             title: "the friend list"
         transactionHistory:
@@ -380,6 +381,7 @@
                     OrangeButton:
                         pos_hint: {'center_y': .7, 'center_x': 0.5}
                         size_hint:(None, .25)
+                        text: "Change Password"
                         width: 500
                         on_press: root.changeInfo(editName.text,editCard.text,editEmail.text,editPhone.text,editAddress.text,editState.text)
         fixedItem:

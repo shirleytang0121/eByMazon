@@ -7,7 +7,7 @@ from mysql.connector import errorcode
 from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
-
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
 
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
@@ -125,13 +125,6 @@ class LoadImage(FloatLayout):
     cancel = ObjectProperty(None)
 
 class ouItem(Screen):
-    '''global variables:
-    isDate(true), isTitle(true),
-    isDescription(true), isNumber(True), isImage(True), isPrice(True)
-    isNew(False), isUsed(False)
-    '''
-
-
     def backProfile(self):
         root.toProfile()
 
@@ -256,27 +249,43 @@ class ouItem(Screen):
             self.clearFixedItemInput()
             self.backPostItemPage()
 
-    ######################### QUERY #############################
-    # def postBidItem(self, title, description, itemPrice, itemBidDay):
-    #     try:
-    #         query()
-    #         self.cursor.execute(query())
-    #         self.cnx.commit()
-    #         return True
-    #     except mysql.connector.Error as ERR:
-    #         print("Error in Applying OU Account: %s" % ERR)
-    #         return False
-    #
-    # def postFixedItem(self, title, description, itemPrice, number_available):
-    #     try:
-    #         query()
-    #         self.cursor.execute(query())
-    #         self.cnx.commit()
-    #         return True
-    #     except mysql.connector.Error as ERR:
-    #         print("Error in Applying OU Account: %s" % ERR)
-    #         return False
+################################### Friend Page ################################
 
+class friendInfo(GridLayout):
+    def deleteFriend(self):
+        print(self.friendID)
+        test = ou.deleteFriend(self.friendID)
+
+    def getFriendMessage(self):
+        root.getMessage(self.friendID)
+        # messages = ou.getFriendMessage(self.friendID)
+        # root.friendID = self.friendID
+        # for mess in messages:
+        #     mess['sendTime'] = mess['sendTime'].strftime('%m/%d/%Y')
+        # root.ids["friendPage"].ids['messages'].data = messages
+
+        print(self.friendID)
+
+
+class friendList(Screen):
+    def backProfile(self):
+        root.toProfile()
+    def displayFriend(self):
+        friends = ou.getFriend()
+        self.ids['friends'].data = friends
+        print("Refresh")
+    # def sendMessage(self):
+    #     print(self.ids['chat'].text)
+    def addFriend(self):
+        print("Add Friend")
+
+    def addFriends(self,friendID,discount):
+        ou.addFriend(friendID,discount)
+    def sentMessage(self,message):
+        print(message)
+        ou.sendFriendMessage(root.friendID,message)
+        root.getMessage(root.friendID)
+        self.ids['chat'].text =""
 
 ################################### Other Pages ################################
 class GUapplication(Screen):
@@ -297,22 +306,6 @@ class editPassword(FloatLayout):
     back = ObjectProperty(None)
     submit = ObjectProperty(None)
 
-def convert_data(data):
-    l = []
-    for item in data:
-        for key, value in item.items():
-            l.append({'text': key, 'value': str(value)})
-    return l
-
-class friendList(Screen):
-    def backProfile(self):
-        root.toProfile()
-
-    def displayFriend(self):
-        #fetching from database
-        arr = ({'Item1': 5000},{'Item2': 1000})
-        # convert to [{'text': 'Item1', 'value': 5000}, {'text': 'Item2', 'value': 1000}]
-        self.ids['rv'].data = convert_data(arr)
 
 class transactionHistory(Screen):
     def backProfile(self):
@@ -454,7 +447,6 @@ class Manager(Screen):
         self.ids['editState'].text = ou.state
         self.ids['screenmanager'].current = "editPage"
 
-
     ###################### Change Password and Ou Info ###################
     def getPassword(self):
         content = editPassword(back=self.dismiss_popup, submit=self.changePassword)
@@ -466,40 +458,20 @@ class Manager(Screen):
 
     def changePassword(self,newpassword):
         print("Change Password %s" % newpassword)
+        # Need Check inputs, add warning label
         ou.changePassword(newpassword)
         self.dismiss_popup()
 
     def changeInfo(self,name, card, email, phone, address, state):
-        # Check....... inputs, add warning label
+        # Need Check....... inputs, add warning label
         ou.updateOUInfo(name, card, email, phone, address, state)
         self.toProfile()
 
 
-    ###################### Other ###################
-    def sortPop(self):
-        print("Sort by Popular")
-    def sortRating(self):
-        print("Sort by Rating")
-    def sortPricelh(self):
-        print("Sort by price low to high")
-    def sortPricehl(self):
-        print("Sort by price high to low")
-
-
-
-    def tohome(self):
-        self.displayItem()
-        self.ids['screenmanager'].current = "homepage"
-
-
-    def signup(self):
-        self.ids['screenmanager'].current = "signupPage"
-
-
+    ###################### To Item Page from homepage ###################
     def tofixedItem(self,itemIndex):
         item = items[itemIndex]
         item.addView()
-
         self.ids['fixedItem'].itemIndex = itemIndex
         self.ids['fixedItem'].user = not self.login
         self.ids['fixedItem'].ids['itemImage'].texture = item.image
@@ -529,7 +501,7 @@ class Manager(Screen):
             self.ids['biddingItem'].ids['itemBid'].text = "None"
         self.ids['screenmanager'].current = "biddingItem"
 
-    # ###############
+    ############################# Like/Dislike Item ################################
     def likeItem(self,pagename,itemIndex):
         items[itemIndex].likeItem(ou.ID)
         self.ids[pagename].ids['itemLike'].text = str(items[itemIndex].likeness)
@@ -538,12 +510,12 @@ class Manager(Screen):
         items[itemIndex].dislikeItem(ou.ID)
         self.ids[pagename].ids['itemDislike'].text = str(items[itemIndex].dislike)
 
+    ################################### OU Item Page ################################
     def getOUitem(self):
         ouItems = ou.getItem()
         waitI = []
         fixedI = []
         bidI = []
-
         for item in ouItems:
             typeStr = "Bidding" if item.priceType else "Fixed Price"
             if not item.approvalStatus:
@@ -575,9 +547,36 @@ class Manager(Screen):
         self.ids["ouItem"].ids["itemFixed"].data = fixedI
         self.ids["ouItem"].ids["itemBid"].data = bidI
 
+    ################################### Friend Page ################################
     def friendList(self):
         print('friendlist')
+        self.ids["friendPage"].ids['friends'].data = ou.getFriend()
         self.ids['screenmanager'].current = "friendPage"
+    def getMessage(self,friendID):
+        messages = ou.getFriendMessage(friendID)
+        self.friendID = friendID
+        for mess in messages:
+            mess['sendTime'] = mess['sendTime'].strftime('%m/%d/%Y')
+        root.ids["friendPage"].ids['messages'].data = messages
+
+    def sortPop(self):
+        print("Sort by Popular")
+    def sortRating(self):
+        print("Sort by Rating")
+    def sortPricelh(self):
+        print("Sort by price low to high")
+    def sortPricehl(self):
+        print("Sort by price high to low")
+
+
+
+    def tohome(self):
+        self.displayItem()
+        self.ids['screenmanager'].current = "homepage"
+
+
+    def signup(self):
+        self.ids['screenmanager'].current = "signupPage"
     def history(self):
         print('history')
         self.ids['screenmanager'].current = "historyPage"
@@ -596,6 +595,9 @@ class Manager(Screen):
     def toOuItem(self):
         self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
+
+
+
 class eByMazonApp(App):
 
     def build(self):

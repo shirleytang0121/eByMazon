@@ -1,6 +1,6 @@
 import mysql.connector
-from kivy.core.image import Image as CoreImage
-from io import BytesIO
+# from kivy.core.image import Image as CoreImage
+# from io import BytesIO
 try:
     from scr.GU import GU
     from scr.Item import Item
