@@ -1,4 +1,7 @@
-from mysql.connector import OperationalError
+
+import datetime
+import mysql.connector
+
 try:
     from scr.Item import Item
 except ModuleNotFoundError:
@@ -13,8 +16,21 @@ class OU():
         self.getItem()
 
 
+
+    def changePassword(self,password):
+        #update password in DB
+        qry = "UPDATE User SET password = %s WHERE ID = %s;"
+        try:
+            self.cursor.execute(qry, (password,self.ID))
+            self.cnx.commit()
+            return True
+        except mysql.connector.errors:
+            print("Error in update OU password")
+            return False
+
+
     def getOUInfo(self):
-        # Return ou information in strings: name, card number, address, state, phone
+        # Get ou information in strings: name, card number, address, state, phone
         self.cursor.execute("SELECT * FROM OU WHERE ouID = %s"% self.ID)
 
         for info in self.cursor:
@@ -26,18 +42,23 @@ class OU():
             self.moneySpend, self.avgRate, self.status,self.statusTime= status[1],status[2],status[3],status[4]
 
 
-    def updateOUInfo(self, name, card, phone, address, state):
+    def updateOUInfo(self, name, card, email,phone, address, state):
         # update OU info in DB
-        qry = "UPDATE OU SET name = %s, cardNumber= %s, address =%s, state =%s, phone=%s WHERE ouID=%s;"
+        qry = "UPDATE OU SET name = %s, cardNumber= %s, email=%s,address =%s, state =%s, phone=%s WHERE ouID=%s;"
 
         try:
-            self.cursor.execute(qry,(name, card,address,state,phone,self.ID))
+            self.cursor.execute(qry,(name, card,email,address,state,phone,self.ID))
+            self.cnx.commit()
+            self.getOUInfo()    #update info
             return True
-        except OperationalError:
+
+        except mysql.connector.errors:
             print("Error in update OU Info")
             return False
 
     def getItem(self):
+        '''Get items that own by current OU, in list of Item class '''
+
         qry = "SELECT itemID FROM ItemOwner WHERE ownerID = %s;" % self.ID
         self.cursor.execute(qry)
         self.items = []
@@ -45,32 +66,80 @@ class OU():
         allitem = self.cursor.fetchall()
         for item in allitem:
             self.items.append(Item(cnx=self.cnx, cursor=self.cursor,itemID=item[0]))
+        return self.items
 
+    def submitItem(self):
+        # add submit item to ItemOwner,ItemView
+        # return itemID
+        try:
+            qry = "INSERT INTO ItemOwner(ownerID) VALUES (%s);"%self.ID
+            self.cursor.execute(qry)
+            self.cnx.commit()
 
-    def changePassword(self,password):
-        #update password in DB
-        print()
+            self.cursor.execute("SELECT MAX(itemID) FROM ItemOwner;")
+            for number in self.cursor:
+                iID = number[0]
+            # itemID = self.cursor.fetclone()
+
+            qry = "INSERT INTO ItemView(itemID) VALUE (%s);" % int(iID)
+            self.cursor.execute(qry)
+            self.cnx.commit()
+            return iID
+        except mysql.connector.errors as ERR:
+            print(ERR)
+            return False
+
+    def submitBiddingItem(self,image, title, description, usedStatus, startPrice, endDay):
+
+        try:
+            itemID = self.submitItem()
+            qry = ("INSERT INTO ItemInfo(itemID, image, title, description, priceType) "
+                   "VALUE (%s,%s,%s,%s,%s);")
+            self.cursor.execute(qry,(itemID,image,title,description,True))
+            self.cnx.commit()
+
+            endDay = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=endDay),
+                                                     datetime.time(23, 59,59))
+            qry = "INSERT INTO ItemBid(itemID, startPrice,usedStatus,endDay) VALUE (%s,%s,%s,%s);"
+            self.cursor.execute(qry, (itemID, float(startPrice), usedStatus, endDay))
+            self.cnx.commit()
+        except mysql.connector.errors as ERR:
+            print(ERR)
+            return False
+
+    def submitFixedPriceItem(self,image, title, description, price,available):
+        try:
+            itemID = self.submitItem()
+            qry = ("INSERT INTO ItemInfo(itemID, image, title, description, priceType) "
+                   "VALUE (%s,%s,%s,%s,%s);")
+            self.cursor.execute(qry, (itemID,image,title,description,False))
+            self.cnx.commit()
+
+            qry = "INSERT INTO FixedPrice(itemID, price,availableNum) VALUE (%s,%s,%s);"
+            self.cursor.execute(qry , (itemID, float(price), int(available)))
+            self.cnx.commit()
+        except mysql.connector.errors as ERR:
+            print(ERR)
+            return False
+
 
     def editFriend(self,ownID,friendID,discount = 0.05):
         # add friend relation to DB,
         # each friend can have customer discount, if not provide, default is 5%
         pass
 
-    def submitItem(self,image, title, priceType, usedStatus):
-        # add submit item to itemDB
-        pass
 
-    def submitFixedPrice(self,itemID, price, numAvailable):
-        # add price for fixed price item
-        pass
-
-    def submitBiddingInfo(self, itemID, startPrice, endDay):
-        # add price for bidding item
-        pass
-
-    def bidding(self,itemID, bidderID, price):
-        # record bidding in BidRecord
-        pass
+    # def submitFixedPrice(self,itemID, price, numAvailable):
+    #     # add price for fixed price item
+    #     pass
+    #
+    # def submitBiddingInfo(self, itemID, startPrice, endDay):
+    #     # add price for bidding item
+    #     pass
+    #
+    # def bidding(self,itemID, bidderID, price):
+    #     # record bidding in BidRecord
+    #     pass
 
     def calculateTotal(self, price, buyerID,itemID):
         # get taxrate from taxDB by buyer address
