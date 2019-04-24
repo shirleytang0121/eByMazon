@@ -1,12 +1,13 @@
 # mysql
 import mysql.connector
-import numbers
+import os
 import datetime
 from mysql.connector import errorcode
 # kivy
 from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
 from kivy.properties import BooleanProperty,NumericProperty
 from kivy.lang import Builder
@@ -28,6 +29,7 @@ except ModuleNotFoundError:
     from Item import Item
     from otherClass import *
 
+################### Home Page Item Recycle View ################################
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
     def getItem(self):
@@ -37,6 +39,7 @@ class item(BoxLayout):
         else:
             root.tofixedItem(self.itemIndex)
 
+################################### Sign Up Page ################################
 class Signup(Screen):
     # sign up page implement in signup.kv
     stateV,cardV,nameV = BooleanProperty(),BooleanProperty(),BooleanProperty()
@@ -92,16 +95,8 @@ class Signup(Screen):
                 self.clearSignup()
                 root.tohome()
 
-class GUapplication(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-class ouInfo(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-class itemManage(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
 
+########################## Appeal Pop Up Page ################################
 class appealPop(Popup):
     def homepage(self):
         appealPop.dismiss(self)
@@ -119,11 +114,13 @@ class appealPop(Popup):
         general.appeal(ouID=root.ouID,message=message)
         self.homepage()
 
-class itemFixed(Screen):
-    status = BooleanProperty()
+########################## OU Item Page ################################
+class LoadImage(FloatLayout):
+    load = ObjectProperty(None)
+    cancel = ObjectProperty(None)
 
 class ouItem(Screen):
-    '''global variables: 
+    '''global variables:
     isDate(true), isTitle(true),
     isDescription(true), isNumber(True), isImage(True), isPrice(True)
     isNew(False), isUsed(False)
@@ -131,130 +128,163 @@ class ouItem(Screen):
 
     def backProfile(self):
         root.toProfile()
+
     def backPostItemPage(self):
+        root.getOUitem()
         self.ids["ouItemManager"].current = "itemHome"
         self.clearBidItemInput()
         self.clearFixedItemInput()
- 
-    def checkTitle(self,input):
-        self.isTitle = not self.checkEmpty(input)
-    def checkDescription(self,input):
-        self.isDescription = not self.checkEmpty(input)
-    def checkDate(self,input):
-        self.isDate = self.checkDateTime(input)
-        # self.isDate = not self.checkEmpty(input)
-    def checkNumber(self,input):
-        self.isNumber = self.checkInt(input)
-    def checkImage(self,input):
-        self.isImage = not self.checkEmpty(input)
-    def checkPrice(self,input):
-        self.isPrice = self.checkFloat(input)
-    def updateStatus(self, input):
-        if input=='used':
-            self.isNew = False
-            # self.isUsed = True
-        elif input == 'new':
-            # self.isNew = True
-            self.isUsed = False
-        
-    def submitBidingItem(self,title,description, itemPrice, itemBidDay):
-        self.checkTitle(title)
-        self.checkDescription(description)
-        self.checkPrice(itemPrice)
-        self.checkDate(itemBidDay)
-        # self.checkImage(image)
 
-        result = self.isTitle and self.isDescription and self.isDate and self.isPrice and (self.isNew != self.isUsed)
+    ################### Clear FUNCTIONS ################
+    def clearBidItemInput(self):
+        self.ids['itemTitle'].text = ""
+        self.ids['itemDescription'].text = ""
+        self.ids['itemPrice'].text = ""
+        self.ids['itemBidDay'].text = ""
+        self.ids['image'].text = "Choose Image"
+        self.ids['bidItemWarning'].text = ""
+        self.ids['new'].active = False
+        self.ids['used'].active = False
+        self.image = ""
 
-        if not result:
-            self.ids['bidItemWarning'].text = "Fail to Submit!!! Input should not be empty\
-            \nStart Price should be integer or decimal, one checkbox should be checked\
-            \nBid Day should follow format of YYYY-MM-DD"
-            self.clearBidItemInput()
-        else:
-            self.ids['bidItemWarning'].text = ""
-            print("submitted")
-            self.clearBidItemInput()
-            root.toProfile()
+    def clearFixedItemInput(self):
+        self.ids['itemTitle1'].text = ""
+        self.ids['itemDescription1'].text = ""
+        self.ids['itemPrice1'].text = ""
+        self.ids['itemNumbers1'].text = ""
+        self.ids['fixedItemWarning'].text = ""
+        self.image = ""
+        # self.isTitle, self.isDescription, self.isPrice, self.isNumber = True, True, True, True
 
-    def submitFixedItem(self,title, description, itemPrice, number_available):
-        self.checkTitle(title)
-        self.checkDescription(description)
-        self.checkPrice(itemPrice)
-        self.checkNumber(number_available)
-        # self.checkImage(image)
+    ############ Getting image #########
+    def getImage(self):
+        content = LoadImage(load=self.loadImage, cancel=self.dismiss_popup)
+        self._popup = Popup(title="Load file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
+    def loadImage(self,path, filename):
+        with open(os.path.join(path, filename[0]),'rb') as file:
+            self.image = file.read()
+        filename= str(filename[0])
+        filename = filename.split('/')
+        self.ids['image'].text = filename[-1]
+        self.ids['image1'].text = filename[-1]
+        self._popup.dismiss()
+    def dismiss_popup(self):
+        self._popup.dismiss()
 
-        result = self.isTitle and self.isDescription and self.isNumber and self.isPrice
-        if not result:
-            self.ids['fixedItemWarning'].text = "Fail to Submit!!!\nInput should not be Empty\
-            \nPrice should be integer or decimal\
-            \nNumber available should be integer"
-        else:
-            self.ids['fixedItemWarning'].text = ""
-            print("submitted")
-            self.clearFixedItemInput()
-            root.toProfile()
-
-################### HELPER FUNCTIONS ################
-    def checkEmpty(self,input):
-        if input is None or input=='':
-            return True
-        return False
+    ################### Check FUNCTIONS ################
+    def checkEmpty(self, input):
+        if input is None or input == '':
+            return False
+        return True
 
     def checkInt(self, input):
+        if input is None or input == '':
+            return False
         try:
             int(input)
             return True
         except ValueError:
             return False
 
-    def checkFloat(self,input):
+    def checkFloat(self, input):
+        if input is None or input == '':
+            return False
         return isinstance(input, float) or self.checkInt(input)
 
-    def checkDateTime(self,input):
-        try:
-            datetime.datetime.strptime(input, '%Y-%m-%d')
-            return True
-        except ValueError:
-            print('date not accepted')
-            return False
+    def updateStatus(self, status):
+        self.isUsed = status
 
-################### HELPER FUNCTIONS ################
-    def clearBidItemInput(self):
-        self.ids['itemTitle'].text = ""
-        self.ids['itemDescription'].text = ""
-        self.ids['itemPrice'].text = ""
-        self.ids['itemBidDay'].text = ""
-        self.ids['new'].active = False
-        self.ids['used'].active = False
+    ################### Submit FUNCTIONS ################
+    def submitBidingItem(self, title, description, itemPrice, itemBidDay):
+        if not(self.checkEmpty(title) or self.checkEmpty(description) or self.checkFloat(itemPrice) or self.checkInt(itemBidDay)):
+            condition = False
+        else:
+            try:
+                used = self.isUsed
+                image = self.image
+                condition = True
+                if image == "":
+                    condition = False
+            except AttributeError as err:
+                print(err)
+                condition = False
 
-        self.isTitle, self.isDescription, self.isPrice,self.isDate,self.isNew, self.isUsed = True,True,True,True,True,True
-    def clearFixedItemInput(self):
-        self.ids['itemTitle1'].text = ""
-        self.ids['itemDescription1'].text = ""
-        self.ids['itemPrice1'].text = ""
-        self.ids['itemNumbers1'].text = ""
-        self.isTitle, self.isDescription, self.isPrice, self.isNumber = True,True,True,True
+        if not condition or not (self.ids['new'].active or self.ids['used'].active):
+            self.ids['bidItemWarning'].text = "Fail to Submit!!! Input should not be empty\
+            \nStart Price should be an number (integer or decimal), one checkbox should be checked.\
+            \nBid Day should be integer, for how many days you want bidding last."
 
-######################### QUERY #############################
-    def postBidItem(self,title, description, itemPrice, itemBidDay):
-        try:
-            query()
-            self.cursor.execute(query())
-            self.cnx.commit()
-            return True
-        except mysql.connector.Error as ERR:
-            print("Error in Applying OU Account: %s" % ERR)
-            return False
-    def postFixedItem(self,title, description, itemPrice, number_available):
-        try:
-            query()
-            self.cursor.execute(query())
-            self.cnx.commit()
-            return True
-        except mysql.connector.Error as ERR:
-            print("Error in Applying OU Account: %s" % ERR)
-            return False
+        else:
+            self.ids['bidItemWarning'].text = ""
+            ou.submitBiddingItem(image=self.image,title=title,description=description,
+                                 usedStatus=self.isUsed,startPrice=float(itemPrice),endDay=int(itemBidDay))
+            print("submitted")
+            self.clearBidItemInput()
+            self.backPostItemPage()
+
+    def submitFixedItem(self, title, description, itemPrice, number_available):
+        if not(self.checkEmpty(title) or self.checkEmpty(description) or self.checkFloat(itemPrice) or self.checkInt(number_available)):
+            condition = False
+        else:
+            try:
+                image = self.image
+                condition = True
+                if image == "":
+                    condition = False
+            except AttributeError as err:
+                print(err)
+                condition = False
+
+        if not condition:
+            self.ids['fixedItemWarning'].text = "Fail to Submit!!!\nInput should not be Empty!\
+            \nPrice should be integer or decimal.\
+            \nNumber available should be integer."
+        else:
+            self.ids['fixedItemWarning'].text = ""
+            ou.submitFixedPriceItem(image=self.image, title=title, description=description,
+                                    price=float(itemPrice), available=int(number_available))
+
+            print("submitted")
+            self.clearFixedItemInput()
+            self.backPostItemPage()
+
+    ######################### QUERY #############################
+    # def postBidItem(self, title, description, itemPrice, itemBidDay):
+    #     try:
+    #         query()
+    #         self.cursor.execute(query())
+    #         self.cnx.commit()
+    #         return True
+    #     except mysql.connector.Error as ERR:
+    #         print("Error in Applying OU Account: %s" % ERR)
+    #         return False
+    #
+    # def postFixedItem(self, title, description, itemPrice, number_available):
+    #     try:
+    #         query()
+    #         self.cursor.execute(query())
+    #         self.cnx.commit()
+    #         return True
+    #     except mysql.connector.Error as ERR:
+    #         print("Error in Applying OU Account: %s" % ERR)
+    #         return False
+
+
+################################### Other Pages ################################
+class GUapplication(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class ouInfo(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class itemManage(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class itemFixed(Screen):
+    status = BooleanProperty()
+
 
 ####################### TO BE FILLED #################
 class friendList(Screen):
@@ -431,8 +461,7 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "fixedItem"
 
     def tobidItem(self,itemIndex):
-    #     global item
-    #     item = Item(cursor=cursor,itemID=itemID)
+
         item = items[itemIndex]
         item.addView()
         self.ids['biddingItem'].user = not self.login
@@ -460,7 +489,7 @@ class Manager(Screen):
         self.ids[pagename].ids['itemDislike'].text = str(items[itemIndex].dislike)
 
     def getOUitem(self):
-        ouItems = ou.items
+        ouItems = ou.getItem()
         waitI = []
         fixedI = []
         bidI = []
