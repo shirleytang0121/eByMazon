@@ -105,6 +105,27 @@
     orientation: "vertical"
     size_hint_x:0.1
 
+## Change password layout
+#<editPassword>:
+#    BoxLayout:
+#        size: root.size
+#        pos: root.pos
+#        orientation: 'vertical'
+#        BoldLabel:
+#            text: "Please Enter New Password Below:"
+#        TextInput：
+#            id: newPassword
+#            pos_hint_x: 0.5
+#            font_size:33
+#            size_hint_x: 0.5
+#            multiline: False
+#        GrayButton:
+#            text: "Goback"
+#            on_release: root.back()
+#        OrangeButton:
+#            text: "Change Password"
+#            on_release: root.submit(newPassword.text)
+
 # Image Boxlayout of Homepage
 <item>:
     orientation: "horizontal"

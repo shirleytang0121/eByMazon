@@ -2,14 +2,6 @@
 #:include itemRecycleView.kv
 
 <ouItem>:
-#    isDate: True
-#    isTitle: True
-#    isDescription: True
-#    isNumber: True
-#    isImage: True
-#    isPrice: True
-#    isNew: True
-#    isUsed: True
     ScreenManager:
         id: ouItemManager
         Screen:
@@ -223,7 +215,7 @@
                     color: 1,0,1,1
 
 
-<LoadImage@>:
+<LoadImage>:
     BoxLayout:
         size: root.size
         pos: root.pos

@@ -287,6 +287,10 @@ class itemFixed(Screen):
 
 
 ####################### TO BE FILLED #################
+class editPassword(FloatLayout):
+    back = ObjectProperty(None)
+    submit = ObjectProperty(None)
+
 class friendList(Screen):
     def backProfile(self):
         root.toProfile()
@@ -313,6 +317,7 @@ class biddingItem(Screen):
     def likeItem(self,name):
         root.likeItem(name,self.itemIndex)
 
+####################### Main Class #############################
 class Manager(Screen):
     login = BooleanProperty()
     ouID = ObjectProperty()
@@ -320,7 +325,7 @@ class Manager(Screen):
         super(Manager, self).__init__(**kwargs)
         self.displayItem()
 
-    # ###### Display Item
+    ####################### Display Homepage Item #############################
     def displayItem(self):
         global items
         items = general.popularItem()
@@ -334,7 +339,7 @@ class Manager(Screen):
             i+= 1
         self.ids['rv'].data = returndict
 
-
+    ####################### Homepage Two Button #############################
     def tologin(self):
         if self.login:
             self.login = False
@@ -346,7 +351,7 @@ class Manager(Screen):
         else:
             self.signup()
 
-    # Login Page
+    ####################### Login Page Function #############################
     def clearLogin(self):
         self.ids['loginUsername'].text = ""
         self.ids['loginPassword'].text = ""
@@ -395,7 +400,7 @@ class Manager(Screen):
             else:
                 self.ids['loginCheck'].text ="No User Found"
 
-    # Go to OU Account
+    ####################### Goto OU Profile #############################
     def toProfile(self):
         status = "VIP" if ou.status else "Ordinary User"
         self.ids['ouName'].text = "Name: %s" % ou.name
@@ -420,11 +425,27 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "editPage"
 
 
+    ###################### Change Password and Ou Info ###################
+    def getPassword(self):
+        content = editPassword(back=self.dismiss_popup, submit=self.changePassword)
+        self._popup = Popup(title="Load file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
+    def dismiss_popup(self):
+        self._popup.dismiss()
+
+    def changePassword(self,newpassword):
+        print("Change Password %s" % newpassword)
+        ou.changePassword(newpassword)
+        self.dismiss_popup()
+
+    def changeInfo(self,name, card, email, phone, address, state):
+        # Check....... inputs, add warning label
+        ou.updateOUInfo(name, card, email, phone, address, state)
+        self.toProfile()
 
 
-
-    def changePassword(self):
-        print("Change Password")
+    ###################### Other ###################
     def sortPop(self):
         print("Sort by Popular")
     def sortRating(self):
@@ -523,11 +544,6 @@ class Manager(Screen):
         self.ids["ouItem"].ids["itemFixed"].data = fixedI
         self.ids["ouItem"].ids["itemBid"].data = bidI
 
-
-
-
-
-
     def friendList(self):
         print('friendlist')
         self.ids['screenmanager'].current = "friendPage"
@@ -550,7 +566,6 @@ class Manager(Screen):
         self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
 class eByMazonApp(App):
-    # m = Manager()
     def build(self):
         Window.clearcolor = (1, 1, 1, 1)
         Builder.load_file("manage.kv")

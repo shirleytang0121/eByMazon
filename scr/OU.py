@@ -15,7 +15,15 @@ class OU():
 
     def changePassword(self,password):
         #update password in DB
-        print()
+        qry = "UPDATE User SET password = %s WHERE ID = %s;"
+        try:
+            self.cursor.execute(qry, (password,self.ID))
+            self.cnx.commit()
+            return True
+        except mysql.connector.errors:
+            print("Error in update OU password")
+            return False
+
 
     def getOUInfo(self):
         # Get ou information in strings: name, card number, address, state, phone
@@ -30,13 +38,16 @@ class OU():
             self.moneySpend, self.avgRate, self.status,self.statusTime= status[1],status[2],status[3],status[4]
 
 
-    def updateOUInfo(self, name, card, phone, address, state):
+    def updateOUInfo(self, name, card, email,phone, address, state):
         # update OU info in DB
-        qry = "UPDATE OU SET name = %s, cardNumber= %s, address =%s, state =%s, phone=%s WHERE ouID=%s;"
+        qry = "UPDATE OU SET name = %s, cardNumber= %s, email=%s,address =%s, state =%s, phone=%s WHERE ouID=%s;"
 
         try:
-            self.cursor.execute(qry,(name, card,address,state,phone,self.ID))
+            self.cursor.execute(qry,(name, card,email,address,state,phone,self.ID))
+            self.cnx.commit()
+            self.getOUInfo()    #update info
             return True
+
         except mysql.connector.errors:
             print("Error in update OU Info")
             return False

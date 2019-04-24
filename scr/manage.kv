@@ -298,7 +298,7 @@
                             on_press: root.editInfo()
                         YellowButton:
                             text: "Change Password"
-                            on_press: root.changePassword()
+                            on_press: root.getPassword()
                         Label:
                             size_hint_y: 0.2
                     Vspace:
@@ -333,7 +333,6 @@
             name: "historyPage"
             title: "the history"
         EditProfile:
-#            id: editProfile
             name: "editPage"
             title: "to edit profile"
             BoxLayout:
@@ -382,7 +381,7 @@
                         size_hint:(None, .25)
                         width: 500
                         text: "Save"
-                        on_press: root.toProfile()
+                        on_press: root.changeInfo(editName.text,editCard.text,editEmail.text,editPhone.text,editAddress.text,editState.text)
         fixedItem:
             id: fixedItem
             name: "fixedItem"
@@ -406,3 +405,25 @@
             name: "ouItem"
 
 
+# Change password layout
+<editPassword>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+        Label:
+            text: 'Please Enter New Password Below:'
+            color: 0, 0, 0, 1
+            font_size: 33
+        TextInput:
+            id: newPassword
+            pos_hint_x: 0.5
+            font_size:33
+            size_hint_x: 0.5
+            multiline: False
+        GrayButton:
+            text: "Goback"
+            on_release: root.back()
+        OrangeButton:
+            text: "Change Password"
+            on_release: root.submit(newPassword.text)
