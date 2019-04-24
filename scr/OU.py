@@ -1,9 +1,16 @@
 from mysql.connector import OperationalError
+try:
+    from scr.Item import Item
+except ModuleNotFoundError:
+    from Item import Item
+
 class OU():
-    def __init__(self,cursor,ouID):
+    def __init__(self,cnx, cursor,ouID):
         self.cursor = cursor
+        self.cnx = cnx
         self.ID = ouID
         self.getOUInfo()
+        self.getItem()
 
 
     def getOUInfo(self):
@@ -19,7 +26,6 @@ class OU():
             self.moneySpend, self.avgRate, self.status,self.statusTime= status[1],status[2],status[3],status[4]
 
 
-
     def updateOUInfo(self, name, card, phone, address, state):
         # update OU info in DB
         qry = "UPDATE OU SET name = %s, cardNumber= %s, address =%s, state =%s, phone=%s WHERE ouID=%s;"
@@ -30,6 +36,16 @@ class OU():
         except OperationalError:
             print("Error in update OU Info")
             return False
+
+    def getItem(self):
+        qry = "SELECT itemID FROM ItemOwner WHERE ownerID = %s;" % self.ID
+        self.cursor.execute(qry)
+        self.items = []
+
+        allitem = self.cursor.fetchall()
+        for item in allitem:
+            self.items.append(Item(cnx=self.cnx, cursor=self.cursor,itemID=item[0]))
+
 
     def changePassword(self,password):
         #update password in DB

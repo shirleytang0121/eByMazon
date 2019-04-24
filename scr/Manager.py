@@ -191,19 +191,23 @@ class ouItem(Screen):
             print("submitted")
             self.clearFixedItemInput()
             root.toProfile()
+
 ################### HELPER FUNCTIONS ################
     def checkEmpty(self,input):
         if input is None or input=='':
             return True
         return False
+
     def checkInt(self, input):
         try:
             int(input)
             return True
         except ValueError:
             return False
+
     def checkFloat(self,input):
         return isinstance(input, float) or self.checkInt(input)
+
     def checkDateTime(self,input):
         try:
             datetime.datetime.strptime(input, '%Y-%m-%d')
@@ -211,6 +215,8 @@ class ouItem(Screen):
         except ValueError:
             print('date not accepted')
             return False
+
+################### HELPER FUNCTIONS ################
     def clearBidItemInput(self):
         self.ids['itemTitle'].text = ""
         self.ids['itemDescription'].text = ""
@@ -341,7 +347,7 @@ class Manager(Screen):
                     appeal.open()
                 else:                   # Create OU
                     global ou
-                    ou = OU(cursor=cursor,ouID = self.ouID)
+                    ou = OU(cnx=cnx, cursor=cursor,ouID = self.ouID)
                     self.ids['screenmanager'].current = "homepage"
                     self.clearLogin()  # clear login info for potential next user
 
@@ -450,6 +456,38 @@ class Manager(Screen):
         items[itemIndex].dislikeItem(ou.ID)
         self.ids[pagename].ids['itemDislike'].text = str(items[itemIndex].dislike)
 
+    def getOUitem(self):
+        ouItems = ou.items
+        waitI = []
+        fixedI = []
+        bidI = []
+
+        for item in ouItems:
+            typeStr = "Bidding" if item.priceType else "Fixed Price"
+            if not item.approvalStatus:
+                waitI.append({"image": item.image,"title": item.title, "priceType": item.priceType,
+                              "price": str(item.price), "typeStr": typeStr, "description": item.descrpition})
+            else:
+                # sale = "Sold" if item.saleStatus else "On Sale"
+                if item.priceType:
+                    bidI.append({"image": item.image, "title": item.title,"price": str(item.price),
+                                 "currentBid": str(item.highestPrice), "typeStr": typeStr,
+                                 "description": item.descrpition, "reviews": str(item.views),
+                                 "likes": str(item.likeness), "dislike": str(item.dislike), "status": item.saleStatus})
+                else:
+                    fixedI.append({"image": item.image, "title": item.title,"price": str(item.price),
+                                 "numLeft": str(item.available), "typeStr": typeStr,
+                                 "description": item.descrpition, "reviews": str(item.views),
+                                 "likes": str(item.likeness), "dislike": str(item.dislike), "status": item.saleStatus})
+        self.ids["ouItem"].ids["waitItem"].data = waitI
+        self.ids["ouItem"].ids["itemFixed"].data = fixedI
+        self.ids["ouItem"].ids["itemBid"].data = bidI
+
+
+
+
+
+
     def friendList(self):
         print('friendlist')
         self.ids['screenmanager'].current = "friendPage"
@@ -469,6 +507,7 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "itemManage"
 
     def toOuItem(self):
+        self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
 class eByMazonApp(App):
     # m = Manager()
