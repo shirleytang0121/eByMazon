@@ -86,12 +86,19 @@
     multiline: False
 
 #Recycle views
-<RVL@RecycleBoxLayout>:
+<VRVL@RecycleBoxLayout>:
     default_size: None, dp(200)
     default_size_hint: 1, None
     size_hint_y: None
     height: self.minimum_height
     orientation: 'vertical'
+
+<HRVL@RecycleBoxLayout>:
+    default_size:dp(700), None
+    default_size_hint: None, 1
+    size_hint_x: None
+    width: self.minimum_width
+    orientation: 'horizontal'
 
 # Vertical Space
 <Vspace@BoxLayout>:

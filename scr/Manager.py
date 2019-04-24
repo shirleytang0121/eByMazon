@@ -119,6 +119,8 @@ class appealPop(Popup):
         general.appeal(ouID=root.ouID,message=message)
         self.homepage()
 
+class itemFixed(Screen):
+    status = BooleanProperty()
 
 class ouItem(Screen):
     '''global variables: 
@@ -126,6 +128,7 @@ class ouItem(Screen):
     isDescription(true), isNumber(True), isImage(True), isPrice(True)
     isNew(False), isUsed(False)
     '''
+
     def backProfile(self):
         root.toProfile()
     def backPostItemPage(self):
@@ -469,16 +472,24 @@ class Manager(Screen):
                               "price": str(item.price), "typeStr": typeStr, "description": item.descrpition})
             else:
                 # sale = "Sold" if item.saleStatus else "On Sale"
+                try:
+                    highestPrice = str(item.highestPrice)
+                except AttributeError:
+                    highestPrice = "None"
+
+                saleStatus = False
+                if item.saleStatus:
+                    saleStatus = True
                 if item.priceType:
                     bidI.append({"image": item.image, "title": item.title,"price": str(item.price),
-                                 "currentBid": str(item.highestPrice), "typeStr": typeStr,
+                                 "currentBid": highestPrice, "typeStr": typeStr,
                                  "description": item.descrpition, "reviews": str(item.views),
-                                 "likes": str(item.likeness), "dislike": str(item.dislike), "status": item.saleStatus})
+                                 "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
                 else:
                     fixedI.append({"image": item.image, "title": item.title,"price": str(item.price),
                                  "numLeft": str(item.available), "typeStr": typeStr,
                                  "description": item.descrpition, "reviews": str(item.views),
-                                 "likes": str(item.likeness), "dislike": str(item.dislike), "status": item.saleStatus})
+                                 "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
         self.ids["ouItem"].ids["waitItem"].data = waitI
         self.ids["ouItem"].ids["itemFixed"].data = fixedI
         self.ids["ouItem"].ids["itemBid"].data = bidI
