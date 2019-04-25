@@ -1,7 +1,85 @@
 #:include features.kv
+
+<ouInformation@BoxLayout>
+    ouID: 0
+    ouName: ''
+    ouPhone: 0
+    ouEmail: ''
+    ouCard: ''
+    ouAddress: ''
+    ouState: ''
+    ouStatus:''
+    ouRate: 0
+    ouComplaint: 0
+    ouWarning: 0
+    orientation: "vertical"
+    BoxLayout:
+        size_hint_y: 0.2
+        BoldLabel:
+            text: "OU ID: %s" % root.ouID
+
+    BoxLayout:
+        size_hint_y: 0.8
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: "vertical"
+            padding: 250, 20, 0, 0
+            LeftLabel:
+                text: "Name: %s" % root.ouName
+            LeftLabel:
+                text: "Phone number: %s" % str(root.ouPhone)
+            LeftLabel:
+                text: "Email: %s" % root.ouEmail
+            LeftLabel:
+                text: "Card Info: %s" % root.ouCard
+            LeftLabel:
+                text: "Address: %s" % root.ouAddress
+            LeftLabel:
+                text: "State: %s" % root.ouState
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: 150, 0, 400, 0
+            LeftLabel:
+                text: "Status: %s" % root.ouStatus
+            LeftLabel:
+                text: "Rate: %s" % str(root.ouRate)
+            LeftLabel:
+                text: "Complaint: %s" % str(root.ouComplaint)
+            LeftLabel:
+                text: "Warning: %s" % str(root.ouWarning)
+            PinkButton:
+                text: "Remove"
+
 <ouInfo>:
     BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            size_hint_y: 0.1
+            Label:
+                size_hint_x: 0.9
+            GrayButton:
+                text:"Home"
+                size_hint_x: 0.1
+                size: 150, 100
+                on_press: root.tohome()
 
-        GrayButton:
-            text: "Go back"
-            on_press: root.tohome()
+        BoxLayout:
+            size_hint_y: 0.3
+            BoxLayout:
+                BoldLabel:
+                    text: "All OU Information"
+                    font_size: 100
+        RecycleView:
+            id: OUInformation
+            data: []
+            viewclass: 'ouInformation'
+            RVL:
+                default_size: None, dp(200)
+        BoxLayout:
+            size_hint_y: 0.1
+            SkyBlueButton:
+                size_hint:(0.5,0.8)
+                text:"Refresh List"
+                on_press:root.getOUInformation()
+

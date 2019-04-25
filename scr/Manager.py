@@ -93,9 +93,48 @@ class Signup(Screen):
 class GUapplication(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
+
+    def fakeData(self):
+        self.ids['application'].data = [{'guusername':'lu7', 'guname':'lu', 'guphone': 777, 'guemail':'lu@gmail.com', 'guaddress':'east village', 'guState': 'NY', 'gucard': '12489738'},
+                                        {'guusername':'han7', 'guname':'han', 'guphone': 77777, 'guemail':'han@gmail.com', 'guaddress':'beijing', 'guState':'CA', 'gucard':'12439890'}]
+        print("Refresh")
+
 class ouInfo(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
+
+    def getOUInformation(self):
+        self.ids['OUInformation'].data = [{'ouID': 1, 'ouName': 'lu', 'ouPhone': 3435345, 'ouEmail': 'lu@gmail.com', 'ouCard': '124123', 'ouAddress': 'east village',
+                                           'ouState': 'NY', 'ouStatus':'VIP', 'ouRate': 5, 'ouComplaint': 0, 'ouWarning': 0},
+                                          {'ouID': 2, 'ouName': 'han', 'ouPhone': 345432, 'ouEmail': 'han@gmail.com', 'ouCard': '452355', 'ouAddress': 'beijing',
+                                           'ouState': 'CA', 'ouStatus':'Ordinary', 'ouRate': 5, 'ouComplaint': 1, 'ouWarning': 0}]
+
+        # ouID = ObjectProperty()
+        # ous = OU(cursor=cursor, ouID=ouID)
+        #
+        # status = "VIP" if ou.status else "Ordinary User"
+        # self.ids['OUInformation'].ids['ouName'].text = "Name: %s" % ou.name
+        # self.ids['OUInformation'].ids['ouPhone'].text = "Phone: %s" % ou.phone
+        # self.ids['OUInformation'].ids['ouEmail'].text = "Email: %s" % ou.email
+        # self.ids['OUInformation'].ids['ouCard'].text = "Card Number: %s" % ou.card
+        # self.ids['OUInformation'].ids['ouAddress'].text = "Address: %s" % ou.address
+        # self.ids['OUInformation'].ids['ouState'].text = "State: %s" % ou.state
+        # self.ids['OUInformation'].ids['ouRate'].text = "Current Rating: %s" % ou.avgRate
+        # self.ids['OUInformation'].ids['ouMoney'].text = "Current Money Spend: %s" % ou.moneySpend
+        # self.ids['OUInformation'].ids['ouStatus'].text = "Current Status: %s" % status
+
+        # OUInfo = []
+        # i = 0
+        # for ou in ous:
+        #     status = "VIP" if ou.status else "Ordinary User"
+        #     ouInfo.append({"ouName": ou.name, "ouPhone": str(ou.phone), "ouEmail": ou.email, "ouCard": ou.Card,
+        #                        "ouAddress": ou.address, "ouStates": ou.state, "ouRate": str(ou.State),
+        #                        "ouMoney": str(ou.moneySpend), "ouStatus": status})
+        #     i += 1
+        # self.ids['OUInformation'].data = ouInfo
+
+        print("Refresh")
+
 class itemManage(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
