@@ -1,8 +1,78 @@
 #:include features.kv
+<guApplications@BoxLayout>:
+    guusername: ""
+    guname: ""
+    guphone: 0
+    guemail: ""
+    guaddress: ""
+    guState: ""
+    gucard: ""
+    orientation: "horizontal"
+    BoxLayout
+        orientation:"vertical"
+        size_hint_x:0.7
+#        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+        BoldLabel:
+            text: "Applicants Information"
+        SmallLabel:
+            text: "Username: " + root.guusername
+        SmallLabel:
+            text: "Name: " + root.guname
+        SmallLabel:
+            text: "Phone number: " + str(root.guphone)
+        SmallLabel:
+            text: "Email: " + root.guemail
+        SmallLabel:
+            text: "Address: " + root.guaddress
+        SmallLabel:
+            text: "State: " + root.guState
+        SmallLabel:
+            text: "Card number: " + root.gucard
+        SmallLabel:
+            text: " "
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_x: 0.3
+        padding: 0, 70, 200, 70
+        SkyBlueButton:
+            text: "Approve"
+        SkyBlueButton
+            text: "Decline"
+
+
 <GUapplication>:
 #    name: "GUapplication"
     BoxLayout:
+        BoxLayout
+            orientation: "vertical"
+            BoxLayout:
+                size_hint_y: 0.1
+                Label:
+                    size_hint_x: 0.9
+                GrayButton:
+                    text:"Home"
+                    size_hint_x: 0.1
+                    size: 150, 100
+                    on_press: root.tohome()
 
-        GrayButton:
-            text: "Go back"
-            on_press: root.tohome()
+            BoxLayout:
+                size_hint_y: 0.3
+                BoxLayout:
+                    BoldLabel:
+                        text: "Manage GU Applications"
+                        font_size: 100
+            RecycleView:
+                id: application
+                data: []
+                viewclass: 'guApplications'
+                RVL:
+                    default_size: None, dp(150)
+            BoxLayout:
+                size_hint_y: 0.1
+                SkyBlueButton:
+                    size_hint:(0.5,0.8)
+                    text:"Refresh List"
+                    on_press:root.fakeData()
+
+
+
