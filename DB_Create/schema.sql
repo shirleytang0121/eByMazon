@@ -61,6 +61,7 @@ CREATE TABLE Appeal(
   appealTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE
 );
+
 CREATE TABLE FriendList(
   ownerID INTEGER,
   friendID INTEGER,
@@ -183,11 +184,11 @@ CREATE TABLE Complaint(
 --    description VARCHAR(128)
 --  );
 CREATE TABLE Warning(
-  itemID INTEGER,
+  ouID INTEGER,
   warningID INTEGER, -- 0 for low rating, 1 for 2 complaints, 2 for decline deal, 3 for removed item, 4 for taboo word
   warnTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (itemID,warningID),
-  FOREIGN KEY (itemID) REFERENCES Transaction(itemID) ON DELETE CASCADE
+  PRIMARY KEY (ouID,warningID),
+  FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE
 );
 
 -- Search

@@ -281,6 +281,7 @@ class friendList(Screen):
 
     def addFriends(self,friendID,discount):
         ou.addFriend(friendID,discount)
+
     def sentMessage(self,message):
         print(message)
         ou.sendFriendMessage(root.friendID,message)
