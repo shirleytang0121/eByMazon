@@ -1,10 +1,15 @@
 # mysql
 import mysql.connector
+import os
+import datetime
 from mysql.connector import errorcode
 # kivy
 from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
+
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
 from kivy.properties import BooleanProperty,NumericProperty
 from kivy.lang import Builder
@@ -26,6 +31,8 @@ except ModuleNotFoundError:
     from Item import Item
     from otherClass import *
 
+
+################### Home Page Item Recycle View ################################
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
     def getItem(self):
@@ -35,6 +42,8 @@ class item(BoxLayout):
         else:
             root.tofixedItem(self.itemIndex)
 
+
+################################### Sign Up Page ################################
 class Signup(Screen):
     # sign up page implement in signup.kv
     stateV,cardV,nameV = BooleanProperty(),BooleanProperty(),BooleanProperty()
@@ -90,55 +99,8 @@ class Signup(Screen):
                 self.clearSignup()
                 root.tohome()
 
-class GUapplication(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
 
-    def fakeData(self):
-        self.ids['application'].data = [{'guusername':'lu7', 'guname':'lu', 'guphone': 777, 'guemail':'lu@gmail.com', 'guaddress':'east village', 'guState': 'NY', 'gucard': '12489738'},
-                                        {'guusername':'han7', 'guname':'han', 'guphone': 77777, 'guemail':'han@gmail.com', 'guaddress':'beijing', 'guState':'CA', 'gucard':'12439890'}]
-        print("Refresh")
-
-class ouInfo(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-
-    def getOUInformation(self):
-        self.ids['OUInformation'].data = [{'ouID': 1, 'ouName': 'lu', 'ouPhone': 3435345, 'ouEmail': 'lu@gmail.com', 'ouCard': '124123', 'ouAddress': 'east village',
-                                           'ouState': 'NY', 'ouStatus':'VIP', 'ouRate': 5, 'ouComplaint': 0, 'ouWarning': 0},
-                                          {'ouID': 2, 'ouName': 'han', 'ouPhone': 345432, 'ouEmail': 'han@gmail.com', 'ouCard': '452355', 'ouAddress': 'beijing',
-                                           'ouState': 'CA', 'ouStatus':'Ordinary', 'ouRate': 5, 'ouComplaint': 1, 'ouWarning': 0}]
-
-        # ouID = ObjectProperty()
-        # ous = OU(cursor=cursor, ouID=ouID)
-        #
-        # status = "VIP" if ou.status else "Ordinary User"
-        # self.ids['OUInformation'].ids['ouName'].text = "Name: %s" % ou.name
-        # self.ids['OUInformation'].ids['ouPhone'].text = "Phone: %s" % ou.phone
-        # self.ids['OUInformation'].ids['ouEmail'].text = "Email: %s" % ou.email
-        # self.ids['OUInformation'].ids['ouCard'].text = "Card Number: %s" % ou.card
-        # self.ids['OUInformation'].ids['ouAddress'].text = "Address: %s" % ou.address
-        # self.ids['OUInformation'].ids['ouState'].text = "State: %s" % ou.state
-        # self.ids['OUInformation'].ids['ouRate'].text = "Current Rating: %s" % ou.avgRate
-        # self.ids['OUInformation'].ids['ouMoney'].text = "Current Money Spend: %s" % ou.moneySpend
-        # self.ids['OUInformation'].ids['ouStatus'].text = "Current Status: %s" % status
-
-        # OUInfo = []
-        # i = 0
-        # for ou in ous:
-        #     status = "VIP" if ou.status else "Ordinary User"
-        #     ouInfo.append({"ouName": ou.name, "ouPhone": str(ou.phone), "ouEmail": ou.email, "ouCard": ou.Card,
-        #                        "ouAddress": ou.address, "ouStates": ou.state, "ouRate": str(ou.State),
-        #                        "ouMoney": str(ou.moneySpend), "ouStatus": status})
-        #     i += 1
-        # self.ids['OUInformation'].data = ouInfo
-
-        print("Refresh")
-
-class itemManage(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-
+########################## Appeal Pop Up Page ################################
 class appealPop(Popup):
     def homepage(self):
         appealPop.dismiss(self)
@@ -157,18 +119,238 @@ class appealPop(Popup):
         self.homepage()
 
 
+########################## OU Item Page ################################
+class LoadImage(FloatLayout):
+    load = ObjectProperty(None)
+    cancel = ObjectProperty(None)
+
 class ouItem(Screen):
     def backProfile(self):
         root.toProfile()
-    def submit(self):
-        print("Submit Item")
 
+    def backPostItemPage(self):
+        root.getOUitem()
+        self.ids["ouItemManager"].current = "itemHome"
+        self.clearBidItemInput()
+        self.clearFixedItemInput()
 
+    ################### Clear FUNCTIONS ################
+    def clearBidItemInput(self):
+        self.ids['itemTitle'].text = ""
+        self.ids['itemDescription'].text = ""
+        self.ids['itemPrice'].text = ""
+        self.ids['itemBidDay'].text = ""
+        self.ids['image'].text = "Choose Image"
+        self.ids['bidItemWarning'].text = ""
+        self.ids['new'].active = False
+        self.ids['used'].active = False
+        self.image = ""
+
+    def clearFixedItemInput(self):
+        self.ids['itemTitle1'].text = ""
+        self.ids['itemDescription1'].text = ""
+        self.ids['itemPrice1'].text = ""
+        self.ids['itemNumbers1'].text = ""
+        self.ids['fixedItemWarning'].text = ""
+        self.image = ""
+        # self.isTitle, self.isDescription, self.isPrice, self.isNumber = True, True, True, True
+
+    ############ Getting image #########
+    def getImage(self):
+        content = LoadImage(load=self.loadImage, cancel=self.dismiss_popup)
+        self._popup = Popup(title="Load file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
+    def loadImage(self,path, filename):
+        with open(os.path.join(path, filename[0]),'rb') as file:
+            self.image = file.read()
+        filename= str(filename[0])
+        filename = filename.split('/')
+        self.ids['image'].text = filename[-1]
+        self.ids['image1'].text = filename[-1]
+        self._popup.dismiss()
+    def dismiss_popup(self):
+        self._popup.dismiss()
+
+    ################### Check FUNCTIONS ################
+    def checkEmpty(self, input):
+        if input is None or input == '':
+            return False
+        return True
+
+    def checkInt(self, input):
+        if input is None or input == '':
+            return False
+        try:
+            int(input)
+            return True
+        except ValueError:
+            return False
+
+    def checkFloat(self, input):
+        if input is None or input == '':
+            return False
+        return isinstance(input, float) or self.checkInt(input)
+
+    def updateStatus(self, status):
+        self.isUsed = status
+
+    ################### Submit FUNCTIONS ################
+    def submitBidingItem(self, title, description, itemPrice, itemBidDay):
+        if not(self.checkEmpty(title) or self.checkEmpty(description) or self.checkFloat(itemPrice) or self.checkInt(itemBidDay)):
+            condition = False
+        else:
+            try:
+                used = self.isUsed
+                image = self.image
+                condition = True
+                if image == "":
+                    condition = False
+            except AttributeError as err:
+                print(err)
+                condition = False
+
+        if not condition or not (self.ids['new'].active or self.ids['used'].active):
+            self.ids['bidItemWarning'].text = "Fail to Submit!!! Input should not be empty\
+            \nStart Price should be an number (integer or decimal), one checkbox should be checked.\
+            \nBid Day should be integer, for how many days you want bidding last."
+
+        else:
+            self.ids['bidItemWarning'].text = ""
+            ou.submitBiddingItem(image=self.image,title=title,description=description,
+                                 usedStatus=self.isUsed,startPrice=float(itemPrice),endDay=int(itemBidDay))
+            print("submitted")
+            self.clearBidItemInput()
+            self.backPostItemPage()
+
+    def submitFixedItem(self, title, description, itemPrice, number_available):
+        if not(self.checkEmpty(title) or self.checkEmpty(description) or self.checkFloat(itemPrice) or self.checkInt(number_available)):
+            condition = False
+        else:
+            try:
+                image = self.image
+                condition = True
+                if image == "":
+                    condition = False
+            except AttributeError as err:
+                print(err)
+                condition = False
+
+        if not condition:
+            self.ids['fixedItemWarning'].text = "Fail to Submit!!!\nInput should not be Empty!\
+            \nPrice should be integer or decimal.\
+            \nNumber available should be integer."
+        else:
+            self.ids['fixedItemWarning'].text = ""
+            ou.submitFixedPriceItem(image=self.image, title=title, description=description,
+                                    price=float(itemPrice), available=int(number_available))
+
+            print("submitted")
+            self.clearFixedItemInput()
+            self.backPostItemPage()
+
+################################### Friend Page ################################
+
+class friendInfo(GridLayout):
+    def deleteFriend(self):
+        print(self.friendID)
+        test = ou.deleteFriend(self.friendID)
+
+    def getFriendMessage(self):
+        root.getMessage(self.friendID)
+        # messages = ou.getFriendMessage(self.friendID)
+        # root.friendID = self.friendID
+        # for mess in messages:
+        #     mess['sendTime'] = mess['sendTime'].strftime('%m/%d/%Y')
+        # root.ids["friendPage"].ids['messages'].data = messages
+
+        print(self.friendID)
 
 
 class friendList(Screen):
     def backProfile(self):
         root.toProfile()
+    def displayFriend(self):
+        friends = ou.getFriend()
+        self.ids['friends'].data = friends
+        print("Refresh")
+    # def sendMessage(self):
+    #     print(self.ids['chat'].text)
+    def addFriend(self):
+        print("Add Friend")
+
+    def addFriends(self,friendID,discount):
+        ou.addFriend(friendID,discount)
+    def sentMessage(self,message):
+        print(message)
+        ou.sendFriendMessage(root.friendID,message)
+        root.getMessage(root.friendID)
+        self.ids['chat'].text =""
+
+################################### Other Pages ################################
+class GUapplication(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+
+    def fakeData(self):
+        self.ids['application'].data = [{'guusername': 'lu7', 'guname': 'lu', 'guphone': 777, 'guemail': 'lu@gmail.com',
+                 'guaddress': 'east village', 'guState': 'NY', 'gucard': '12489738'},
+                {'guusername': 'han7', 'guname': 'han', 'guphone': 77777, 'guemail': 'han@gmail.com',
+                 'guaddress': 'beijing', 'guState': 'CA', 'gucard': '12439890'}]
+        print("Refresh")
+
+    class ouInfo(Screen):
+        def tohome(self):
+            root.ids['screenmanager'].current = "suHomepage"
+
+        def getOUInformation(self):
+            self.ids['OUInformation'].data = [
+                {'ouID': 1, 'ouName': 'lu', 'ouPhone': 3435345, 'ouEmail': 'lu@gmail.com', 'ouCard': '124123',
+                 'ouAddress': 'east village',
+                 'ouState': 'NY', 'ouStatus': 'VIP', 'ouRate': 5, 'ouComplaint': 0, 'ouWarning': 0},
+                {'ouID': 2, 'ouName': 'han', 'ouPhone': 345432, 'ouEmail': 'han@gmail.com', 'ouCard': '452355',
+                 'ouAddress': 'beijing',
+                 'ouState': 'CA', 'ouStatus': 'Ordinary', 'ouRate': 5, 'ouComplaint': 1, 'ouWarning': 0}]
+
+            # ouID = ObjectProperty()
+            # ous = OU(cursor=cursor, ouID=ouID)
+            #
+            # status = "VIP" if ou.status else "Ordinary User"
+            # self.ids['OUInformation'].ids['ouName'].text = "Name: %s" % ou.name
+            # self.ids['OUInformation'].ids['ouPhone'].text = "Phone: %s" % ou.phone
+            # self.ids['OUInformation'].ids['ouEmail'].text = "Email: %s" % ou.email
+            # self.ids['OUInformation'].ids['ouCard'].text = "Card Number: %s" % ou.card
+            # self.ids['OUInformation'].ids['ouAddress'].text = "Address: %s" % ou.address
+            # self.ids['OUInformation'].ids['ouState'].text = "State: %s" % ou.state
+            # self.ids['OUInformation'].ids['ouRate'].text = "Current Rating: %s" % ou.avgRate
+            # self.ids['OUInformation'].ids['ouMoney'].text = "Current Money Spend: %s" % ou.moneySpend
+            # self.ids['OUInformation'].ids['ouStatus'].text = "Current Status: %s" % status
+
+            # OUInfo = []
+            # i = 0
+            # for ou in ous:
+            #     status = "VIP" if ou.status else "Ordinary User"
+            #     ouInfo.append({"ouName": ou.name, "ouPhone": str(ou.phone), "ouEmail": ou.email, "ouCard": ou.Card,
+            #                        "ouAddress": ou.address, "ouStates": ou.state, "ouRate": str(ou.State),
+            #                        "ouMoney": str(ou.moneySpend), "ouStatus": status})
+            #     i += 1
+            # self.ids['OUInformation'].data = ouInfo
+
+            print("Refresh")
+
+class itemManage(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class itemFixed(Screen):
+    status = BooleanProperty()
+
+
+####################### TO BE FILLED #################
+class editPassword(FloatLayout):
+    back = ObjectProperty(None)
+    submit = ObjectProperty(None)
+
+
 class transactionHistory(Screen):
     def backProfile(self):
         root.toProfile()
@@ -192,6 +374,9 @@ class biddingItem(Screen):
     def likeItem(self,name):
         root.likeItem(name,self.itemIndex)
 
+
+####################### Main Class #############################
+
 class Manager(Screen):
     login = BooleanProperty()
     ouID = ObjectProperty()
@@ -199,7 +384,9 @@ class Manager(Screen):
         super(Manager, self).__init__(**kwargs)
         self.displayItem()
 
-    # ###### Display Item
+
+    ####################### Display Homepage Item #############################
+
     def displayItem(self):
         global items
         items = general.popularItem()
@@ -214,6 +401,8 @@ class Manager(Screen):
         self.ids['rv'].data = returndict
 
 
+    ####################### Homepage Two Button #############################
+
     def tologin(self):
         if self.login:
             self.login = False
@@ -225,7 +414,9 @@ class Manager(Screen):
         else:
             self.signup()
 
-    # Login Page
+
+    ####################### Login Page Function #############################
+
     def clearLogin(self):
         self.ids['loginUsername'].text = ""
         self.ids['loginPassword'].text = ""
@@ -259,7 +450,7 @@ class Manager(Screen):
                     appeal.open()
                 else:                   # Create OU
                     global ou
-                    ou = OU(cursor=cursor,ouID = self.ouID)
+                    ou = OU(cnx=cnx, cursor=cursor,ouID = self.ouID)
                     self.ids['screenmanager'].current = "homepage"
                     self.clearLogin()  # clear login info for potential next user
 
@@ -274,7 +465,9 @@ class Manager(Screen):
             else:
                 self.ids['loginCheck'].text ="No User Found"
 
-    # Go to OU Account
+
+    ####################### Goto OU Profile #############################
+
     def toProfile(self):
         status = "VIP" if ou.status else "Ordinary User"
         self.ids['ouName'].text = "Name: %s" % ou.name
@@ -298,12 +491,118 @@ class Manager(Screen):
         self.ids['editState'].text = ou.state
         self.ids['screenmanager'].current = "editPage"
 
+    ###################### Change Password and Ou Info ###################
+    def getPassword(self):
+        content = editPassword(back=self.dismiss_popup, submit=self.changePassword)
+        self._popup = Popup(title="Load file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
+    def dismiss_popup(self):
+        self._popup.dismiss()
+
+    def changePassword(self,newpassword):
+        print("Change Password %s" % newpassword)
+        # Need Check inputs, add warning label
+        ou.changePassword(newpassword)
+        self.dismiss_popup()
+
+    def changeInfo(self,name, card, email, phone, address, state):
+        # Need Check....... inputs, add warning label
+        ou.updateOUInfo(name, card, email, phone, address, state)
+        self.toProfile()
 
 
+    ###################### To Item Page from homepage ###################
+    def tofixedItem(self,itemIndex):
+        item = items[itemIndex]
+        item.addView()
+        self.ids['fixedItem'].itemIndex = itemIndex
+        self.ids['fixedItem'].user = not self.login
+        self.ids['fixedItem'].ids['itemImage'].texture = item.image
+        self.ids['fixedItem'].ids['itemTitle'].text = item.title
+        self.ids['fixedItem'].ids['itemDescription'].text=item.descrpition
+        self.ids['fixedItem'].ids['itemPrice'].text="$"+str(item.price)
+        self.ids['fixedItem'].ids['itemAvailable'].text = str(item.available)
+        self.ids['fixedItem'].ids['itemLike'].text = str(item.likeness)
+        self.ids['fixedItem'].ids['itemDislike'].text = str(item.dislike)
+        self.ids['screenmanager'].current = "fixedItem"
 
+    def tobidItem(self,itemIndex):
+        item = items[itemIndex]
+        item.addView()
+        self.ids['biddingItem'].user = not self.login
+        self.ids['biddingItem'].itemIndex = itemIndex
+        self.ids['biddingItem'].ids['itemImage'].texture = item.image
+        self.ids['biddingItem'].ids['itemTitle'].text = item.title
+        self.ids['biddingItem'].ids['itemDescription'].text=item.descrpition
+        self.ids['biddingItem'].ids['itemPrice'].text="$"+str(item.price)
+        self.ids['biddingItem'].ids['itemLike'].text = str(item.likeness)
+        self.ids['biddingItem'].ids['itemDislike'].text = str(item.dislike)
+        self.ids['biddingItem'].ids['itemUsed'].text = str(item.usedStatus)
+        try:
+            self.ids['biddingItem'].ids['itemBid'].text = "$" + str(item.highestPrice)
+        except AttributeError:
+            self.ids['biddingItem'].ids['itemBid'].text = "None"
+        self.ids['screenmanager'].current = "biddingItem"
 
-    def changePassword(self):
-        print("Change Password")
+    ############################# Like/Dislike Item ################################
+    def likeItem(self,pagename,itemIndex):
+        items[itemIndex].likeItem(ou.ID)
+        self.ids[pagename].ids['itemLike'].text = str(items[itemIndex].likeness)
+
+    def dislikeItem(self,pagename,itemIndex):
+        items[itemIndex].dislikeItem(ou.ID)
+        self.ids[pagename].ids['itemDislike'].text = str(items[itemIndex].dislike)
+
+    ################################### OU Item Page ################################
+    def getOUitem(self):
+        ouItems = ou.getItem()
+        waitI = []
+        fixedI = []
+        bidI = []
+        for item in ouItems:
+            typeStr = "Bidding" if item.priceType else "Fixed Price"
+            if not item.approvalStatus:
+                waitI.append({"image": item.image,"title": item.title, "priceType": item.priceType,
+                              "price": str(item.price), "typeStr": typeStr, "description": item.descrpition})
+            else:
+                # sale = "Sold" if item.saleStatus else "On Sale"
+                try:
+                    highestPrice = str(item.highestPrice)
+                except AttributeError:
+                    highestPrice = "None"
+
+                saleStatus = False
+                if item.saleStatus:
+                    saleStatus = True
+                if item.priceType:
+                    bidI.append({"image": item.image, "title": item.title,"price": str(item.price),
+                                 "currentBid": highestPrice, "typeStr": typeStr,
+                                 "description": item.descrpition, "reviews": str(item.views),
+                                 "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
+
+                else:
+                    fixedI.append({"image": item.image, "title": item.title,"price": str(item.price),
+                                 "numLeft": str(item.available), "typeStr": typeStr,
+                                 "description": item.descrpition, "reviews": str(item.views),
+                                 "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
+
+        self.ids["ouItem"].ids["waitItem"].data = waitI
+        self.ids["ouItem"].ids["itemFixed"].data = fixedI
+        self.ids["ouItem"].ids["itemBid"].data = bidI
+
+    ################################### Friend Page ################################
+    def friendList(self):
+        print('friendlist')
+        self.ids["friendPage"].ids['friends'].data = ou.getFriend()
+        self.ids['screenmanager'].current = "friendPage"
+    def getMessage(self,friendID):
+        messages = ou.getFriendMessage(friendID)
+        self.friendID = friendID
+        for mess in messages:
+            mess['sendTime'] = mess['sendTime'].strftime('%m/%d/%Y')
+        root.ids["friendPage"].ids['messages'].data = messages
+
     def sortPop(self):
         print("Sort by Popular")
     def sortRating(self):
@@ -322,55 +621,6 @@ class Manager(Screen):
 
     def signup(self):
         self.ids['screenmanager'].current = "signupPage"
-
-
-    def tofixedItem(self,itemIndex):
-        item = items[itemIndex]
-        item.addView()
-
-        self.ids['fixedItem'].itemIndex = itemIndex
-        self.ids['fixedItem'].user = not self.login
-        self.ids['fixedItem'].ids['itemImage'].texture = item.image
-        self.ids['fixedItem'].ids['itemTitle'].text = item.title
-        self.ids['fixedItem'].ids['itemDescription'].text=item.descrpition
-        self.ids['fixedItem'].ids['itemPrice'].text="$"+str(item.price)
-        self.ids['fixedItem'].ids['itemAvailable'].text = str(item.available)
-        self.ids['fixedItem'].ids['itemLike'].text = str(item.likeness)
-        self.ids['fixedItem'].ids['itemDislike'].text = str(item.dislike)
-        self.ids['screenmanager'].current = "fixedItem"
-
-    def tobidItem(self,itemIndex):
-    #     global item
-    #     item = Item(cursor=cursor,itemID=itemID)
-        item = items[itemIndex]
-        item.addView()
-        self.ids['biddingItem'].user = not self.login
-        self.ids['biddingItem'].itemIndex = itemIndex
-        self.ids['biddingItem'].ids['itemImage'].texture = item.image
-        self.ids['biddingItem'].ids['itemTitle'].text = item.title
-        self.ids['biddingItem'].ids['itemDescription'].text=item.descrpition
-        self.ids['biddingItem'].ids['itemPrice'].text="$"+str(item.price)
-        self.ids['biddingItem'].ids['itemLike'].text = str(item.likeness)
-        self.ids['biddingItem'].ids['itemDislike'].text = str(item.dislike)
-        self.ids['biddingItem'].ids['itemUsed'].text = str(item.usedStatus)
-        try:
-            self.ids['biddingItem'].ids['itemBid'].text = "$" + str(item.highestPrice)
-        except AttributeError:
-            self.ids['biddingItem'].ids['itemBid'].text = "None"
-        self.ids['screenmanager'].current = "biddingItem"
-
-    # ###############
-    def likeItem(self,pagename,itemIndex):
-        items[itemIndex].likeItem(ou.ID)
-        self.ids[pagename].ids['itemLike'].text = str(items[itemIndex].likeness)
-
-    def dislikeItem(self,pagename,itemIndex):
-        items[itemIndex].dislikeItem(ou.ID)
-        self.ids[pagename].ids['itemDislike'].text = str(items[itemIndex].dislike)
-
-    def friendList(self):
-        print('friendlist')
-        self.ids['screenmanager'].current = "friendPage"
     def history(self):
         print('history')
         self.ids['screenmanager'].current = "historyPage"
@@ -387,9 +637,13 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "itemManage"
 
     def toOuItem(self):
+        self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
+
+
+
 class eByMazonApp(App):
-    # m = Manager()
+
     def build(self):
         Window.clearcolor = (1, 1, 1, 1)
         Builder.load_file("manage.kv")
