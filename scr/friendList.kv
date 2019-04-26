@@ -1,17 +1,120 @@
-#:include features.kv
+<friendInfo@GridLayout>:
+    friendID : -1
+    discount: 0
+    username:""
+    cols: 3
+    padding : 5, 0
+    spacing: 10, 0
+    BlueButton:
+        size_hint: (.35,0.5)
+        text: root.username
+        on_press: root.getFriendMessage()
+    CenterLabel:
+        size_hint_x: .15
+        text: str(root.discount*100)+'%'
+    RedButton:
+        size_hint: (.35,0.5)
+        text: "Delete"
+        on_press: root.deleteFriend()
+
+<messageBox@GridLayout>:
+    send:True
+    message:""
+    sendTime:""
+    cols: 2
+    canvas.before:
+        Color:
+            rgb: (255, 204, 255)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        size_hint_x: 0.8
+        text: root.message
+        text_size: self.size
+        halign: 'right' if root.send else 'left'
+        valign: 'middle'
+        color: [0, 100, 255, 0.5] if root.send else [2.17, 2.17, 2.17, 0.7]
+    centerBLabel:
+        size_hint_x: 0.2
+        text:root.sendTime
+        halign: 'right'
+        valign: 'middle'
+        text_size: self.size
+
 <friendList>:
     BoxLayout:
-        size_hint_y:1.92
-        orientation: "horizontal"
-        height: 15
-        spacing: 10
-        BoldLabel:
-            text: "My friends"
-    BoxLayout:
-        size_hint_y: 0.05
-        orientation: "horizontal"
-        height: 30
-        spacing: 10
-        Button:
-            text: "Go back"
-            on_press: root.backProfile()
+        orientation:"vertical"
+        BoxLayout:
+            orientation:"horizontal"
+            size_hint_y:0.1
+            BoldLabel:
+                size_hint_x:0.9
+                text:"My Friend List"
+            PinkButton:
+                size_hint_x:0.1
+                text:"Go Back"
+                on_press:root.backProfile()
+        BoxLayout:
+            size_hint_y:0.9
+            orientation:"horizontal"
+            BoxLayout:
+                orientation: "vertical"
+                size_hint: (0.4,1)
+                pos_hint: {'center_y': .5, 'center_x': 0.8}
+                GridLayout:
+                    size_hint_y: 0.2
+                    cols: 3
+                    CenterLabel:
+                        size_hint_x: .25
+                        text: 'username'
+                    CenterLabel:
+                        size_hint_x: .25
+                        text: 'discount'
+                    CenterLabel:
+                        size_hint_x: .15
+                RecycleView:
+                    size_hint_y: 0.8
+                    id: friends
+                    data: []
+                    viewclass: 'friendInfo'
+                    VRVL:
+                        default_size: None, dp(50)
+                BoxLayout:
+                    orientation:"horizontal"
+                    size_hint_y: 0.1
+                    OrangeButton:
+                        size_hint:(0.5,0.8)
+                        text:"Add New Friend"
+                        on_press: root.addFriend()
+                    SkyBlueButton:
+                        size_hint:(0.5,0.8)
+                        text:"Refresh List"
+                        on_press:root.displayFriend()
+            Vspace:
+            BoxLayout:
+                size_hint:(0.7,0.8)
+                orientation:"vertical"
+                pos_hint: {'center_y': .5, 'center_x': 0.3}
+                CenterLabel:
+                    size_hint_y:0.2
+                    text:"Messages"
+                RecycleView:
+                    size_hint_y: 0.7
+                    id: messages
+                    data: []
+                    viewclass: 'messageBox'
+                    VRVL:
+                        default_size: None, dp(30)
+                BoxLayout:
+                    orientation:"horizontal"
+                    size_hint_y:0.2
+                    TextInput:
+                        id: chat
+                        size_hint: (0.8,0.5)
+                        multiline: True
+                    SkyBlueButton:
+                        size_hint_y:0.5
+                        text:"send"
+                        on_press: root.sentMessage(chat.text)
+            

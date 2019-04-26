@@ -41,7 +41,7 @@
 #Buttons
 <SkyBlueButton@Button>:
     color: 0, 0, 0, 1
-    background_color: 0, 100, 255, 0.5
+    background_color: [0, 100, 255, 0.5]
     font_size: 33
 
 <OrangeButton@Button>:
@@ -63,7 +63,6 @@
     color: [0, 0, 0, 1]
     background_color: [2.55, 2.04, 2.55, 0.7]
     font_size: 33
-
 <BlueButton@Button>:
     color: [0, 0, 0, 1]
     background_color: [2.04, 2.30, 2.55, 1]
@@ -71,6 +70,14 @@
 <RedButton@Button>:
     background_color: [2.06, .18, .24, .7]
     font_size: 33
+#
+#<LeftButton@Button>
+#    color: [0, 0, 0, 1]
+#    background_color: [2.04, 2.30, 2.55, 1]
+#    font_size: 33
+#    halign: 'left'
+#    valign: 'middle'
+#    text_size: self.size
 
 # Inputs
 <InfoInput@TextInput>:
@@ -86,17 +93,48 @@
     multiline: False
 
 #Recycle views
-<RVL@RecycleBoxLayout>:
+
+<VRVL@RecycleBoxLayout>:
     default_size: None, dp(200)
     default_size_hint: 1, None
     size_hint_y: None
     height: self.minimum_height
     orientation: 'vertical'
 
+
+<HRVL@RecycleBoxLayout>:
+    default_size:dp(700), None
+    default_size_hint: None, 1
+    size_hint_x: None
+    width: self.minimum_width
+    orientation: 'horizontal'
+
 # Vertical Space
 <Vspace@BoxLayout>:
     orientation: "vertical"
     size_hint_x:0.1
+
+
+## Change password layout
+#<editPassword>:
+#    BoxLayout:
+#        size: root.size
+#        pos: root.pos
+#        orientation: 'vertical'
+#        BoldLabel:
+#            text: "Please Enter New Password Below:"
+#        TextInput：
+#            id: newPassword
+#            pos_hint_x: 0.5
+#            font_size:33
+#            size_hint_x: 0.5
+#            multiline: False
+#        GrayButton:
+#            text: "Goback"
+#            on_release: root.back()
+#        OrangeButton:
+#            text: "Change Password"
+#            on_release: root.submit(newPassword.text)
 
 # Image Boxlayout of Homepage
 <item>:

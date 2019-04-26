@@ -1,4 +1,6 @@
-#:include features.kv
+#include features.kv
+#:include itemRecycleView.kv
+
 <ouItem>:
     ScreenManager:
         id: ouItemManager
@@ -6,40 +8,236 @@
             id: itemHome
             name: "itemHome"
             BoxLayout:
-                GrayButton:
-                    text: "Profile"
-                    on_press: root.backProfile()
+                orientation: 'vertical'
+                size_hint_y: 0.8
+                pos_hint: {'center_x': .5, 'center_y': .6}
+                spacing: 20
+                BoldLabel:
+                    size_hint_y: 0.1
+                    text: "Items Wait for SU to Approve"
+                RecycleView:
+                    size_hint_y: 0.4
+                    id: waitItem
+                    do_scroll_x: True
+                    do_scroll_y: False
+                    data:[]
+                    viewclass: 'itemPost'
+                    HRVL:
+                BoldLabel:
+                    size_hint_y: 0.1
+                    text: "Items on Sale(white) or Sold(yellow)"
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: 0.8
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoldLabel:
+                            size_hint_y: 0.15
+                            text: "Fixed Price Items"
+                        RecycleView:
+                            id: itemFixed
+                            data:[]
+                            viewclass: 'itemFixed'
+                            VRVL:
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoldLabel:
+                            size_hint_y: 0.15
+                            text: "Bidding Items"
+                        RecycleView:
+                            id: itemBid
+                            data:[]
+                            viewclass: 'itemBid'
+                            VRVL:
+            BoxLayout:
+                size_hint_y: .1
+                orientation: 'horizontal'
+                spacing: 20
                 BlueButton:
-                    text: "addBid"
+                    text: "addBid Item"
                     on_press: root.ids["ouItemManager"].current = "biddingItem"
                 OrangeButton:
-                    text: "addFixed"
+                    text: "addFixed Item"
                     on_press: root.ids["ouItemManager"].current = "fixedItem"
+                GrayButton:
+                    text: "Go Back To Profile"
+                    on_press: root.backProfile()
+
         Screen:
             name: "biddingItem"
             BoxLayout:
-                Label:
+                orientation: 'vertical'
+                size_hint: (.5, .8)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                BoldLabel:
+                    size_hint_y: 0.2
                     text: "Bid Item"
-                YellowButton:
-                    text: "Go back"
-                    on_press: root.ids["ouItemManager"].current = "itemHome"
-                PinkButton:
-                    text: "Submit"
-                    on_press: root.submit()
+                GridLayout:
+                    size_hint_y: 0.7
+                    cols:2
+                    CenterLabel:
+                        text: 'Title: '
+                    ProfileInput:
+                        id: itemTitle
+                        size_hint_x: .6
+                    CenterLabel:
+                        text: 'Description: '
+                    TextInput:
+                        id: itemDescription
+                        size_hint_x: .6
+                    CenterLabel:
+                        text: 'Start Price: '
+                    ProfileInput:
+                        id: itemPrice
+                        size_hint_x: .6
+                    CenterLabel:
+                        text: 'Bid Day: '
+                    ProfileInput:
+                        id: itemBidDay
+                        size_hint_x: .6
+                    CenterLabel:
+                        text: 'Image: '
+                    Button:
+                        id: image
+                        text: 'Choose Image'
+                        on_press: root.getImage()
+                BoxLayout:
+                    size_hint_y: 0.1
+                    orientation: 'horizontal'
+                    spacing: 10
+                    CenterLabel:
+                        text: 'Used Status: '
+                    BoxLayout:
+                        orientation: 'vertical'
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            spacing: 10
+                            RightLabel:
+                                text: 'New'
+                            CheckBox:
+                                id: new
+                                group: "usedStatus"
+                                on_active: root.updateStatus(False)
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            spacing: 10
+                            RightLabel:
+                                text: 'Used'
+                            CheckBox:
+                                id: used
+                                group: "usedStatus"
+                                on_active: root.updateStatus(True)
+                BoxLayout:
+                    size_hint_y: 0.2
+                    orientation: 'horizontal'
+                    spacing: 100
+                    YellowButton:
+                        text: "Go back"
+                        size_hint: (.25,0.5)
+                        # on_press: root.ids["ouItemManager"].current = "itemHome"
+                        on_press: root.backPostItemPage()
+                    GrayButton:
+                        text: "Clear"
+                        size_hint: (.25,0.5)
+                        # on_press: root.ids["ouItemManager"].current = "itemHome"
+                        on_press: root.clearBidItemInput()
+                    PinkButton:
+                        size_hint: (.25,0.5)
+
+                        text: "Submit"
+                        # on_press: root.submitBidingItem()
+                        on_press: root.submitBidingItem(itemTitle.text,itemDescription.text, itemPrice.text, itemBidDay.text)
+                centerBLabel:
+                    size_hint_y: 0.2
+
+                    id: bidItemWarning
+                    text:''
+                    color: 1,0,1,1
 
         Screen:
             name: "fixedItem"
             BoxLayout:
-                Label:
+                orientation: 'vertical'
+                size_hint: (.5, .8)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                spacing: 20
+                BoldLabel:
+                    size_hint_y: 0.2
                     text: "Fixed Item"
-                YellowButton:
-                    text: "Go back"
-                    on_press: root.ids["ouItemManager"].current = "itemHome"
-                PinkButton:
-                    text: "Submit"
-                    on_press: root.submit()
+                GridLayout:
+                    size_hint_y: 0.7
+                    cols:2
+                    CenterLabel:
+                        text: 'Title: '
+                    ProfileInput:
+                        id: itemTitle1 
+                        size_hint_x: .6
+#                        on_text_validate: root.checkTitle(self.text)
+                    CenterLabel:
+                        text: 'Description: '
+                    TextInput:
+                        id: itemDescription1
+                        size_hint_x: .6
+#                        on_text_validate: root.checkDescription(self.text)
+                    CenterLabel:
+                        text: 'Price: '
+                    ProfileInput:
+                        id: itemPrice1 
+                        size_hint_x: .6
+                        on_text_validate: root.checkPrice(self.text)
+                    CenterLabel:
+                        text: 'Number Available: '
+                    ProfileInput:
+                        id: itemNumbers1 
+                        size_hint_x: .6
+                        on_text_validate: root.checkNumber(self.text)
+                    CenterLabel:
+                        text: 'Image: '
+                    Button:
+                        id: image1
+                        text: 'Choose Image'
+                        on_press: root.getImage()
+                BoxLayout:
+                    size_hint_y: 0.2
+                    orientation: 'horizontal'
+                    spacing: 100
+                    YellowButton:
+                        size_hint: (.25,0.5)
+                        text: "Go back"
+                        on_press: root.backPostItemPage()
+                    GrayButton:
+                        text: "Clear"
+                        size_hint: (.25,0.5)"
+                        on_press: root.clearFixedItemInput()
+                    PinkButton:
+                        size_hint: (.25,0.5)
+                        text: "Submit"
+                        on_press: root.submitFixedItem(itemTitle1.text,itemDescription1.text, itemPrice1.text, itemNumbers1.text,)
+                centerBLabel:
+                    size_hint_y: 0.2
+                    id: fixedItemWarning
+                    text:''
+                    color: 1,0,1,1
 
 
+
+<LoadImage>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
 
 
 

@@ -17,12 +17,13 @@ class Item():
         # return image, title, priceType, saleStatus, postTime
         # need for view item action
 
-        qry = "SELECT image, title, description, priceType,likeness,dislike FROM ItemInfo WHERE itemID = %s;"%self.itemID
+        qry = "SELECT image, title, description, priceType,likeness,dislike,saleStatus, approvalStatus FROM ItemInfo WHERE itemID = %s;"%self.itemID
         self.cursor.execute(qry)
         profile = self.cursor.fetchone()
         self.image= CoreImage(BytesIO(profile[0]), ext="png").texture
         self.title, self.descrpition, self.priceType = profile[1],profile[2],profile[3]
         self.likeness,self.dislike = profile[4],profile[5]
+        self.saleStatus, self.approvalStatus = profile[6], profile[7]
 
         qry = "SELECT frequency from ItemView WHERE itemID = %s;"% self.itemID
         self.cursor.execute(qry)
