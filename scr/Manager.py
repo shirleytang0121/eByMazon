@@ -114,7 +114,7 @@ class ouInfo(Screen):
         root.ids['screenmanager'].current = "suHomepage"
 
     def getOUInformation(self):
-        self.ids['OUInformation'].data = [{'ouID': 1, 'ouName': 'lu', 'ouPhone': 3435345, 'ouEmail': 'lu@gmail.com', 'ouCard': '124123', 'ouAddress': 'east village',
+        self.ids['ouInformation'].data = [{'ouID': 1, 'ouName': 'lu', 'ouPhone': 3435345, 'ouEmail': 'lu@gmail.com', 'ouCard': '124123', 'ouAddress': 'east village',
                                            'ouState': 'NY', 'ouStatus':'VIP', 'ouRate': 5, 'ouComplaint': 0, 'ouWarning': 0},
                                           {'ouID': 2, 'ouName': 'han', 'ouPhone': 345432, 'ouEmail': 'han@gmail.com', 'ouCard': '452355', 'ouAddress': 'beijing',
                                            'ouState': 'CA', 'ouStatus':'Ordinary', 'ouRate': 5, 'ouComplaint': 1, 'ouWarning': 0}]

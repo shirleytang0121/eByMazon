@@ -1,4 +1,4 @@
-#include features.kv
+#:include features.kv
 #:include itemRecycleView.kv
 
 <ouItem>:
@@ -143,13 +143,12 @@
                         on_press: root.clearBidItemInput()
                     PinkButton:
                         size_hint: (.25,0.5)
-
                         text: "Submit"
                         # on_press: root.submitBidingItem()
                         on_press: root.submitBidingItem(itemTitle.text,itemDescription.text, itemPrice.text, itemBidDay.text)
+
                 centerBLabel:
                     size_hint_y: 0.2
-
                     id: bidItemWarning
                     text:''
                     color: 1,0,1,1
@@ -170,7 +169,7 @@
                     CenterLabel:
                         text: 'Title: '
                     ProfileInput:
-                        id: itemTitle1 
+                        id: itemTitle1
                         size_hint_x: .6
 #                        on_text_validate: root.checkTitle(self.text)
                     CenterLabel:
@@ -182,13 +181,13 @@
                     CenterLabel:
                         text: 'Price: '
                     ProfileInput:
-                        id: itemPrice1 
+                        id: itemPrice1
                         size_hint_x: .6
                         on_text_validate: root.checkPrice(self.text)
                     CenterLabel:
                         text: 'Number Available: '
                     ProfileInput:
-                        id: itemNumbers1 
+                        id: itemNumbers1
                         size_hint_x: .6
                         on_text_validate: root.checkNumber(self.text)
                     CenterLabel:
@@ -207,7 +206,8 @@
                         on_press: root.backPostItemPage()
                     GrayButton:
                         text: "Clear"
-                        size_hint: (.25,0.5)"
+                        size_hint: (.25,0.5)
+                        # on_press: root.ids["ouItemManager"].current = "itemHome"
                         on_press: root.clearFixedItemInput()
                     PinkButton:
                         size_hint: (.25,0.5)
@@ -218,7 +218,6 @@
                     id: fixedItemWarning
                     text:''
                     color: 1,0,1,1
-
 
 
 <LoadImage>:
@@ -238,6 +237,5 @@
             Button:
                 text: "Load"
                 on_release: root.load(filechooser.path, filechooser.selection)
-
 
 
