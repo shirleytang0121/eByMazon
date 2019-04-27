@@ -1,8 +1,9 @@
 #:include features.kv
 <guApplications@BoxLayout>:
+
     guusername: ""
     guname: ""
-    guphone: 0
+    guphone: ""
     guemail: ""
     guaddress: ""
     guState: ""
@@ -12,14 +13,14 @@
         orientation:"vertical"
         size_hint_x:0.7
 #        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+#        BoldLabel:
+#            text: "Applicants Information"
         BoldLabel:
-            text: "Applicants Information"
-        SmallLabel:
             text: "Username: " + root.guusername
         SmallLabel:
             text: "Name: " + root.guname
         SmallLabel:
-            text: "Phone number: " + str(root.guphone)
+            text: "Phone number: " + root.guphone
         SmallLabel:
             text: "Email: " + root.guemail
         SmallLabel:
@@ -36,8 +37,11 @@
         padding: 0, 70, 200, 70
         SkyBlueButton:
             text: "Approve"
+            on_press: root.manageApplication(root.guusername,True)
         SkyBlueButton
             text: "Decline"
+            on_press: root.manageApplication(root.guusername,False)
+
 
 
 <GUapplication>:
@@ -72,7 +76,7 @@
                 SkyBlueButton:
                     size_hint:(0.5,0.8)
                     text:"Refresh List"
-                    on_press:root.fakeData()
+                    on_press:root.getApplications()
 
 
 

@@ -32,7 +32,7 @@ except ModuleNotFoundError:
     from otherClass import *
 
 
-################### Home Page Item Recycle View ################################
+################################## Home Page Item Recycle View ###############################################
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
     def getItem(self):
@@ -43,7 +43,7 @@ class item(BoxLayout):
             root.tofixedItem(self.itemIndex)
 
 
-################################### Sign Up Page ################################
+################################################## Sign Up Page ###############################################
 class Signup(Screen):
     # sign up page implement in signup.kv
     stateV,cardV,nameV = BooleanProperty(),BooleanProperty(),BooleanProperty()
@@ -99,57 +99,7 @@ class Signup(Screen):
                 self.clearSignup()
                 root.tohome()
 
-
-class GUapplication(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-
-    def fakeData(self):
-        self.ids['application'].data = [{'guusername':'lu7', 'guname':'lu', 'guphone': 777, 'guemail':'lu@gmail.com', 'guaddress':'east village', 'guState': 'NY', 'gucard': '12489738'},
-                                        {'guusername':'han7', 'guname':'han', 'guphone': 77777, 'guemail':'han@gmail.com', 'guaddress':'beijing', 'guState':'CA', 'gucard':'12439890'}]
-        print("Refresh")
-
-class ouInfo(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-
-    def getOUInformation(self):
-        self.ids['ouInformation'].data = [{'ouID': 1, 'ouName': 'lu', 'ouPhone': 3435345, 'ouEmail': 'lu@gmail.com', 'ouCard': '124123', 'ouAddress': 'east village',
-                                           'ouState': 'NY', 'ouStatus':'VIP', 'ouRate': 5, 'ouComplaint': 0, 'ouWarning': 0},
-                                          {'ouID': 2, 'ouName': 'han', 'ouPhone': 345432, 'ouEmail': 'han@gmail.com', 'ouCard': '452355', 'ouAddress': 'beijing',
-                                           'ouState': 'CA', 'ouStatus':'Ordinary', 'ouRate': 5, 'ouComplaint': 1, 'ouWarning': 0}]
-
-        # ouID = ObjectProperty()
-        # ous = OU(cursor=cursor, ouID=ouID)
-        #
-        # status = "VIP" if ou.status else "Ordinary User"
-        # self.ids['OUInformation'].ids['ouName'].text = "Name: %s" % ou.name
-        # self.ids['OUInformation'].ids['ouPhone'].text = "Phone: %s" % ou.phone
-        # self.ids['OUInformation'].ids['ouEmail'].text = "Email: %s" % ou.email
-        # self.ids['OUInformation'].ids['ouCard'].text = "Card Number: %s" % ou.card
-        # self.ids['OUInformation'].ids['ouAddress'].text = "Address: %s" % ou.address
-        # self.ids['OUInformation'].ids['ouState'].text = "State: %s" % ou.state
-        # self.ids['OUInformation'].ids['ouRate'].text = "Current Rating: %s" % ou.avgRate
-        # self.ids['OUInformation'].ids['ouMoney'].text = "Current Money Spend: %s" % ou.moneySpend
-        # self.ids['OUInformation'].ids['ouStatus'].text = "Current Status: %s" % status
-
-        # OUInfo = []
-        # i = 0
-        # for ou in ous:
-        #     status = "VIP" if ou.status else "Ordinary User"
-        #     ouInfo.append({"ouName": ou.name, "ouPhone": str(ou.phone), "ouEmail": ou.email, "ouCard": ou.Card,
-        #                        "ouAddress": ou.address, "ouStates": ou.state, "ouRate": str(ou.State),
-        #                        "ouMoney": str(ou.moneySpend), "ouStatus": status})
-        #     i += 1
-        # self.ids['OUInformation'].data = ouInfo
-
-        print("Refresh")
-
-class itemManage(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-
-########################## Appeal Pop Up Page ################################
+######################################### Appeal Pop Up Page ###############################################
 class appealPop(Popup):
     def homepage(self):
         appealPop.dismiss(self)
@@ -168,7 +118,7 @@ class appealPop(Popup):
         self.homepage()
 
 
-########################## OU Item Page ################################
+######################################### OU Item Page ###############################################
 class LoadImage(FloatLayout):
     load = ObjectProperty(None)
     cancel = ObjectProperty(None)
@@ -204,7 +154,7 @@ class ouItem(Screen):
         self.image = ""
         # self.isTitle, self.isDescription, self.isPrice, self.isNumber = True, True, True, True
 
-    ############ Getting image #########
+    ############ Getting image ########################
     def getImage(self):
         content = LoadImage(load=self.loadImage, cancel=self.dismiss_popup)
         self._popup = Popup(title="Load file", content=content,
@@ -298,7 +248,7 @@ class ouItem(Screen):
             self.clearFixedItemInput()
             self.backPostItemPage()
 
-################################### Friend Page ################################
+################################################## Friend Page ###############################################
 
 class friendInfo(GridLayout):
     def deleteFriend(self):
@@ -337,13 +287,51 @@ class friendList(Screen):
         root.getMessage(root.friendID)
         self.ids['chat'].text =""
 
-################################### Other Pages ################################
+
+##################################################### SU Pages #################################################
+
+################################### GU Application ################################
 class GUapplication(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
+
+    def getApplications(self):
+        self.ids['application'].data = su.getGU()
+        print("Refresh")
+
+class guApplications(BoxLayout):
+    def manageApplication(self,guUsername, action):
+        su.manageApplication(guUsername, action)
+
+################################### OU INFO ################################
+class ouInformation(BoxLayout):
+    def removeOU(self,ouID):
+        su.removeOU(ouID)
+
 class ouInfo(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
+
+    def getOUInformation(self):
+        ous = su.getOU()
+        ouData = []
+        for ou in ous:
+            remove = True if ou.status == 3 else False
+            status = 'Ordinary'
+            if ou.status == 1:
+                status = 'VIP'
+            elif ou.status == 2:
+                status = 'Suspend'
+            elif ou.status == 3:
+                status = 'Removed'
+
+            ouData.append({'ouID': ou.ID, 'ouName': ou.name, 'ouPhone': ou.phone, 'ouEmail': ou.email,
+                           'ouCard': ou.card, 'ouAddress': ou.address,'ouState':ou.state,
+                           'ouStatus':status, 'ouRate': ou.avgRate, 'ouComplaint': len(ou.compliants),
+                           'ouWarning': 0, 'remove': remove})
+        self.ids['ouInformation'].data = ouData
+
+################################### Others ################################
 class itemManage(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
@@ -443,7 +431,7 @@ class Manager(Screen):
             self.ids['loginCheck'].text = ""
             if userInfo['userType']:   # Create SU
                 global su
-                su = SU(cursor=cursor,suID=userInfo['ID'])
+                su = SU(cnx=cnx, cursor=cursor,suID=userInfo['ID'])
                 self.ids['screenmanager'].current = "suHomepage"
                 self.clearLogin()  # clear login info for potential next user
             else:
@@ -635,9 +623,12 @@ class Manager(Screen):
         self.displayItem()
         print(word)
     def toguApply(self):
+        self.ids['guApply'].getApplications()
         self.ids['screenmanager'].current = "GUapplication"
-        print("In GU")
+
+
     def toouInfo(self):
+        self.ids['ouInfo'].getOUInformation()
         self.ids['screenmanager'].current = "ouInfo"
     def toitemManage(self):
         self.ids['screenmanager'].current = "itemManage"
