@@ -275,9 +275,45 @@ class friendList(Screen):
         print("Refresh")
     # def sendMessage(self):
     #     print(self.ids['chat'].text)
-    def addFriend(self):
-        print("Add Friend")
+    def checkInt(self, input):
+        if input is None or input == '':
+            return False
+        try:
+            int(input)
+            return True
+        except ValueError:
+            return False
 
+    def checkFloat(self, input):
+        if input is None or input == '':
+            return False
+        return isinstance(input, float) or self.checkInt(input)
+    def clearMsg(self):
+        self.ids['warning'].text = ''
+        self.ids['friendName'].text = ''
+        self.ids['discount'].text = ''
+
+    def checkExist(self,input):
+        #check with db, to be filled
+        return True
+
+    def checkUsername(self,input):
+        self.isUserName =  ouItem.checkEmpty(self,input) and self.checkExist(input)
+    def checkDiscount(self,input):
+        self.isDiscount = self.checkFloat(input)
+    def addFriend(self, username, discount):
+        self.checkUsername(username)
+        self.checkDiscount(discount)
+        condition = self.isUserName and self.isDiscount
+        if not condition:
+            self.ids['warning'].text = 'Please enter valid input'
+            self.ids['friendName'].text = ''
+            self.ids['discount'].text = ''
+        else:
+            self.clearMsg()
+            # self.addFriends(username,discount)
+            print("Add Friend")
+        
     def addFriends(self,friendID,discount):
         ou.addFriend(friendID,discount)
 
