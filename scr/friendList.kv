@@ -5,6 +5,8 @@
     cols: 3
     padding : 5, 0
     spacing: 10, 0
+    isUserName: True
+    isDiscount: True
     BlueButton:
         size_hint: (.35,0.5)
         text: root.username
@@ -81,12 +83,29 @@
                     VRVL:
                         default_size: None, dp(50)
                 BoxLayout:
-                    orientation:"horizontal"
-                    size_hint_y: 0.1
-                    OrangeButton:
-                        size_hint:(0.5,0.8)
-                        text:"Add New Friend"
-                        on_press: root.addFriend()
+                    orientation:"vertical"
+                    size_hint_y: 0.3
+                    WarningLabel:
+                        id: warning
+                        text: ''
+                        size_hint_x: 1.3
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.7}
+                    BoxLayout:
+                        orientation:'horizontal'
+                        size_hint:(1.2,.8)
+                        OrangeButton:
+                            text:"Add New Friend"
+                            on_press: root.addFriend(friendName.text,discount.text)
+                            size_hint_x: .5
+                        TextInput:
+                            id: friendName
+                            hint_text: 'username'
+                            size_hint_x: .4
+
+                        TextInput:
+                            id: discount
+                            hint_text: 'discount'
+                            size_hint_x: .3
                     SkyBlueButton:
                         size_hint:(0.5,0.8)
                         text:"Refresh List"
