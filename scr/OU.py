@@ -14,11 +14,7 @@ class OU():
         self.ID = ouID
         self.getOUInfo()
         self.getItem()
-
-
-
-
-
+        self.getCompliants()
 
     def getOUInfo(self):
         # Get ou information in strings: name, card number, address, state, phone
@@ -34,8 +30,9 @@ class OU():
 
         self.getTax()
 
+
     def getItem(self):
-        '''Get items that own by current OU, in list of Item class '''
+        ''' Get items that own by current OU, in list of Item class '''
 
         qry = "SELECT itemID FROM ItemOwner WHERE ownerID = %s;" % self.ID
         self.cursor.execute(qry)
@@ -50,6 +47,16 @@ class OU():
         qry = "SELECT taxRate FROM Tax WHERE state = '%s';" % self.state
         self.cursor.execute(qry)
         self.taxRate = self.cursor.fetchone()[0]
+
+    def getCompliants(self):
+        qry =("SELECT * FROM Complaint NATURAL JOIN ItemOwner "
+              "WHERE justified = TRUE AND ownerID = %s;"% self.ID)
+        self.cursor.execute(qry)
+        self.compliants = []
+        for compliant in self.cursor:
+            self.compliants.append({'itemID':compliant[0], 'description': compliant[1],
+                                    'compliantTime': compliant[2]})
+            print(self.ID, self.name, compliant[0])
     ####################### Change Info #####################################
     def changePassword(self,password):
         #update password in DB

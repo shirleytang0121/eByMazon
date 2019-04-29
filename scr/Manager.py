@@ -32,7 +32,7 @@ except ModuleNotFoundError:
     from otherClass import *
 
 
-################### Home Page Item Recycle View ################################
+################################## Home Page Item Recycle View ###############################################
 class item(BoxLayout):
     # the item frame in homepage, implemented in feature.kv
     def getItem(self):
@@ -43,7 +43,7 @@ class item(BoxLayout):
             root.tofixedItem(self.itemIndex)
 
 
-################################### Sign Up Page ################################
+################################################## Sign Up Page ###############################################
 class Signup(Screen):
     # sign up page implement in signup.kv
     stateV,cardV,nameV = BooleanProperty(),BooleanProperty(),BooleanProperty()
@@ -100,7 +100,7 @@ class Signup(Screen):
                 root.tohome()
 
 
-########################## Appeal Pop Up Page ################################
+######################################### Appeal Pop Up Page ###############################################
 class appealPop(Popup):
     def homepage(self):
         appealPop.dismiss(self)
@@ -119,7 +119,7 @@ class appealPop(Popup):
         self.homepage()
 
 
-########################## OU Item Page ################################
+######################################### OU Item Page ###############################################
 class LoadImage(FloatLayout):
     load = ObjectProperty(None)
     cancel = ObjectProperty(None)
@@ -155,7 +155,7 @@ class ouItem(Screen):
         self.image = ""
         # self.isTitle, self.isDescription, self.isPrice, self.isNumber = True, True, True, True
 
-    ############ Getting image #########
+    ############ Getting image ########################
     def getImage(self):
         content = LoadImage(load=self.loadImage, cancel=self.dismiss_popup)
         self._popup = Popup(title="Load file", content=content,
@@ -249,23 +249,58 @@ class ouItem(Screen):
             self.clearFixedItemInput()
             self.backPostItemPage()
 
-################################### Friend Page ################################
+################################### GU Application ################################
+class GUapplication(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+
+    def getApplications(self):
+        self.ids['application'].data = su.getGU()
+        print("Refresh")
+
+class guApplications(BoxLayout):
+    def manageApplication(self,guUsername, action):
+        su.manageApplication(guUsername, action)
+
+################################### OU INFO ################################
+class ouInformation(BoxLayout):
+    def removeOU(self,ouID):
+        su.removeOU(ouID)
+
+class ouInfo(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+
+    def getOUInformation(self):
+        ous = su.getOU()
+        ouData = []
+        for ou in ous:
+            remove = True if ou.status == 3 else False
+            status = 'Ordinary'
+            if ou.status == 1:
+                status = 'VIP'
+            elif ou.status == 2:
+                status = 'Suspend'
+            elif ou.status == 3:
+                status = 'Removed'
+
+            ouData.append({'ouID': ou.ID, 'ouName': ou.name, 'ouPhone': ou.phone, 'ouEmail': ou.email,
+                           'ouCard': ou.card, 'ouAddress': ou.address,'ouState':ou.state,
+                           'ouStatus':status, 'ouRate': ou.avgRate, 'ouComplaint': len(ou.compliants),
+                           'ouWarning': 0, 'remove': remove})
+        self.ids['ouInformation'].data = ouData
+
+################################################## Friend Page ###############################################
 
 class friendInfo(GridLayout):
     def deleteFriend(self):
-        print(self.friendID)
+        # print(self.friendID)
         test = ou.deleteFriend(self.friendID)
 
     def getFriendMessage(self):
+        root.ids["friendPage"].selectedFriend = self.username
         root.getMessage(self.friendID)
-        # messages = ou.getFriendMessage(self.friendID)
-        # root.friendID = self.friendID
-        # for mess in messages:
-        #     mess['sendTime'] = mess['sendTime'].strftime('%m/%d/%Y')
-        # root.ids["friendPage"].ids['messages'].data = messages
-
-        print(self.friendID)
-
+        # print(self.friendID)
 
 class friendList(Screen):
     def backProfile(self):
@@ -274,10 +309,33 @@ class friendList(Screen):
         friends = ou.getFriend()
         self.ids['friends'].data = friends
         print("Refresh")
-    # def sendMessage(self):
-    #     print(self.ids['chat'].text)
-    def addFriend(self):
-        print("Add Friend")
+    def checkInt(self, input):
+        if input is None or input == '':
+            return False
+        try:
+            if float(input) < 1:        # max discount
+                return True
+        except ValueError:
+            return False
+        return False
+    # def checkFloat(self, input):
+    #     return isinstance(float(input, float) or self.checkInt(input)
+    def clearMsg(self):
+        self.ids['warning'].text = ''
+        self.ids['friendName'].text = ''
+        self.ids['discount'].text = ''
+
+    def addFriend(self, username, discount):
+        if not guest.checkUsername(username) or not self.checkInt(discount):
+            print(guest.checkUsername(username))
+            print(self.checkInt(discount))
+            self.ids['warning'].text = 'Please enter valid input'
+        else:
+            self.clearMsg()
+            cursor.execute("SELECT ID FROM User WHERE username = '%s'" % username)
+            friendID = cursor.fetchone()[0]
+            ou.addFriend(friendID, float(discount))
+            print("Add Friend")
 
     def addFriends(self,friendID,discount):
         ou.addFriend(friendID,discount)
@@ -287,64 +345,43 @@ class friendList(Screen):
         root.getMessage(root.friendID)
         self.ids['chat'].text =""
 
-################################### Other Pages ################################
-class GUapplication(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
 
-    def fakeData(self):
-        self.ids['application'].data = [{'guusername': 'lu7', 'guname': 'lu', 'guphone': 777, 'guemail': 'lu@gmail.com',
-                 'guaddress': 'east village', 'guState': 'NY', 'gucard': '12489738'},
-                {'guusername': 'han7', 'guname': 'han', 'guphone': 77777, 'guemail': 'han@gmail.com',
-                 'guaddress': 'beijing', 'guState': 'CA', 'gucard': '12439890'}]
-        print("Refresh")
 
-    class ouInfo(Screen):
-        def tohome(self):
-            root.ids['screenmanager'].current = "suHomepage"
+##################################################### SU Pages #################################################
+class suItemPost(Screen):
+    def declineItem(self):
+        print("Decline: %d" % self.itemID)
+    def approveItem(self):
+        print("Approve: %d" %self.itemID)
 
-        def getOUInformation(self):
-            self.ids['OUInformation'].data = [
-                {'ouID': 1, 'ouName': 'lu', 'ouPhone': 3435345, 'ouEmail': 'lu@gmail.com', 'ouCard': '124123',
-                 'ouAddress': 'east village',
-                 'ouState': 'NY', 'ouStatus': 'VIP', 'ouRate': 5, 'ouComplaint': 0, 'ouWarning': 0},
-                {'ouID': 2, 'ouName': 'han', 'ouPhone': 345432, 'ouEmail': 'han@gmail.com', 'ouCard': '452355',
-                 'ouAddress': 'beijing',
-                 'ouState': 'CA', 'ouStatus': 'Ordinary', 'ouRate': 5, 'ouComplaint': 1, 'ouWarning': 0}]
+class suItemSale(Screen):
+    def removeItem(self):
+        print("Remove: %d" % self.itemID)
 
-            # ouID = ObjectProperty()
-            # ous = OU(cursor=cursor, ouID=ouID)
-            #
-            # status = "VIP" if ou.status else "Ordinary User"
-            # self.ids['OUInformation'].ids['ouName'].text = "Name: %s" % ou.name
-            # self.ids['OUInformation'].ids['ouPhone'].text = "Phone: %s" % ou.phone
-            # self.ids['OUInformation'].ids['ouEmail'].text = "Email: %s" % ou.email
-            # self.ids['OUInformation'].ids['ouCard'].text = "Card Number: %s" % ou.card
-            # self.ids['OUInformation'].ids['ouAddress'].text = "Address: %s" % ou.address
-            # self.ids['OUInformation'].ids['ouState'].text = "State: %s" % ou.state
-            # self.ids['OUInformation'].ids['ouRate'].text = "Current Rating: %s" % ou.avgRate
-            # self.ids['OUInformation'].ids['ouMoney'].text = "Current Money Spend: %s" % ou.moneySpend
-            # self.ids['OUInformation'].ids['ouStatus'].text = "Current Status: %s" % status
 
-            # OUInfo = []
-            # i = 0
-            # for ou in ous:
-            #     status = "VIP" if ou.status else "Ordinary User"
-            #     ouInfo.append({"ouName": ou.name, "ouPhone": str(ou.phone), "ouEmail": ou.email, "ouCard": ou.Card,
-            #                        "ouAddress": ou.address, "ouStates": ou.state, "ouRate": str(ou.State),
-            #                        "ouMoney": str(ou.moneySpend), "ouStatus": status})
-            #     i += 1
-            # self.ids['OUInformation'].data = ouInfo
 
-            print("Refresh")
+
+################################### Others ################################
 
 class itemManage(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
+
 class itemFixed(Screen):
     status = BooleanProperty()
 
-
+class processCompliant(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class ouWarning(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "profilePage"
+class blackTaboo(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class suTransaction(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
 ####################### TO BE FILLED #################
 class editPassword(FloatLayout):
     back = ObjectProperty(None)
@@ -437,7 +474,7 @@ class Manager(Screen):
             self.ids['loginCheck'].text = ""
             if userInfo['userType']:   # Create SU
                 global su
-                su = SU(cursor=cursor,suID=userInfo['ID'])
+                su = SU(cnx=cnx, cursor=cursor,suID=userInfo['ID'])
                 self.ids['screenmanager'].current = "suHomepage"
                 self.clearLogin()  # clear login info for potential next user
             else:
@@ -594,14 +631,49 @@ class Manager(Screen):
     ################################### Friend Page ################################
     def friendList(self):
         print('friendlist')
+        root.ids["friendPage"].selectedFriend = " Unselected "
         self.ids["friendPage"].ids['friends'].data = ou.getFriend()
+        self.ids["friendPage"].ids['messages'].data = []
         self.ids['screenmanager'].current = "friendPage"
+
     def getMessage(self,friendID):
         messages = ou.getFriendMessage(friendID)
         self.friendID = friendID
         for mess in messages:
             mess['sendTime'] = mess['sendTime'].strftime('%m/%d/%Y')
         root.ids["friendPage"].ids['messages'].data = messages
+
+
+
+    ################################### SU Item Page ################################
+    def getSUitem(self):
+        suItems = su.getAllItem()
+        waitI = []
+        saleI = []
+        for item in suItems:
+            typeStr = "Bidding" if item.priceType else "Fixed Price"
+            if not item.approvalStatus:
+                waitI.append({"itemID": item.itemID,"image": item.image,"title": item.title, "priceType": item.priceType,
+                              "price": str(item.price), "typeStr": typeStr, "description": item.descrpition})
+            else:
+                # sale = "Sold" if item.saleStatus else "On Sale"
+                try:
+                    highestPrice = str(item.highestPrice)
+                except AttributeError:
+                    highestPrice = "None"
+
+                saleStatus = False
+                if item.saleStatus:
+                    saleStatus = True
+
+                # if item.priceType:
+                saleI.append({"itemID": item.itemID,"image": item.image, "title": item.title,"price": str(item.price),
+                              "typeStr": typeStr,"description": item.descrpition, "reviews": str(item.views),
+                             "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
+
+
+        self.ids["itemManage"].ids["itemPost"].data = waitI
+        self.ids["itemManage"].ids["itemSale"].data = saleI
 
     def sortPop(self):
         print("Sort by Popular")
@@ -629,18 +701,30 @@ class Manager(Screen):
         self.displayItem()
         print(word)
     def toguApply(self):
+        self.ids['guApply'].getApplications()
         self.ids['screenmanager'].current = "GUapplication"
-        print("In GU")
+
+
     def toouInfo(self):
+        self.ids['ouInfo'].getOUInformation()
         self.ids['screenmanager'].current = "ouInfo"
     def toitemManage(self):
+        self.getSUitem()
         self.ids['screenmanager'].current = "itemManage"
 
     def toOuItem(self):
         self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
+    def toWarning(self):
+        self.ids['screenmanager'].current = "ouWarning"
 
+    def toCompliant(self):
+        self.ids['screenmanager'].current ="processCompliant"
 
+    def toBlacklist(self):
+        self.ids['screenmanager'].current = "blackTaboo"
+    def toSUtransaction(self):
+        self.ids['screenmanager'].current = "suTransaction"
 
 class eByMazonApp(App):
 
@@ -658,6 +742,7 @@ if __name__ == "__main__":
         "host": '127.0.0.1',
         "database": 'eByMazon'
     }
+
     try:
         cnx = mysql.connector.connect(**config)
         cnx.set_unicode(value=True)

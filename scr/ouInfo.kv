@@ -1,9 +1,10 @@
 #:include features.kv
 
 <ouInformation@BoxLayout>
+    remove: False
     ouID: 0
     ouName: ''
-    ouPhone: 0
+    ouPhone: ""
     ouEmail: ''
     ouCard: ''
     ouAddress: ''
@@ -24,62 +25,68 @@
         BoxLayout:
             orientation: "vertical"
             padding: 250, 20, 0, 0
+            size_hint_x: (0.8)
             LeftLabel:
-                text: "Name: %s" % root.ouName
+                text: "Name:  " + root.ouName
             LeftLabel:
-                text: "Phone number: %s" % str(root.ouPhone)
+                text: "Phone number:  " + root.ouPhone
             LeftLabel:
-                text: "Email: %s" % root.ouEmail
+                text: "Email:  " + root.ouEmail
             LeftLabel:
-                text: "Card Info: %s" % root.ouCard
+                text: "Card Info:  " + root.ouCard
             LeftLabel:
-                text: "Address: %s" % root.ouAddress
+                text: "Address:  " + root.ouAddress
             LeftLabel:
-                text: "State: %s" % root.ouState
+                text: "State:  " + root.ouState
 
         BoxLayout:
             orientation: "vertical"
             padding: 150, 0, 400, 0
+            size_hint_x: (0.8)
             LeftLabel:
-                text: "Status: %s" % root.ouStatus
+                text: "Status: " + root.ouStatus
             LeftLabel:
-                text: "Rate: %s" % str(root.ouRate)
+                text: "Rate:  " + str(root.ouRate)
             LeftLabel:
-                text: "Complaint: %s" % str(root.ouComplaint)
+                text: "Complaint:  " + str(root.ouComplaint)
             LeftLabel:
-                text: "Warning: %s" % str(root.ouWarning)
+                text: "Warning:  " + str(root.ouWarning)
             PinkButton:
                 text: "Remove"
+                opacity: 0 if root.remove else 1
+                disable: 1 if root.remove else 0
+                on_press: root.removeOU(root.ouID)
 
 <ouInfo>:
+#    name: "GUapplication"
     BoxLayout:
-        orientation: "vertical"
-        BoxLayout:
-            size_hint_y: 0.1
-            Label:
-                size_hint_x: 0.9
-            GrayButton:
-                text:"Home"
-                size_hint_x: 0.1
-                size: 150, 100
-                on_press: root.tohome()
-
-        BoxLayout:
-            size_hint_y: 0.3
+        BoxLayout
+            orientation: "vertical"
             BoxLayout:
-                BoldLabel:
-                    text: "All OU Information"
-                    font_size: 100
-        RecycleView:
-            id: OUInformation
-            data: []
-            viewclass: 'ouInformation'
-            VRVL:
-                default_size: None, dp(200)
-        BoxLayout:
-            size_hint_y: 0.1
-            SkyBlueButton:
-                size_hint:(0.5,0.8)
-                text:"Refresh List"
-                on_press:root.getOUInformation()
+                size_hint_y: 0.1
+                Label:
+                    size_hint_x: 0.9
+                GrayButton:
+                    text:"Home"
+                    size_hint_x: 0.1
+                    size: 150, 100
+                    on_press: root.tohome()
 
+            BoxLayout:
+                size_hint_y: 0.3
+                BoxLayout:
+                    BoldLabel:
+                        text: "OU INFO"
+                        font_size: 100
+            RecycleView:
+                id: ouInformation
+                data: []
+                viewclass: 'ouInformation'
+                VRVL:
+                    default_size: None, dp(150)
+            BoxLayout:
+                size_hint_y: 0.1
+                SkyBlueButton:
+                    size_hint:(0.5,0.8)
+                    text:"Refresh List"
+                    on_press:root.getOUInformation()
