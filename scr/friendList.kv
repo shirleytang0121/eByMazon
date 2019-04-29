@@ -45,6 +45,7 @@
         text_size: self.size
 
 <friendList>:
+    selectedFriend: " Unselected "
     BoxLayout:
         orientation:"vertical"
         BoxLayout:
@@ -117,10 +118,16 @@
                 pos_hint: {'center_y': .5, 'center_x': 0.3}
                 CenterLabel:
                     size_hint_y:0.2
-                    text:"Messages"
+                    text:"Messages with " + root.selectedFriend
                 RecycleView:
                     size_hint_y: 0.7
                     id: messages
+                    canvas.before:
+                        Color:
+                            rgb: (255, 204, 255)
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
                     data: []
                     viewclass: 'messageBox'
                     VRVL:

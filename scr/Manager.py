@@ -252,19 +252,13 @@ class ouItem(Screen):
 
 class friendInfo(GridLayout):
     def deleteFriend(self):
-        print(self.friendID)
+        # print(self.friendID)
         test = ou.deleteFriend(self.friendID)
 
     def getFriendMessage(self):
+        root.ids["friendPage"].selectedFriend = self.username
         root.getMessage(self.friendID)
-        # messages = ou.getFriendMessage(self.friendID)
-        # root.friendID = self.friendID
-        # for mess in messages:
-        #     mess['sendTime'] = mess['sendTime'].strftime('%m/%d/%Y')
-        # root.ids["friendPage"].ids['messages'].data = messages
-
-        print(self.friendID)
-
+        # print(self.friendID)
 
 class friendList(Screen):
     def backProfile(self):
@@ -273,47 +267,34 @@ class friendList(Screen):
         friends = ou.getFriend()
         self.ids['friends'].data = friends
         print("Refresh")
-    # def sendMessage(self):
-    #     print(self.ids['chat'].text)
     def checkInt(self, input):
         if input is None or input == '':
             return False
         try:
-            int(input)
-            return True
+            if float(input) < 1:        # max discount
+                return True
         except ValueError:
             return False
-
-    def checkFloat(self, input):
-        if input is None or input == '':
-            return False
-        return isinstance(input, float) or self.checkInt(input)
+        return False
+    # def checkFloat(self, input):
+    #     return isinstance(float(input, float) or self.checkInt(input)
     def clearMsg(self):
         self.ids['warning'].text = ''
         self.ids['friendName'].text = ''
         self.ids['discount'].text = ''
 
-    def checkExist(self,input):
-        #check with db, to be filled
-        return True
-
-    def checkUsername(self,input):
-        self.isUserName =  ouItem.checkEmpty(self,input) and self.checkExist(input)
-    def checkDiscount(self,input):
-        self.isDiscount = self.checkFloat(input)
     def addFriend(self, username, discount):
-        self.checkUsername(username)
-        self.checkDiscount(discount)
-        condition = self.isUserName and self.isDiscount
-        if not condition:
+        if not guest.checkUsername(username) or not self.checkInt(discount):
+            print(guest.checkUsername(username))
+            print(self.checkInt(discount))
             self.ids['warning'].text = 'Please enter valid input'
-            self.ids['friendName'].text = ''
-            self.ids['discount'].text = ''
         else:
             self.clearMsg()
-            # self.addFriends(username,discount)
+            cursor.execute("SELECT ID FROM User WHERE username = '%s'" % username)
+            friendID = cursor.fetchone()[0]
+            ou.addFriend(friendID, float(discount))
             print("Add Friend")
-        
+
     def addFriends(self,friendID,discount):
         ou.addFriend(friendID,discount)
 
@@ -624,8 +605,11 @@ class Manager(Screen):
     ################################### Friend Page ################################
     def friendList(self):
         print('friendlist')
+        root.ids["friendPage"].selectedFriend = " Unselected "
         self.ids["friendPage"].ids['friends'].data = ou.getFriend()
+        self.ids["friendPage"].ids['messages'].data = []
         self.ids['screenmanager'].current = "friendPage"
+
     def getMessage(self,friendID):
         messages = ou.getFriendMessage(friendID)
         self.friendID = friendID
