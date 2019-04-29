@@ -34,7 +34,7 @@ class OU():
     def getItem(self):
         ''' Get items that own by current OU, in list of Item class '''
 
-        qry = "SELECT itemID FROM ItemOwner WHERE ownerID = %s;" % self.ID
+        qry = "SELECT itemID FROM ItemOwner NATURAL JOIN ItemInfo WHERE ownerID = %s;" % self.ID
         self.cursor.execute(qry)
         self.items = []
 

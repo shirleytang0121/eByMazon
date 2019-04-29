@@ -58,7 +58,7 @@ class SU():
         self.cnx.commit()
 
     def getAllItem(self):
-        qry = "SELECT itemID FROM ItemOwner;"
+        qry = "SELECT itemID FROM ItemOwner NATURAL JOIN ItemInfo;"
         self.cursor.execute(qry)
         self.items = []
 
@@ -67,23 +67,29 @@ class SU():
             self.items.append(Item(cnx=self.cnx, cursor=self.cursor,itemID=item[0]))
         return self.items
 
-    def manageItem(self, itemID, action, justification):
+    def manageItem(self, itemID, action, justification='removed By SU'):
         # action == True: approve: change approvalStatus in ItemDB to True
         # action == False: decline: remove the item in ItemDB, add warning to post OU in warningDB
         if not action:      #decline
-            self.cursor.execute("SELECT ownerID FROM ItemOwner WHERE itemID = %s;" % itemID)
-            ownerID = self.cursor.fetchone()[0]
-
-            self.cursor.execute("DELETE FROM ItemOwner WHERE itemID = %s;" % itemID)
-            # add warning
-
-            self.cnx.commit()
-
+            self.removeItem(itemID,justification)
         else:               # approve
             self.cursor.execute("UPDATE ItemInfo SET approvalStatus = True WHERE itemID = %s;" % itemID)
-            self.cursor.execute("INSERT INTO ItemView(itemID,frequency) VALUE (%s,0);" % itemID)
-            self.cursor.execute("INSERT INTO ItemView(itemID,frequency) VALUE (%s,0);" % itemID)
-        pass
+        self.cnx.commit()
+
+    def removeItem(self,itemID, justification='removed By SU'):
+        item = Item(self.cnx, self.cursor, itemID)
+
+        # add warning
+        self.cursor.execute("INSERT INTO Warning(ouID,warningID,description) VALUE (%s,3,'%s')"
+                            % (item.owner,str(itemID)+'_'+justification))
+
+        # Blacklist Item
+        self.cursor.execute("INSERT INTO itemBlackList(itemID,title) VALUE (%s,'%s');"
+                            % (item.itemID,item.title))
+        # Delete Item
+        self.cursor.execute("DELETE FROM ItemInfo WHERE itemID = %s;" % itemID)
+
+        self.cnx.commit()
 
     def viewCompliant(self):
         # Get all compliant from DB, return array of dict{itemID, complianerID, description, compliantTime}

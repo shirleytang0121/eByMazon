@@ -132,6 +132,9 @@ if __name__  == "__main__":
     insertItemInfo(cursor,itemID=6,image="images/item6.jpg",title="Macbook Air 13-Inch",description="Used 2 year, early 2015 version. "
                     "1.8GHz dual-core Intel Core i5 processor,\n Turbo Boost up to 2.9GHz,\n128GB SSD storage",
                    priceType=True,  saleStatus=False,approvalStatus=False)
+    # Insert values to other tables
+    print("Insert Item to eByMazon")
+    executeScriptsFromFile(cnx,cursor,'insertItem.sql')
     cnx.commit()        #Need to make sure everything push to database
 
 # Test get image

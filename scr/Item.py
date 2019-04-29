@@ -20,10 +20,16 @@ class Item():
         qry = "SELECT image, title, description, priceType,likeness,dislike,saleStatus, approvalStatus FROM ItemInfo WHERE itemID = %s;"%self.itemID
         self.cursor.execute(qry)
         profile = self.cursor.fetchone()
-        self.image= CoreImage(BytesIO(profile[0]), ext="png").texture
+
         self.title, self.descrpition, self.priceType = profile[1],profile[2],profile[3]
         self.likeness,self.dislike = profile[4],profile[5]
         self.saleStatus, self.approvalStatus = profile[6], profile[7]
+        self.image = CoreImage(BytesIO(profile[0]), ext="png").texture
+
+        qry = "SELECT ownerID from ItemOwner WHERE itemID = %s;"% self.itemID
+        self.cursor.execute(qry)
+        self.owner = self.cursor.fetchone()[0]
+
 
         qry = "SELECT frequency from ItemView WHERE itemID = %s;"% self.itemID
         self.cursor.execute(qry)

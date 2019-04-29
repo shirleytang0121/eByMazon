@@ -351,12 +351,18 @@ class friendList(Screen):
 class suItemPost(Screen):
     def declineItem(self):
         print("Decline: %d" % self.itemID)
+        su.manageItem(self.itemID, False,self.ids['justification'].text)
+        root.getSUitem()
     def approveItem(self):
         print("Approve: %d" %self.itemID)
+        su.manageItem(self.itemID, True)
+        root.getSUitem()
 
 class suItemSale(Screen):
     def removeItem(self):
         print("Remove: %d" % self.itemID)
+        su.removeItem(self.itemID)
+        root.getSUitem()
 
 
 
@@ -652,6 +658,7 @@ class Manager(Screen):
         saleI = []
         for item in suItems:
             typeStr = "Bidding" if item.priceType else "Fixed Price"
+
             if not item.approvalStatus:
                 waitI.append({"itemID": item.itemID,"image": item.image,"title": item.title, "priceType": item.priceType,
                               "price": str(item.price), "typeStr": typeStr, "description": item.descrpition})
@@ -737,8 +744,8 @@ class eByMazonApp(App):
 
 if __name__ == "__main__":
     config = {
-        "user": 'eby',                 # Enter your own username
-        "password": 'ebypw',             # Enter your own password
+        "user": '',                 # Enter your own username
+        "password": '',             # Enter your own password
         "host": '127.0.0.1',
         "database": 'eByMazon'
     }

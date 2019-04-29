@@ -86,6 +86,12 @@ CREATE TABLE ItemOwner(
 );
 
 
+CREATE TABLE itemBlackList(
+  itemID INTEGER PRIMARY KEY,
+  title VARCHAR(64),
+  FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
+);
+
 CREATE TABLE ItemInfo(
   itemID INTEGER PRIMARY KEY,
   image BLOB,               -- Only allow store file/image up to 64KB
@@ -106,7 +112,7 @@ CREATE TABLE ItemInfo(
 --   FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
 -- );
 CREATE TABLE ItemLike(
-  itemID INTEGER REFERENCES ItemOwner(itemID) ON DELETE CASCADE,
+  itemID INTEGER REFERENCES ItemInfo(itemID) ON DELETE CASCADE,
   ouID INTEGER REFERENCES OU(ouID) ON DELETE CASCADE
 );
 
@@ -114,7 +120,7 @@ CREATE TABLE FixedPrice(
   itemID INTEGER PRIMARY KEY,
   price FLOAT,
   availableNum INTEGER,
-  FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
+  FOREIGN KEY (itemID) REFERENCES ItemInfo(itemID) ON DELETE CASCADE
 );
 CREATE TABLE ItemBid(
   itemID INTEGER PRIMARY KEY,
@@ -122,7 +128,7 @@ CREATE TABLE ItemBid(
   usedStatus BOOLEAN DEFAULT TRUE, -- true for used, false for new
 --  bid_high FLOAT,
   endDay TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
+  FOREIGN KEY (itemID) REFERENCES ItemInfo(itemID) ON DELETE CASCADE
 );
 
 CREATE TABLE BidRecord(
@@ -131,7 +137,7 @@ CREATE TABLE BidRecord(
   bidPrice FLOAT,
   bidTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (itemID, bidderID),
-  FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE,
+  FOREIGN KEY (itemID) REFERENCES ItemInfo(itemID) ON DELETE CASCADE,
   FOREIGN KEY (bidderID) REFERENCES OU(ouID) ON DELETE CASCADE
 );
 
@@ -142,7 +148,7 @@ CREATE TABLE Category(  -- ?
   category VARCHAR(64),
   itemID INTEGER,
   PRIMARY KEY (category,itemID),
-  FOREIGN KEY (itemID) REFERENCES ItemOwner(itemID) ON DELETE CASCADE
+  FOREIGN KEY (itemID) REFERENCES ItemInfo(itemID) ON DELETE CASCADE
 );
 
 
@@ -186,8 +192,9 @@ CREATE TABLE Complaint(
 CREATE TABLE Warning(
   ouID INTEGER,
   warningID INTEGER, -- 0 for low rating, 1 for 2 complaints, 2 for decline deal, 3 for removed item, 4 for taboo word
+  description VARCHAR (128),
   warnTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (ouID,warningID),
+--   PRIMARY KEY (warnTime),
   FOREIGN KEY (ouID) REFERENCES OU(ouID) ON DELETE CASCADE
 );
 
@@ -210,7 +217,7 @@ CREATE TABLE OUlike(
 CREATE TABLE ItemView(
   itemID INTEGER PRIMARY KEY,
   frequency INTEGER DEFAULT 0,
-  FOREIGN KEY (itemID) REFERENCES itemOwner(itemID) ON DELETE CASCADE
+  FOREIGN KEY (itemID) REFERENCES ItemInfo(itemID) ON DELETE CASCADE
 );
 
 CREATE TABLE Notification(
@@ -227,7 +234,7 @@ CREATE TABLE Taboo (word VARCHAR(64));
 CREATE TABLE ouBlacklist (ouName VARCHAR(64));    -- for blockOU, sold item will not be remove
 -- ouName is the username
 
-CREATE TABLE itemBlackList(itemID INTEGER);
+
 
 -- Trigger
 -- delimiter #
