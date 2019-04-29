@@ -80,7 +80,6 @@ class OU():
     ####################### Friend Info #####################################
     def getFriend(self):
         self.friends=[]
-
         qry = ("SELECT friendID,discount,username FROM FriendList JOIN User ON friendID=ID WHERE ownerID = %s;") %self.ID
         self.cursor.execute(qry)
         for info in self.cursor:

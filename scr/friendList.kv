@@ -36,10 +36,12 @@
         valign: 'middle'
         color: [0, 100, 255, 0.5] if root.send else [2.17, 2.17, 2.17, 0.7]
     centerBLabel:
+        size_hint_x: 0.2
         text:root.sendTime
         halign: 'right'
         valign: 'middle'
         text_size: self.size
+
 <friendList>:
     BoxLayout:
         orientation:"vertical"

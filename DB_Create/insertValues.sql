@@ -69,8 +69,8 @@ INSERT INTO Warning(itemID, warningID) VALUES (1, 0), (2, 1);
 
 
 
-SELECT friendID,discount,username FROM FriendList
-  JOIN User ON friendID=ID
-  WHERE ownerID = 2;
-
-DELETE FROM FriendList WHERE ownerID=8 AND friendID = 7;
+-- SELECT friendID,discount,username FROM FriendList
+--   JOIN User ON friendID=ID
+--   WHERE ownerID = 2;
+--
+-- DELETE FROM FriendList WHERE ownerID=8 AND friendID = 7;
