@@ -606,7 +606,7 @@ class Manager(Screen):
     ################################### Friend Page ################################
     def friendList(self):
         print('friendlist')
-        root.ids["items"].selectedFriend = " Unselected "
+        root.ids["friendPage"].selectedFriend = " Unselected "
         self.ids["friendPage"].ids['friends'].data = ou.getFriend()
         self.ids["friendPage"].ids['messages'].data = []
         self.ids['screenmanager'].current = "friendPage"
@@ -703,8 +703,8 @@ class eByMazonApp(App):
 
 if __name__ == "__main__":
     config = {
-        "user": '',                 # Enter your own username
-        "password": '',             # Enter your own password
+        "user": 'eby',                 # Enter your own username
+        "password": 'ebypw',             # Enter your own password
         "host": '127.0.0.1',
         "database": 'eByMazon'
     }
