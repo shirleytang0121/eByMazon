@@ -67,9 +67,22 @@ class SU():
             self.items.append(Item(cnx=self.cnx, cursor=self.cursor,itemID=item[0]))
         return self.items
 
-    def manageItem(self, itemID, action):
+    def manageItem(self, itemID, action, justification):
         # action == True: approve: change approvalStatus in ItemDB to True
         # action == False: decline: remove the item in ItemDB, add warning to post OU in warningDB
+        if not action:      #decline
+            self.cursor.execute("SELECT ownerID FROM ItemOwner WHERE itemID = %s;" % itemID)
+            ownerID = self.cursor.fetchone()[0]
+
+            self.cursor.execute("DELETE FROM ItemOwner WHERE itemID = %s;" % itemID)
+            # add warning
+
+            self.cnx.commit()
+
+        else:               # approve
+            self.cursor.execute("UPDATE ItemInfo SET approvalStatus = True WHERE itemID = %s;" % itemID)
+            self.cursor.execute("INSERT INTO ItemView(itemID,frequency) VALUE (%s,0);" % itemID)
+            self.cursor.execute("INSERT INTO ItemView(itemID,frequency) VALUE (%s,0);" % itemID)
         pass
 
     def viewCompliant(self):

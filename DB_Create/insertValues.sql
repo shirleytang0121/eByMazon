@@ -18,7 +18,9 @@ INSERT INTO OU(ouID, name, cardNumber,email,address,state,phone) VALUES
 (10,'Xu Chen', '201121334905', 'xuC@yahoo.com','DongGong 555','TN', 9177353701);
 
 INSERT INTO GUapplications(username,email,name,cardNumber,address,state,phone) VALUES
-('bon18','bonbon@tian.com','Bon Tian','2001938436634','TaoYuan 1023','NJ',9175550330);
+('bon18','bonbon@tian.com','Bon Tian','2001938436634','TaoYuan 1023','NJ',9175550330),
+('crystine21', 'crystine@gmail.com', 'Crystine Leo', '1232454232', 'Korean Town', 'NY', 9173405968),
+('david12', 'david@gmail.com', 'David Yuhas', '12454324123', 'Disney', 'CA', 6463829485);
 
 INSERT INTO OUstatus(ouID, moneySpend, status) VALUES
 (2,10.31, 1),(3,0,0),(4,0,0),(5, 777, 1),(6,90, 0),(7,540,1),(8,44,3),(9, 59, 2),(10,45,3);
@@ -28,10 +30,11 @@ INSERT INTO FriendList(ownerID, friendID, discount) VALUES
 (2,3,0.05),(3,2,0.10),(4,2,0.03),(6,7,0.05),(7,6,0.05),(6,9,0.05),(8,7,0.15),(6,3,0.05);
 
 INSERT INTO MessageSent(senderID, receiverID, message) VALUES
-(2,3,'Good Morning'),(4,2,'Come to my home page'),(6,7,'How are you?');
+(2,3,'Good Morning'),(3,2,'Good Morning to You!'),(2,3,'How are you today!'),(3,2,'I am happy! How are you!'), (2,3,'Same here!'),
+(4,2,'Come to my home page'),(6,7,'How are you?'),(7,6,'I am great! What about you?'),(6,7,'I am great too!');
 
 INSERT INTO ItemOwner(itemID, ownerID) VALUES
-(1,2),(2,2),(3,4),(4,4),(5,3),(6,5);
+(1,2),(2,2),(3,2),(4,2),(5,2),(6,2);
 
 INSERT INTO ItemView(itemID) VALUES (1),(2),(3),(4),(5),(6);
 
@@ -48,9 +51,9 @@ INSERT INTO FixedPrice(itemID, price, availableNum) VALUES
 INSERT INTO ItemBid(itemID, startPrice) VALUES (5,300),(6,800);
 INSERT INTO BidRecord (itemID,bidderID, bidPrice) VALUES (5,4,320),(5,2,330),(5,5,350);
 INSERT INTO Transaction(itemID, buyerID, singlePrice, priceTotal, numDeal, shippingStatus)
-VALUES (1,7,15.99,16.40,1,TRUE),(1,6,15.99,17.30,1,TRUE);
+VALUES (1,7,15.99,16.40,1,TRUE),(1,6,15.99,17.30,1,TRUE),(2,5,7.99,9,1,TRUE),(2,6,7.99,18,2,TRUE),(1,9,22,24,1,TRUE);
 INSERT INTO Complaint(itemID, complainerID, description, justified) VALUES
-(1,7,'Arrive Too Late',TRUE);
+(1,7,'Arrive Too Late',TRUE),(1,6,'Broken Item',TRUE),(2,9,'Wrong Shipment',TRUE);
 INSERT INTO ItemRate(itemID,raterID, rating,description) VALUES
 (1,6,4,'Good Product'),(1,7,3,'Nice Sound');
 -- Electronic, Home, Grocery, Clothes,Furniture,Education,Music
@@ -58,6 +61,13 @@ INSERT INTO Category(category, itemID) VALUES
 ('Music',1),('Music',2),('Education',3),('Education',4),('Electronic',5),('Electronic',6);
 INSERT INTO Taboo(word) VALUES ('subway'),('CSC'),('TG'),('super'),('winner');
 INSERT INTO ouBlacklist VALUES ('block123'),('test123');
+INSERT INTO Appeal(ouID, message) VALUES
+(9,'I WANT TO APPEAL!');
+INSERT INTO Notification VALUES ('Dolls'),('Phone'),('Ink');
+INSERT INTO searchKeyword(keyword, frequency) VALUES ('DVD', 3),('CD', 6),('Book', 8),('Computer', 7);
+INSERT INTO Warning(itemID, warningID) VALUES (1, 0), (2, 1);
+
+
 
 -- SELECT friendID,discount,username FROM FriendList
 --   JOIN User ON friendID=ID

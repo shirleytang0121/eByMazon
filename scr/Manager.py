@@ -99,6 +99,7 @@ class Signup(Screen):
                 self.clearSignup()
                 root.tohome()
 
+
 ######################################### Appeal Pop Up Page ###############################################
 class appealPop(Popup):
     def homepage(self):
@@ -248,6 +249,47 @@ class ouItem(Screen):
             self.clearFixedItemInput()
             self.backPostItemPage()
 
+################################### GU Application ################################
+class GUapplication(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+
+    def getApplications(self):
+        self.ids['application'].data = su.getGU()
+        print("Refresh")
+
+class guApplications(BoxLayout):
+    def manageApplication(self,guUsername, action):
+        su.manageApplication(guUsername, action)
+
+################################### OU INFO ################################
+class ouInformation(BoxLayout):
+    def removeOU(self,ouID):
+        su.removeOU(ouID)
+
+class ouInfo(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+
+    def getOUInformation(self):
+        ous = su.getOU()
+        ouData = []
+        for ou in ous:
+            remove = True if ou.status == 3 else False
+            status = 'Ordinary'
+            if ou.status == 1:
+                status = 'VIP'
+            elif ou.status == 2:
+                status = 'Suspend'
+            elif ou.status == 3:
+                status = 'Removed'
+
+            ouData.append({'ouID': ou.ID, 'ouName': ou.name, 'ouPhone': ou.phone, 'ouEmail': ou.email,
+                           'ouCard': ou.card, 'ouAddress': ou.address,'ouState':ou.state,
+                           'ouStatus':status, 'ouRate': ou.avgRate, 'ouComplaint': len(ou.compliants),
+                           'ouWarning': 0, 'remove': remove})
+        self.ids['ouInformation'].data = ouData
+
 ################################################## Friend Page ###############################################
 
 class friendInfo(GridLayout):
@@ -297,7 +339,6 @@ class friendList(Screen):
 
     def addFriends(self,friendID,discount):
         ou.addFriend(friendID,discount)
-
     def sentMessage(self,message):
         print(message)
         ou.sendFriendMessage(root.friendID,message)
@@ -305,50 +346,23 @@ class friendList(Screen):
         self.ids['chat'].text =""
 
 
+
 ##################################################### SU Pages #################################################
+class suItemPost(Screen):
+    def declineItem(self):
+        print("Decline: %d" % self.itemID)
+    def approveItem(self):
+        print("Approve: %d" %self.itemID)
 
-################################### GU Application ################################
-class GUapplication(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
+class suItemSale(Screen):
+    def removeItem(self):
+        print("Remove: %d" % self.itemID)
 
-    def getApplications(self):
-        self.ids['application'].data = su.getGU()
-        print("Refresh")
 
-class guApplications(BoxLayout):
-    def manageApplication(self,guUsername, action):
-        su.manageApplication(guUsername, action)
 
-################################### OU INFO ################################
-class ouInformation(BoxLayout):
-    def removeOU(self,ouID):
-        su.removeOU(ouID)
-
-class ouInfo(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-
-    def getOUInformation(self):
-        ous = su.getOU()
-        ouData = []
-        for ou in ous:
-            remove = True if ou.status == 3 else False
-            status = 'Ordinary'
-            if ou.status == 1:
-                status = 'VIP'
-            elif ou.status == 2:
-                status = 'Suspend'
-            elif ou.status == 3:
-                status = 'Removed'
-
-            ouData.append({'ouID': ou.ID, 'ouName': ou.name, 'ouPhone': ou.phone, 'ouEmail': ou.email,
-                           'ouCard': ou.card, 'ouAddress': ou.address,'ouState':ou.state,
-                           'ouStatus':status, 'ouRate': ou.avgRate, 'ouComplaint': len(ou.compliants),
-                           'ouWarning': 0, 'remove': remove})
-        self.ids['ouInformation'].data = ouData
 
 ################################### Others ################################
+
 class itemManage(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
@@ -356,7 +370,18 @@ class itemManage(Screen):
 class itemFixed(Screen):
     status = BooleanProperty()
 
-
+class processCompliant(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class ouWarning(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "profilePage"
+class blackTaboo(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class suTransaction(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
 ####################### TO BE FILLED #################
 class editPassword(FloatLayout):
     back = ObjectProperty(None)
@@ -628,7 +653,7 @@ class Manager(Screen):
         for item in suItems:
             typeStr = "Bidding" if item.priceType else "Fixed Price"
             if not item.approvalStatus:
-                waitI.append({"image": item.image,"title": item.title, "priceType": item.priceType,
+                waitI.append({"itemID": item.itemID,"image": item.image,"title": item.title, "priceType": item.priceType,
                               "price": str(item.price), "typeStr": typeStr, "description": item.descrpition})
             else:
                 # sale = "Sold" if item.saleStatus else "On Sale"
@@ -642,9 +667,8 @@ class Manager(Screen):
                     saleStatus = True
 
                 # if item.priceType:
-                saleI.append({"image": item.image, "title": item.title,"price": str(item.price),
-                              "typeStr": typeStr,
-                             "description": item.descrpition, "reviews": str(item.views),
+                saleI.append({"itemID": item.itemID,"image": item.image, "title": item.title,"price": str(item.price),
+                              "typeStr": typeStr,"description": item.descrpition, "reviews": str(item.views),
                              "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
 
 
@@ -691,6 +715,16 @@ class Manager(Screen):
     def toOuItem(self):
         self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
+    def toWarning(self):
+        self.ids['screenmanager'].current = "ouWarning"
+
+    def toCompliant(self):
+        self.ids['screenmanager'].current ="processCompliant"
+
+    def toBlacklist(self):
+        self.ids['screenmanager'].current = "blackTaboo"
+    def toSUtransaction(self):
+        self.ids['screenmanager'].current = "suTransaction"
 
 class eByMazonApp(App):
 

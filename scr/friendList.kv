@@ -143,4 +143,5 @@
                         size_hint_y:0.5
                         text:"send"
                         on_press: root.sentMessage(chat.text)
+                        disable: 1 if root.selectedFriend == " Unselected " else 0
             

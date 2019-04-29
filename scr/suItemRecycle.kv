@@ -1,6 +1,7 @@
 #include features.kv
 # Image Boxlayout of suItem
 <suItemPost@Screen>:
+    itemID: -1
     image:None
     title: ""
     priceType:None
@@ -62,13 +63,15 @@
                     text: "Decline"
                     pos_hint: {'center_y': .7, 'center_x': 0.5}
                     size_hint:(0.3, .25)
+                    on_press: root.declineItem()
                 SkyBlueButton:
                     text: "Approve"
                     pos_hint: {'center_y': .7, 'center_x': 0.5}
                     size_hint:(0.3, .25)
+                    on_press: root.approveItem()
 
 <suItemSale@Screen>:
-    approve: True
+    itemID: -1
     image:None
     title: ""
     price: ""
@@ -139,3 +142,4 @@
                 text: "Remove"
                 pos_hint: {'center_y': .7, 'center_x': 0.5}
                 size_hint:(0.5, .25)
+                on_press: root.removeItem()
