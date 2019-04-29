@@ -368,7 +368,18 @@ class itemManage(Screen):
 class itemFixed(Screen):
     status = BooleanProperty()
 
-
+class processCompliant(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class ouWarning(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "profilePage"
+class blackTaboo(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+class suTransaction(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
 ####################### TO BE FILLED #################
 class editPassword(FloatLayout):
     back = ObjectProperty(None)
@@ -702,6 +713,16 @@ class Manager(Screen):
     def toOuItem(self):
         self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
+    def toWarning(self):
+        self.ids['screenmanager'].current = "ouWarning"
+
+    def toCompliant(self):
+        self.ids['screenmanager'].current ="processCompliant"
+
+    def toBlacklist(self):
+        self.ids['screenmanager'].current = "blackTaboo"
+    def toSUtransaction(self):
+        self.ids['screenmanager'].current = "suTransaction"
 
 class eByMazonApp(App):
 

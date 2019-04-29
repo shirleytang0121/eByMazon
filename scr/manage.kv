@@ -10,6 +10,10 @@
 #:include transactionHistory.kv
 #:include appealPop.kv
 #:include ouItem.kv
+#:include processCompliant.kv
+#:include ouWarning.kv
+#:include blackTabooList.kv
+#:include suTransactionHistory.kv
 <Manager>:
     login: False
     userID: None
@@ -205,6 +209,7 @@
                         padding: 30
                         BlueButton:
                             text: "View Transactions"
+                            on_press: root.toSUtransaction()
             #                on_press: root.manager.current = ""
 
                 BoxLayout:
@@ -226,11 +231,13 @@
                         padding: 30
                         BlueButton:
                             text: "Process Complaint"
+                            on_press: root.toCompliant()
             #                on_press: root.manager.current = ""
                     BoxLayout:
                         padding: 30
                         BlueButton:
                             text: "Manage BlackList and Taboo List"
+                            on_press: root.toBlacklist()
             #                on_press: root.manager.current = ""
 
 #                BoxLayout:
@@ -298,7 +305,6 @@
                             on_press: root.editInfo()
                         YellowButton:
                             text: "Change Password"
-                            on_press: root.changePassword()
                             on_press: root.getPassword()
                         Label:
                             size_hint_y: 0.2
@@ -324,6 +330,7 @@
                         OrangeButton:
                             size_hint_y: 0.1
                             text: "Warning"
+                            on_press: root.toWarning()
                         Label:
                             size_hint_y: 0.1
         friendList:
@@ -381,7 +388,7 @@
                     OrangeButton:
                         pos_hint: {'center_y': .7, 'center_x': 0.5}
                         size_hint:(None, .25)
-                        text: "Change Password"
+                        text: "Change Info"
                         width: 500
                         on_press: root.changeInfo(editName.text,editCard.text,editEmail.text,editPhone.text,editAddress.text,editState.text)
         fixedItem:
@@ -405,7 +412,18 @@
         ouItem:
             id: ouItem
             name: "ouItem"
-
+        processCompliant:
+            id: processCompliant
+            name: "processCompliant"
+        ouWarning:
+            id: ouWarning
+            name: "ouWarning"
+        blackTaboo:
+            id: blackTaboo
+            name: "blackTaboo"
+        suTransaction:
+            id: suTransaction
+            name: "suTransaction"
 
 
 # Change password layout
