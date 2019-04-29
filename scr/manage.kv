@@ -298,7 +298,7 @@
                             on_press: root.editInfo()
                         YellowButton:
                             text: "Change Password"
-                            on_press: root.changePassword()
+                            # on_press: root.changePassword()
                             on_press: root.getPassword()
                         Label:
                             size_hint_y: 0.2
@@ -410,24 +410,35 @@
 
 # Change password layout
 <editPassword>:
+    title: 'Change Password'
     BoxLayout:
-        size: root.size
-        pos: root.pos
         orientation: 'vertical'
-        Label:
-            text: 'Please Enter New Password Below:'
-            color: 0, 0, 0, 1
-            font_size: 33
-        TextInput:
-            id: newPassword
-            pos_hint_x: 0.5
-            font_size:33
-            size_hint_x: 0.5
-            multiline: False
-        GrayButton:
-            text: "Goback"
-            on_release: root.back()
-        OrangeButton:
-            text: "Change Password"
-            on_release: root.submit(newPassword.text)
+        size_hint: (.5, .5)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        spacing: 20
+        BoxLayout:
+            size: root.size
+            pos: root.pos
+            Label:
+                text: 'Please Enter New Password Below:'
+                color: (2.37, 1.98, .45, .7)
+                font_size: 33
+                size_hint_y: .5
+        BoxLayout:
+            TextInput:
+                id: newPassword
+                pos_hint_x: 0.5
+                font_size:33
+                size_hint_x: 0.5
+                multiline: False
+                size_hint_y:
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 20
+            GrayButton:
+                text: "Goback"
+                on_release: root.back()
+            OrangeButton:
+                text: "Change Password"
+                on_release: root.submit(newPassword.text)
 
