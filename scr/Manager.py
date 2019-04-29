@@ -248,6 +248,47 @@ class ouItem(Screen):
             self.clearFixedItemInput()
             self.backPostItemPage()
 
+################################### GU Application ################################
+class GUapplication(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+
+    def getApplications(self):
+        self.ids['application'].data = su.getGU()
+        print("Refresh")
+
+class guApplications(BoxLayout):
+    def manageApplication(self,guUsername, action):
+        su.manageApplication(guUsername, action)
+
+################################### OU INFO ################################
+class ouInformation(BoxLayout):
+    def removeOU(self,ouID):
+        su.removeOU(ouID)
+
+class ouInfo(Screen):
+    def tohome(self):
+        root.ids['screenmanager'].current = "suHomepage"
+
+    def getOUInformation(self):
+        ous = su.getOU()
+        ouData = []
+        for ou in ous:
+            remove = True if ou.status == 3 else False
+            status = 'Ordinary'
+            if ou.status == 1:
+                status = 'VIP'
+            elif ou.status == 2:
+                status = 'Suspend'
+            elif ou.status == 3:
+                status = 'Removed'
+
+            ouData.append({'ouID': ou.ID, 'ouName': ou.name, 'ouPhone': ou.phone, 'ouEmail': ou.email,
+                           'ouCard': ou.card, 'ouAddress': ou.address,'ouState':ou.state,
+                           'ouStatus':status, 'ouRate': ou.avgRate, 'ouComplaint': len(ou.compliants),
+                           'ouWarning': 0, 'remove': remove})
+        self.ids['ouInformation'].data = ouData
+
 ################################################## Friend Page ###############################################
 
 class friendInfo(GridLayout):
@@ -306,47 +347,18 @@ class friendList(Screen):
 
 
 ##################################################### SU Pages #################################################
+class suItemPost(Screen):
+    def declineItem(self):
+        print("Decline: %d" % self.itemID)
+    def approveItem(self):
+        print("Approve: %d" %self.itemID)
 
-################################### GU Application ################################
-class GUapplication(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
+class suItemSale(Screen):
+    def removeItem(self):
+        print("Remove: %d" % self.itemID)
 
-    def getApplications(self):
-        self.ids['application'].data = su.getGU()
-        print("Refresh")
 
-class guApplications(BoxLayout):
-    def manageApplication(self,guUsername, action):
-        su.manageApplication(guUsername, action)
 
-################################### OU INFO ################################
-class ouInformation(BoxLayout):
-    def removeOU(self,ouID):
-        su.removeOU(ouID)
-
-class ouInfo(Screen):
-    def tohome(self):
-        root.ids['screenmanager'].current = "suHomepage"
-
-    def getOUInformation(self):
-        ous = su.getOU()
-        ouData = []
-        for ou in ous:
-            remove = True if ou.status == 3 else False
-            status = 'Ordinary'
-            if ou.status == 1:
-                status = 'VIP'
-            elif ou.status == 2:
-                status = 'Suspend'
-            elif ou.status == 3:
-                status = 'Removed'
-
-            ouData.append({'ouID': ou.ID, 'ouName': ou.name, 'ouPhone': ou.phone, 'ouEmail': ou.email,
-                           'ouCard': ou.card, 'ouAddress': ou.address,'ouState':ou.state,
-                           'ouStatus':status, 'ouRate': ou.avgRate, 'ouComplaint': len(ou.compliants),
-                           'ouWarning': 0, 'remove': remove})
-        self.ids['ouInformation'].data = ouData
 
 ################################### Others ################################
 class itemManage(Screen):
@@ -606,7 +618,7 @@ class Manager(Screen):
     ################################### Friend Page ################################
     def friendList(self):
         print('friendlist')
-        root.ids["items"].selectedFriend = " Unselected "
+        root.ids["friendPage"].selectedFriend = " Unselected "
         self.ids["friendPage"].ids['friends'].data = ou.getFriend()
         self.ids["friendPage"].ids['messages'].data = []
         self.ids['screenmanager'].current = "friendPage"
@@ -628,7 +640,7 @@ class Manager(Screen):
         for item in suItems:
             typeStr = "Bidding" if item.priceType else "Fixed Price"
             if not item.approvalStatus:
-                waitI.append({"image": item.image,"title": item.title, "priceType": item.priceType,
+                waitI.append({"itemID": item.itemID,"image": item.image,"title": item.title, "priceType": item.priceType,
                               "price": str(item.price), "typeStr": typeStr, "description": item.descrpition})
             else:
                 # sale = "Sold" if item.saleStatus else "On Sale"
@@ -642,9 +654,8 @@ class Manager(Screen):
                     saleStatus = True
 
                 # if item.priceType:
-                saleI.append({"image": item.image, "title": item.title,"price": str(item.price),
-                              "typeStr": typeStr,
-                             "description": item.descrpition, "reviews": str(item.views),
+                saleI.append({"itemID": item.itemID,"image": item.image, "title": item.title,"price": str(item.price),
+                              "typeStr": typeStr,"description": item.descrpition, "reviews": str(item.views),
                              "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
 
 

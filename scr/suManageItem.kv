@@ -2,22 +2,29 @@
 #:include suItemRecycle.kv
 <itemManage>:
     BoxLayout:
-        BoxLayout
-            orientation: "vertical"
-            BoxLayout:
-                size_hint_y: 0.05
-                Label:
-                    size_hint_x: 0.9
-                GrayButton:
-                    text:"Home"
-                    size_hint_x: 0.1
-                    size: 150, 100
-                    on_press: root.tohome()
-
+        orientation: "vertical"
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: 0.05
+            Label:
+                size_hint_x: 0.9
+            GrayButton:
+                text:"Home"
+                size_hint_x: 0.1
+                size: 150, 100
+                on_press: root.tohome()
+        GridLayout:
+            cols: 2
             BoxLayout:
                 size_hint_y: 0.1
                 BoldLabel:
                     text: "Post Item by OU"
+                    font_size: 60
+
+            BoxLayout:
+                size_hint_y: 0.1
+                BoldLabel:
+                    text: "Approved Item"
                     font_size: 60
             RecycleView:
                 id: itemPost
@@ -25,20 +32,15 @@
                 viewclass: 'suItemPost'
                 VRVL:
                     default_size: None, dp(200)
-            BoxLayout:
-                size_hint_y: 0.1
-                BoldLabel:
-                    text: "Approved Item"
-                    font_size: 60
             RecycleView:
                 id: itemSale
                 data: []
                 viewclass: 'suItemSale'
                 VRVL:
                     default_size: None, dp(200)
-            BoxLayout:
-                size_hint_y: 0.1
-                SkyBlueButton:
-                    size_hint:(0.5,0.8)
-                    text:"Refresh List"
+        BoxLayout:
+            size_hint_y: 0.1
+            SkyBlueButton:
+                size_hint:(0.5,0.8)
+                text:"Refresh List"
 #                    on_press:root.getOUInformation()
