@@ -352,6 +352,7 @@ class ouInfo(Screen):
 class itemManage(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
+
 class itemFixed(Screen):
     status = BooleanProperty()
 
@@ -605,7 +606,7 @@ class Manager(Screen):
     ################################### Friend Page ################################
     def friendList(self):
         print('friendlist')
-        root.ids["friendPage"].selectedFriend = " Unselected "
+        root.ids["items"].selectedFriend = " Unselected "
         self.ids["friendPage"].ids['friends'].data = ou.getFriend()
         self.ids["friendPage"].ids['messages'].data = []
         self.ids['screenmanager'].current = "friendPage"
@@ -616,6 +617,39 @@ class Manager(Screen):
         for mess in messages:
             mess['sendTime'] = mess['sendTime'].strftime('%m/%d/%Y')
         root.ids["friendPage"].ids['messages'].data = messages
+
+
+
+    ################################### SU Item Page ################################
+    def getSUitem(self):
+        suItems = su.getAllItem()
+        waitI = []
+        saleI = []
+        for item in suItems:
+            typeStr = "Bidding" if item.priceType else "Fixed Price"
+            if not item.approvalStatus:
+                waitI.append({"image": item.image,"title": item.title, "priceType": item.priceType,
+                              "price": str(item.price), "typeStr": typeStr, "description": item.descrpition})
+            else:
+                # sale = "Sold" if item.saleStatus else "On Sale"
+                try:
+                    highestPrice = str(item.highestPrice)
+                except AttributeError:
+                    highestPrice = "None"
+
+                saleStatus = False
+                if item.saleStatus:
+                    saleStatus = True
+
+                # if item.priceType:
+                saleI.append({"image": item.image, "title": item.title,"price": str(item.price),
+                              "typeStr": typeStr,
+                             "description": item.descrpition, "reviews": str(item.views),
+                             "likes": str(item.likeness), "dislike": str(item.dislike), "status": saleStatus})
+
+
+        self.ids["itemManage"].ids["itemPost"].data = waitI
+        self.ids["itemManage"].ids["itemSale"].data = saleI
 
     def sortPop(self):
         print("Sort by Popular")
@@ -651,13 +685,12 @@ class Manager(Screen):
         self.ids['ouInfo'].getOUInformation()
         self.ids['screenmanager'].current = "ouInfo"
     def toitemManage(self):
+        self.getSUitem()
         self.ids['screenmanager'].current = "itemManage"
 
     def toOuItem(self):
         self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
-
-
 
 class eByMazonApp(App):
 
@@ -675,6 +708,7 @@ if __name__ == "__main__":
         "host": '127.0.0.1',
         "database": 'eByMazon'
     }
+
     try:
         cnx = mysql.connector.connect(**config)
         cnx.set_unicode(value=True)

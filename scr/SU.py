@@ -57,6 +57,16 @@ class SU():
         self.cursor.execute("DELETE FROM GUapplications WHERE username = '%s';" % username)
         self.cnx.commit()
 
+    def getAllItem(self):
+        qry = "SELECT itemID FROM ItemOwner;"
+        self.cursor.execute(qry)
+        self.items = []
+
+        allitem = self.cursor.fetchall()
+        for item in allitem:
+            self.items.append(Item(cnx=self.cnx, cursor=self.cursor,itemID=item[0]))
+        return self.items
+
     def manageItem(self, itemID, action):
         # action == True: approve: change approvalStatus in ItemDB to True
         # action == False: decline: remove the item in ItemDB, add warning to post OU in warningDB
