@@ -99,6 +99,7 @@ class Signup(Screen):
                 self.clearSignup()
                 root.tohome()
 
+
 ######################################### Appeal Pop Up Page ###############################################
 class appealPop(Popup):
     def homepage(self):
@@ -338,12 +339,12 @@ class friendList(Screen):
 
     def addFriends(self,friendID,discount):
         ou.addFriend(friendID,discount)
-
     def sentMessage(self,message):
         print(message)
         ou.sendFriendMessage(root.friendID,message)
         root.getMessage(root.friendID)
         self.ids['chat'].text =""
+
 
 
 ##################################################### SU Pages #################################################
@@ -361,6 +362,7 @@ class suItemSale(Screen):
 
 
 ################################### Others ################################
+
 class itemManage(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
