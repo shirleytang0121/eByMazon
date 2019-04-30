@@ -22,6 +22,7 @@ try:
     from scr.SU import SU
     from scr.OU import OU
     from scr.Item import Item
+    from scr.itemPurchase import *
     # from scr.otherClass import *
 except ModuleNotFoundError:
     from GeneralFunctions import General
@@ -29,6 +30,7 @@ except ModuleNotFoundError:
     from SU import SU
     from OU import OU
     from Item import Item
+    from itemPurchase import *
     # from otherClass import *
 
 
@@ -395,15 +397,27 @@ class editPassword(FloatLayout):
 class transactionHistory(Screen):
     def backProfile(self):
         root.toProfile()
+
 class fixedItem(Screen):
     itemIndex = NumericProperty()
     user = BooleanProperty()
     def tohome(self):
+        self.ids["purchaseInfo"].text = ""
+        self.ids["purchase"].clear()
+        self.ids["purchase"].ids["purchaseManager"].current = "empty"
         root.tohome()
+
     def dislikeItem(self,name):
         root.dislikeItem(name,self.itemIndex)
+
     def likeItem(self,name):
         root.likeItem(name,self.itemIndex)
+
+    def toPurchase(self):
+        self.ids["purchase"].infoLoad(items[self.itemIndex],ou,float(self.ids["purchaseInfo"].text))
+        self.ids["purchase"].ids["purchaseManager"].current = "Purchase"
+
+
 
 class biddingItem(Screen):
     itemIndex = NumericProperty()

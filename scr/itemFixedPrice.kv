@@ -1,4 +1,4 @@
-#include features.kv
+#:include Purchase.kv
 <fixedItem>:
     itemIndex: -1
     user: False
@@ -81,7 +81,6 @@
             Label:
                 size_hint_x: 0.5
             LeftLabel:
-
                 font_size: 36
                 text: 'Enter number of item you want buy: '
             ProfileInput:
@@ -93,77 +92,59 @@
             SkyBlueButton:
                 size_hint: (0.2,0.5)
                 text: "Purchase"
-#                orientation: 'horizontal'
-
-
-#                    BoxLayout:
-#                        # size_hint_y: 0.3
-#                        orientation: "horizontal"
-#                        height: 30
-#                        Button:
-#                            text: "I WANT TO BID"
-#                            size_hint_x: .80
-#                            background_color: [.19, .84, 1.19, 0.7]
-#                            border: (1, .1, 1, 1)
-#
-#                        TextInput:
-#                            id: bid_price
-#                            text_size: self.size
-#                            on_hint_text: "Enter Price"
-#                            multiline: False
-#                            # size: self.size
-#                            size_hint_x: .2
-#                            size_hint_y: .5
-
+                on_press: root.toPurchase()
+                disabled: 1 if root.user else 0
         BoxLayout:
             height: 30
-            orientation: 'vertical'
-            LeftLabel:
-                text: "Ratings:"
-                font_size: 48
-                bold: True
+            orientation: 'horizontal'
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint:(0.3,1)
+                LeftLabel:
+                    text: "Ratings:"
+                    font_size: 48
+                    bold: True
+                GridLayout:
+                    cols: 2
+                    row_force_default: True
+                    row_default_height: 50
+                    padding: 20
+                    spacing: 10
+                    LeftLabel:
+                        text: "username"
+                        size_hint_x: .2
+                    LeftLabel:
+                        id: text_input
+                        markup: True
+                        text: 'this is my comment'
+                        font_size: 32
+                        size_hint: 1.8, .1
+                    LeftLabel:
+                        text: "username"
+                        size_hint_x: .2
 
-            GridLayout:
-                cols: 2
-                row_force_default: True
-                row_default_height: 50
-                padding: 20
-                spacing: 10
+                    LeftLabel:
+                        id: text_input
+                        markup: True
+                        text: 'this is my comment'
+                        font_size: 32
+                        size_hint: 1.8, .1
+                    LeftLabel:
+                        text: "username"
+                        size_hint_x: .2
 
-                LeftLabel:
-                    text: "username"
-                    size_hint_x: .2
+                    LeftLabel:
+                        id: text_input
+                        markup: True
+                        text: 'this is my comment'
+                        font_size: 32
+                        size_hint: 1.8, .1
+            FixedPurchase:
+                id: purchase
+                size_hint: (0.7,1)
+        GrayButton:
+            text: 'GO BACK'
+            size_hint_y: .1
+            on_press: root.tohome()
 
-                LeftLabel:
-                    id: text_input
-                    markup: True
-                    text: 'this is my comment'
-                    font_size: 32
-                    size_hint: 1.8, .1
-                LeftLabel:
-                    text: "username"
-                    size_hint_x: .2
 
-                LeftLabel:
-                    id: text_input
-                    markup: True
-                    text: 'this is my comment'
-                    font_size: 32
-                    size_hint: 1.8, .1
-                LeftLabel:
-                    text: "username"
-                    size_hint_x: .2
-
-                LeftLabel:
-                    id: text_input
-                    markup: True
-                    text: 'this is my comment'
-                    font_size: 32
-                    size_hint: 1.8, .1
-            RedButton:
-                text: 'I WANT TO RATE'
-                size_hint_y: .3
-            Button:
-                text: 'GO BACK'
-                size_hint_y: .3
-                on_press: root.tohome()
