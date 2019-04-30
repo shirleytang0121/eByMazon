@@ -84,13 +84,20 @@ class General():
             - False if not found, add to Notification DB
             - list of item, if found
         """
+
+        qry = ("INSERT INTO searchKeyword(keyword) VALUES ('%s') ON DUPLICATE KEY UPDATE frequency =frequency+1;" % (keywords))
+        self.cursor.execute(qry)
+        self.cnx.commit()
+
         qry = ("SELECT itemID FROM ItemInfo WHERE (title LIKE '%s' OR description LIKE '%s') AND approvalStatus = True;"
                % (('%'+keywords+'%','%'+keywords+'%')))
         self.cursor.execute(qry)
+
         allItem = []
         allItems = self.cursor.fetchall()
         if allItems is None:
-            self.cursor.execute("INSERT INTO Notification VALUE ('%s');"%keywords)
+            self.cursor.execute("INSERT INTO Notification VALUE ('%s');"% keywords)
+            self.cnx.commit()
             return False
         else:
             for info in allItems:

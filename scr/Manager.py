@@ -11,7 +11,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
 
 from kivy.uix.screenmanager import Screen #ScreenManager, FadeTransition
-from kivy.properties import BooleanProperty,NumericProperty
+from kivy.properties import BooleanProperty,NumericProperty,ObjectProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
 
@@ -22,14 +22,14 @@ try:
     from scr.SU import SU
     from scr.OU import OU
     from scr.Item import Item
-    from scr.otherClass import *
+    # from scr.otherClass import *
 except ModuleNotFoundError:
     from GeneralFunctions import General
     from GU import GU
     from SU import SU
     from OU import OU
     from Item import Item
-    from otherClass import *
+    # from otherClass import *
 
 
 ################################## Home Page Item Recycle View ###############################################
@@ -421,9 +421,10 @@ class biddingItem(Screen):
 class Manager(Screen):
     login = BooleanProperty()
     ouID = ObjectProperty()
+    sort = 1
     def __init__(self, **kwargs):
         super(Manager, self).__init__(**kwargs)
-        self.displayItem()
+        self.displayItem()          # Display Item
 
 
     ####################### Display Homepage Item #############################
@@ -431,7 +432,7 @@ class Manager(Screen):
     def displayItem(self):
         global items
         items = general.popularItem()
-        self.itemShow()
+        self.sortItem(self.sort)              # Sort by popular Item
 
     ####################### Search Homepage Item #############################
     def searchKeyword(self, word):
@@ -440,35 +441,30 @@ class Manager(Screen):
         else:
             global items
             items = general.searchItem(word)
+
+            if ou is not None:
+                print("Not None")
+                ou.searchAdd(word)
+
             if items:
-                self.itemShow()
+                self.sortItem(self.sort)
             else:
                 self.ids['homeItem'].data = []
                 print("No result for %s" % word)
 
     ####################### Sort Homepage Item #############################
-    def sortPop(self):
+    def sortItem(self, sortType):
         global items
-        items = general.sortItem(items, 'views',decs=True)
+        self.sort = sortType
+        if sortType == 1:       # By popular views
+            items = general.sortItem(items, 'views',decs=True)
+        elif sortType == 2:     # By Rating
+            items = general.sortItem(items, 'rating',decs=True)
+        elif sortType == 3:     # By low to high price
+            items = general.sortItem(items, 'price',decs=False)
+        elif sortType == 4:     # By high to low price
+            items = general.sortItem(items, 'price', decs=True)
         self.itemShow()
-        print("Sort by Popular")
-
-    def sortRating(self):
-        global items
-        items = general.sortItem(items, 'rating',decs=True)
-        self.itemShow()
-        print("Sort by Rating")
-
-    def sortPricelh(self):
-        global items
-        items = general.sortItem(items, 'price',decs=False)
-        self.itemShow()
-        print("Sort by price low to high")
-    def sortPricehl(self):
-        global items
-        items = general.sortItem(items, 'price',decs=True)
-        self.itemShow()
-        print("Sort by price high to low")
 
     def itemShow(self):
         global items
@@ -488,6 +484,8 @@ class Manager(Screen):
     def tologin(self):
         if self.login:
             self.login = False
+            global ou
+            ou = None
         else:
             self.ids['screenmanager'].current = "loginpage"
     def signProfile(self):
@@ -508,7 +506,9 @@ class Manager(Screen):
         self.ids['screenmanager'].current = "homepage"
     def suLogout(self):
         self.login = False
-        self.ids['screenmanager'].current = "homepage"
+        global su
+        su = None
+        self.tohome()
 
     def checkLogin(self,username,password):
         print("Username: %s \nPassword: %s" % (username,password))

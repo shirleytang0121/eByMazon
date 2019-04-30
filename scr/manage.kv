@@ -18,11 +18,12 @@
     login: False
     userID: None
     userType: -1
+    sort: 1
     ScreenManager:
         id: screenmanager
         transition: FadeTransition()
 
-        Home:
+        Screen:
 #            id: home
             name: 'homepage'
             title: "Home Page"
@@ -92,22 +93,22 @@
                             row_default_height: '20dp'
                             CheckBox:
                                 group: "sort_feature"
-                                on_active: root.sortPop()
+                                on_active: root.sortItem(1)
                             LeftLabel:
                                 text: "popular"
                             CheckBox:
                                 group: "sort_feature"
-                                on_active: root.sortRating()
+                                on_active: root.sortItem(2)
                             LeftLabel:
                                 text: "rating"
                             CheckBox:
                                 group: "sort_feature"
-                                on_active: root.sortPricelh()
+                                on_active: root.sortItem(3)
                             LeftLabel:
                                 text: "price low to high"
                             CheckBox:
                                 group: "sort_feature"
-                                on_active: root.sortPricehl()
+                                on_active: root.sortItem(4)
                             LeftLabel:
                                 text: "price high to low"
                         Label:
@@ -119,7 +120,7 @@
                         data:[]
                         viewclass: 'item'
                         VRVL:
-        Login:
+        Screen:
 #            id: login
             name: 'loginpage'
             title: "Login Page"
@@ -176,7 +177,7 @@
             title: "Sign Up"
 
 ########################
-        suHomepage:
+        Screen:
             name: "suHomepage"
             title: "SU homepage"
             BoxLayout:
@@ -253,7 +254,7 @@
 #                            text: "Maintain Taboo List"
 #            #                on_press: root.manager.current = ""
 ########################
-        OUprofile:
+        Screen:
 #            id: ouInfo
             name: "profilePage"
             title: "The OS Profile"
@@ -341,7 +342,7 @@
             id: history
             name: "historyPage"
             title: "the history"
-        EditProfile:
+        Screen:
             name: "editPage"
             title: "to edit profile"
             BoxLayout:

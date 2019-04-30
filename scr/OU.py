@@ -16,6 +16,7 @@ class OU():
         self.getItem()
         self.getCompliants()
 
+    ####################### Get Info #####################################
     def getOUInfo(self):
         # Get ou information in strings: name, card number, address, state, phone
         self.cursor.execute("SELECT * FROM OU WHERE ouID = %s"% self.ID)
@@ -57,6 +58,9 @@ class OU():
             self.compliants.append({'itemID':compliant[0], 'description': compliant[1],
                                     'compliantTime': compliant[2]})
             print(self.ID, self.name, compliant[0])
+
+
+
     ####################### Change Info #####################################
     def changePassword(self,password):
         #update password in DB
@@ -83,6 +87,12 @@ class OU():
             print("Error in update OU Info")
             return False
 
+    ####################### Search Info #####################################
+    def searchAdd(self,keyword):
+        qry = ("INSERT INTO OUlike(ouID, keyword) VALUES (%s,'%s') ON DUPLICATE KEY UPDATE frequency =frequency+1;" %(self.ID,keyword))
+        self.cursor.execute(qry)
+        self.cnx.commit()
+
 
     ####################### Friend Info #####################################
     def getFriend(self):
@@ -91,7 +101,6 @@ class OU():
         self.cursor.execute(qry)
         for info in self.cursor:
             self.friends.append({"friendID": info[0],"discount": info[1],"username": info[2]})
-
         return self.friends
 
     def getFriendMessage(self,friendID):
@@ -143,6 +152,7 @@ class OU():
         except mysql.connector.errors as ERR:
             print("Error in add Friend %s" % ERR)
             return False
+
 
     ####################### Submit Item #####################################
     def submitItem(self):
@@ -197,6 +207,7 @@ class OU():
         except mysql.connector.errors as ERR:
             print(ERR)
             return False
+
 
     ####################### Purchase Item #####################################
     #
