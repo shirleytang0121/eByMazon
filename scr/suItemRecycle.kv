@@ -49,11 +49,15 @@
                     font_size: 14
         BoxLayout:
             pos_hint: {'center_y': 0.5, 'center_x': 0.7}
-            size_hint_x:0.6
+            size_hint_x:0.4
             orientation: "vertical"
+            Label:
+                size_hint_y: 0.2
             ProfileInput:
                 id: justification
                 multiline: True
+                size_hint: (0.7,0.5)
+                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
                 hint_text: "Enter Justification, if decline item."
             BoxLayout:
                 orientation: "horizontal"
@@ -107,12 +111,12 @@
                 cols: 2
                 size_hint:(0.8,0.7)
                 pos_hint: {'center_y': 0.5, 'center_x': 0.5}
-                SmallLabel:
-                    text: "Description: "
-                SmallLabel:
-                    text: root.description
-                    multiline: True
-                    font_size: 14
+#                SmallLabel:
+#                    text: "Description: "
+#                SmallLabel:
+#                    text: root.description
+#                    multiline: True
+#                    font_size: 14
                 SmallLabel:
                     text: "Price: "
                 SmallLabel:
@@ -132,7 +136,7 @@
                 SmallLabel:
                     text: "Sale Status: "
                 SmallLabel:
-                    text: "Sold" if root.status else "On Sale"
+                    text: "On Sale" if root.status else "Sold"
 
             PinkButton:
                 text: "Remove"

@@ -89,7 +89,7 @@ class General():
         self.cursor.execute(qry)
         self.cnx.commit()
 
-        qry = ("SELECT itemID FROM ItemInfo WHERE (title LIKE '%s' OR description LIKE '%s') AND approvalStatus = True;"
+        qry = ("SELECT itemID FROM ItemInfo WHERE (title LIKE '%s' OR description LIKE '%s') AND saleStatus = True;"
                % (('%'+keywords+'%','%'+keywords+'%')))
         self.cursor.execute(qry)
 

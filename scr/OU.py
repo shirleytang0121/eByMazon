@@ -242,10 +242,10 @@ class OU():
         return [basePrice, taxAmount, deductF,deductV,finalPrice]
 
 
-    #
-    # def bidding(self,itemID, bidderID, price):
-    #     # record bidding in BidRecord
-    #     pass
+
+    def bidding(self,itemID, bidderID, price):
+        # record bidding in BidRecord
+        pass
 
     def purchaseFixedPrice(self, itemID, buyerID, numBuy):
         # get price from itemDB by itemID

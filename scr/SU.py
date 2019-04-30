@@ -72,7 +72,7 @@ class SU():
         if not action:      #decline
             self.removeItem(itemID,justification)
         else:               # approve
-            self.cursor.execute("UPDATE ItemInfo SET approvalStatus = True WHERE itemID = %s;" % itemID)
+            self.cursor.execute("UPDATE ItemInfo SET saleStatus = True, approvalStatus = True WHERE itemID = %s;" % itemID)
         self.cnx.commit()
 
     def removeItem(self,itemID, justification='removed By SU'):
