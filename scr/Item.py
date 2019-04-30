@@ -35,6 +35,8 @@ class Item():
         self.cursor.execute(qry)
         self.views = self.cursor.fetchone()[0]
 
+        self.rating = 0
+
         if self.priceType:      # for bidding
             self.getBiddingInfo()
             self.getBiddings()
@@ -76,10 +78,18 @@ class Item():
     def getRating(self):
         qry = "SELECT rating, description,postTime FROM itemRate WHERE itemID = %s ORDER BY postTime DESC;" % self.itemID
         self.cursor.execute(qry)
+        self.rating = 0
         self.ratings = []
+
+
+        i = 0
         for info in self.cursor:
+            self.rating += info[0]
+            i+=1
             self.ratings.append({"Rating": info[0],"Comment": info[1], "Time": info[2]})
 
+        if i > 0:
+            self.rating /= i
 
     def checkLiked(self,ouID):
         qry = "SELECT EXISTS(SELECT * from ItemOwner WHERE itemID=%s AND ownerID =%s);" % (self.itemID,ouID)
@@ -131,18 +141,3 @@ class Item():
             self.cnx.commit()
         except mysql.connector.errors as err:
             print("Update views error: %s"%err)
-
-    def searchItem(self,keywords):
-        # look through all items' title, compare with all capitalize letters
-        # if found return list of itemProfile, call self.itemProfile(itemID)
-        # if not found, add to notification DB
-        pass
-
-    # def getItemInfo(self, itemID):
-    #     try:
-    #         qry = "SELECT * FROM ItemInfo WHERE itemID = %s;" % itemID
-    #         self.cursor.execute(qry, (itemID))
-    #
-    #     except mysql.connector.Error as err:
-    #         print("Error in getting item info to database")
-    #         print(err)

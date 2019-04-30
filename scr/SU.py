@@ -61,7 +61,6 @@ class SU():
         qry = "SELECT itemID FROM ItemOwner NATURAL JOIN ItemInfo;"
         self.cursor.execute(qry)
         self.items = []
-
         allitem = self.cursor.fetchall()
         for item in allitem:
             self.items.append(Item(cnx=self.cnx, cursor=self.cursor,itemID=item[0]))
@@ -77,18 +76,17 @@ class SU():
         self.cnx.commit()
 
     def removeItem(self,itemID, justification='removed By SU'):
+        # remove all the occurance of this item in DB
+        # add to Blacklist and warning to owner
         item = Item(self.cnx, self.cursor, itemID)
-
         # add warning
         self.cursor.execute("INSERT INTO Warning(ouID,warningID,description) VALUE (%s,3,'%s')"
                             % (item.owner,str(itemID)+'_'+justification))
-
         # Blacklist Item
         self.cursor.execute("INSERT INTO itemBlackList(itemID,title) VALUE (%s,'%s');"
                             % (item.itemID,item.title))
         # Delete Item
         self.cursor.execute("DELETE FROM ItemInfo WHERE itemID = %s;" % itemID)
-
         self.cnx.commit()
 
     def viewCompliant(self):
@@ -99,10 +97,4 @@ class SU():
         # action == True: remove: delete compliant in DB
         # action == False: justified: change the justified to True in DB
         #                  check for two justified compliant that will cause warning
-        pass
-
-
-    def itemBlacklist(self,itemID):
-        # remove all the occurance of this item in DB
-        # add to itBlacklist
         pass

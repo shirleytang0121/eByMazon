@@ -167,7 +167,6 @@ class OU():
             return False
 
     def submitBiddingItem(self,image, title, description, usedStatus, startPrice, endDay):
-
         try:
             itemID = self.submitItem()
             qry = ("INSERT INTO ItemInfo(itemID, image, title, description, priceType) "
@@ -198,7 +197,6 @@ class OU():
         except mysql.connector.errors as ERR:
             print(ERR)
             return False
-
 
     ####################### Purchase Item #####################################
     #

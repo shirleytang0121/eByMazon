@@ -77,6 +77,37 @@ class General():
 
 
 
+    def searchItem(self,keywords):
+        """
+        :param keywords: search keyword
+        :return:
+            - False if not found, add to Notification DB
+            - list of item, if found
+        """
+        qry = ("SELECT itemID FROM ItemInfo WHERE (title LIKE '%s' OR description LIKE '%s') AND approvalStatus = True;"
+               % (('%'+keywords+'%','%'+keywords+'%')))
+        self.cursor.execute(qry)
+        allItem = []
+        allItems = self.cursor.fetchall()
+        if allItems is None:
+            self.cursor.execute("INSERT INTO Notification VALUE ('%s');"%keywords)
+            return False
+        else:
+            for info in allItems:
+                allItem.append(Item(cnx=self.cnx,cursor=self.cursor,itemID=info[0]))
+            return allItem
+
+
+
+    def sortItem(self,items,attribute, decs):
+        """
+        :param items:  list of item object
+        :param attribute:  attribute to be sort (string)
+        :param decs: True for sorted in Descending order, False for ascend
+        :return:
+        """
+        k = sorted(items, key=lambda x: getattr(x, attribute),reverse= decs)
+        return k
 
 
     def checkStaus(self, ouID):

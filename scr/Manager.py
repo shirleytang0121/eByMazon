@@ -365,8 +365,6 @@ class suItemSale(Screen):
         root.getSUitem()
 
 
-
-
 ################################### Others ################################
 
 class itemManage(Screen):
@@ -433,17 +431,58 @@ class Manager(Screen):
     def displayItem(self):
         global items
         items = general.popularItem()
+        self.itemShow()
+
+    ####################### Search Homepage Item #############################
+    def searchKeyword(self, word):
+        if word == "":
+            self.displayItem()
+        else:
+            global items
+            items = general.searchItem(word)
+            if items:
+                self.itemShow()
+            else:
+                self.ids['homeItem'].data = []
+                print("No result for %s" % word)
+
+    ####################### Sort Homepage Item #############################
+    def sortPop(self):
+        global items
+        items = general.sortItem(items, 'views',decs=True)
+        self.itemShow()
+        print("Sort by Popular")
+
+    def sortRating(self):
+        global items
+        items = general.sortItem(items, 'rating',decs=True)
+        self.itemShow()
+        print("Sort by Rating")
+
+    def sortPricelh(self):
+        global items
+        items = general.sortItem(items, 'price',decs=False)
+        self.itemShow()
+        print("Sort by price low to high")
+    def sortPricehl(self):
+        global items
+        items = general.sortItem(items, 'price',decs=True)
+        self.itemShow()
+        print("Sort by price high to low")
+
+    def itemShow(self):
+        global items
         returndict = []
         i = 0
-        for item in items:
-            typeStr = "Bidding" if item.priceType else "Fixed Price"
-            returndict.append({"itemIndex": i,"image": item.image,"title":item.title, "priceType":item.priceType,
-                               "price":str(item.price),"reviews": str(item.views), "likes": str(item.likeness),
-                               "typeStr": typeStr})
-            i+= 1
-        self.ids['rv'].data = returndict
-
-
+        if items:
+            for item in items:
+                typeStr = "Bidding" if item.priceType else "Fixed Price"
+                returndict.append(
+                    {"itemIndex": i, "image": item.image, "title": item.title, "priceType": item.priceType,
+                     "price": str(item.price), "reviews": str(item.views), "likes": str(item.likeness),
+                     "typeStr": typeStr, "rating": str(item.rating)})
+                i += 1
+            self.ids['homeItem'].data = returndict
     ####################### Homepage Two Button #############################
 
     def tologin(self):
@@ -682,16 +721,6 @@ class Manager(Screen):
         self.ids["itemManage"].ids["itemPost"].data = waitI
         self.ids["itemManage"].ids["itemSale"].data = saleI
 
-    def sortPop(self):
-        print("Sort by Popular")
-    def sortRating(self):
-        print("Sort by Rating")
-    def sortPricelh(self):
-        print("Sort by price low to high")
-    def sortPricehl(self):
-        print("Sort by price high to low")
-
-
 
     def tohome(self):
         self.displayItem()
@@ -704,9 +733,8 @@ class Manager(Screen):
         print('history')
         self.ids['screenmanager'].current = "historyPage"
 
-    def searchKeyword(self, word):
-        self.displayItem()
-        print(word)
+
+
     def toguApply(self):
         self.ids['guApply'].getApplications()
         self.ids['screenmanager'].current = "GUapplication"
