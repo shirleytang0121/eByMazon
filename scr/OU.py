@@ -210,18 +210,42 @@ class OU():
 
 
     ####################### Purchase Item #####################################
+
+
+    def checkFriendDiscount(self,itemID):
+        """
+        :param itemID: item want to purchase
+        :return: 0 if not friend
+                discount rate if friend
+        """
+        qry = ("SELECT discount FROM ItemOwner NATURAL JOIN FriendList WHERE itemID = %s AND friendID = %s;" %(itemID, self.ID))
+        self.cursor.execute(qry)
+        discount = self.cursor.fetchone()[0]
+        return 0 if discount is None else discount
+
+
+    def calculatePurchase(self, itemID, price, numWant=1):
+        """
+        :param itemID: item want to purchase
+        :return: list of [basePrice, taxAmount, deductFriend,deductVIP,finalPrice]
+        """
+        basePrice = price*numWant
+
+        friendDiscount =  self.checkFriendDiscount(itemID)
+        vipDiscount = 0.05 if self.status == 1 else 0
+
+        deductF = basePrice * friendDiscount
+        deductV = basePrice * vipDiscount
+        taxAmount = basePrice * self.taxRate
+        finalPrice = basePrice + taxAmount - deductF - deductV
+
+        return [basePrice, taxAmount, deductF,deductV,finalPrice]
+
+
     #
     # def bidding(self,itemID, bidderID, price):
     #     # record bidding in BidRecord
     #     pass
-
-    def calculateTotal(self, price, buyerID,itemID):
-        # get taxrate from taxDB by buyer address
-        # get vip status from buyer
-        # check if buyer if friend of owner in friendDB
-        # can combine two discount
-        # return total cost
-        pass
 
     def purchaseFixedPrice(self, itemID, buyerID, numBuy):
         # get price from itemDB by itemID

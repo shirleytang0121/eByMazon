@@ -6,8 +6,6 @@
     friend: 0
     finalPrice: 0
     purchased: False
-#    BoxLayout:
-#    size_hint: (0.3,0.5)
     ScreenManager:
         id: purchaseManager
         Screen:
@@ -51,17 +49,56 @@
                     RightLabel:
                         text: '-' +str(root.friend) if root.friend != 0 else ""
                     RightLabel:
+                        bold: True
                         text:"Final Price:"
                     RightLabel:
+                        bold: True
                         text: str(root.finalPrice)
-                BoxLayout:
-                    orientation: "horizontal"
-                    size_hint_y: 0.2
-                    SkyBlueButton:
-                        size_hint: (0.3,0.30)
-                        text: "Confirm Purchase"
-                        on_press: root.purchasing()
-                    OrangeButton:
-                        size_hint: (0.3,0.30)
-                        text: "Cancel Purchase"
-                        on_press: root.ids["purchaseManager"].current = "cancel"
+
+<BidPurchase>:
+    bidPrice: 0
+    tax:0
+    vip: 0
+    friend: 0
+    finalPrice: 0
+    purchased: False
+    ScreenManager:
+        id: purchaseManager
+        Screen:
+            name: "empty"
+            BoldLabel:
+                text: "Your bid is recorded.\nWith bid price %s\n estimate final price %s" %(str(root.bidPrice),str(root.finalPrice))
+                opacity: 1 if root.purchased else 0
+        Screen:
+            name: "cancel"
+            BoldLabel:
+                text: "You have cancel the Bidding"
+        Screen:
+            name: "Purchase"
+            BoxLayout:
+                orientation: "vertical"
+                GridLayout:
+                    size_hint: (0.8,0.6)
+                    cols: 2
+                    RightLabel:
+                        text:"Bid Price:"
+                    RightLabel:
+                        text:str(root.bidPrice)
+                    RightLabel:
+                        text:"Estimate Tax Collect:"
+                    RightLabel:
+                        text:'+' + str(root.tax)
+                    RightLabel:
+                        text:"VIP Discount:" if root.vip != 0 else ""
+                    RightLabel:
+                        text: '-' +str(root.vip) if root.vip != 0 else ""
+                    RightLabel:
+                        text:"Friend Discount:" if root.friend != 0 else ""
+                    RightLabel:
+                        text: '-' +str(root.friend) if root.friend != 0 else ""
+                    RightLabel:
+                        bold: True
+                        text:"Estimate Final Price:"
+                    RightLabel:
+                        bold: True
+                        text: str(root.finalPrice)

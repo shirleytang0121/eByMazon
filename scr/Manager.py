@@ -401,6 +401,7 @@ class transactionHistory(Screen):
 class fixedItem(Screen):
     itemIndex = NumericProperty()
     user = BooleanProperty()
+
     def tohome(self):
         self.ids["purchaseInfo"].text = ""
         self.ids["purchase"].clear()
@@ -413,8 +414,23 @@ class fixedItem(Screen):
     def likeItem(self,name):
         root.likeItem(name,self.itemIndex)
 
+    def purchasing(self):
+        # purchase Item
+        self.ids["purchase"].ids["purchaseManager"].current = "empty"
+
+    def cancelPurchase(self):
+        self.purchased = False
+        self.ids["purchaseInfo"].text = ""
+        self.ids["purchase"].ids["purchaseManager"].current = "cancel"
+
     def toPurchase(self):
-        self.ids["purchase"].infoLoad(items[self.itemIndex],ou,float(self.ids["purchaseInfo"].text))
+        item = items[self.itemIndex]
+        numWant = int(self.ids["purchaseInfo"].text)
+        purchaseInfo = [item.price,numWant ]
+        purchaseInfo.extend(ou.calculatePurchase(item.itemID,item.price,numWant))
+
+        self.purchased = True
+        self.ids["purchase"].infoLoad(purchaseInfo)
         self.ids["purchase"].ids["purchaseManager"].current = "Purchase"
 
 
@@ -423,12 +439,35 @@ class biddingItem(Screen):
     itemIndex = NumericProperty()
     user = BooleanProperty()
     def tohome(self):
+        self.ids["purchaseInfo"].text = ""
+        self.ids["purchase"].clear()
+        self.ids["purchase"].ids["purchaseManager"].current = "empty"
         root.tohome()
+
     def dislikeItem(self,name):
         root.dislikeItem(name,self.itemIndex)
     def likeItem(self,name):
         root.likeItem(name,self.itemIndex)
 
+    def bidding(self):
+        # purchase Item
+        self.ids["purchase"].ids["purchaseManager"].current = "empty"
+
+    def cancelbid(self):
+        self.bid = False
+        self.ids["purchaseInfo"].text = ""
+        self.ids["purchase"].ids["purchaseManager"].current = "cancel"
+
+    def toPurchase(self):
+        item = items[self.itemIndex]
+        # numWant = 1
+        bidprice = float(self.ids["purchaseInfo"].text)
+        purchaseInfo = [bidprice, 1]
+        purchaseInfo.extend(ou.calculatePurchase(item.itemID,bidprice,1))
+
+        self.bid = True
+        self.ids["purchase"].infoLoad(purchaseInfo)
+        self.ids["purchase"].ids["purchaseManager"].current = "Purchase"
 
 ####################### Main Class #############################
 
@@ -609,6 +648,12 @@ class Manager(Screen):
 
 
     ###################### To Item Page from homepage ###################
+    def checkDisable(self, itemID):
+        if ou is not None:
+            if general.checkOwner(ou.ID,itemID):
+                return False
+        return True
+
     def tofixedItem(self,itemIndex):
         item = items[itemIndex]
         item.addView()
@@ -621,6 +666,8 @@ class Manager(Screen):
         self.ids['fixedItem'].ids['itemAvailable'].text = str(item.available)
         self.ids['fixedItem'].ids['itemLike'].text = str(item.likeness)
         self.ids['fixedItem'].ids['itemDislike'].text = str(item.dislike)
+        self.ids['fixedItem'].disableAction = self.checkDisable(item.itemID)
+
         self.ids['screenmanager'].current = "fixedItem"
 
     def tobidItem(self,itemIndex):
@@ -635,6 +682,7 @@ class Manager(Screen):
         self.ids['biddingItem'].ids['itemLike'].text = str(item.likeness)
         self.ids['biddingItem'].ids['itemDislike'].text = str(item.dislike)
         self.ids['biddingItem'].ids['itemUsed'].text = str(item.usedStatus)
+        self.ids['biddingItem'].disableAction = self.checkDisable(item.itemID)
         try:
             self.ids['biddingItem'].ids['itemBid'].text = "$" + str(item.highestPrice)
         except AttributeError:

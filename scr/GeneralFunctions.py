@@ -105,7 +105,6 @@ class General():
             return allItem
 
 
-
     def sortItem(self,items,attribute, decs):
         """
         :param items:  list of item object
@@ -116,6 +115,14 @@ class General():
         k = sorted(items, key=lambda x: getattr(x, attribute),reverse= decs)
         return k
 
+
+    def checkOwner(self,ouID,itemID):
+        qry = "SELECT EXISTS(SELECT * from ItemOwner WHERE itemID=%s AND ownerID =%s);" % (itemID, ouID)
+        self.cursor.execute(qry)
+
+        if self.cursor.fetchone()[0]:
+            return False
+        return True
 
     def checkStaus(self, ouID):
         # return status of the select OU
