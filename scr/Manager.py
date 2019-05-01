@@ -385,6 +385,14 @@ class ouWarning(Screen):
 class blackTaboo(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
+
+    def blackListData(self):
+        self.ids['tabooList'].data = su.getTabooList()
+        self.ids['userBlackList'].data = su.getUserBlackList()
+        self.ids['itemBlackList'].data = su.getItemBlackList()
+
+        print("Refresh")
+
 class suTransaction(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
@@ -819,6 +827,7 @@ class Manager(Screen):
         self.ids['screenmanager'].current ="processCompliant"
 
     def toBlacklist(self):
+        self.ids['blackTaboo'].blackListData()
         self.ids['screenmanager'].current = "blackTaboo"
     def toSUtransaction(self):
         self.ids['screenmanager'].current = "suTransaction"

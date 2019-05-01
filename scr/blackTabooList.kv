@@ -1,7 +1,30 @@
+<tabooWords@BoxLayout>:
+    taboo: ""
+    BoxLayout
+        orientation:"vertical"
+        CenterLabel:
+            text: root.taboo
+
+<userBlackLists@BoxLayout>:
+    username: ""
+    BoxLayout
+        orientation:"vertical"
+        CenterLabel:
+            text: root.username
+
+<itemBlackLists@BoxLayout>:
+    item: ""
+    BoxLayout
+        orientation:"vertical"
+        CenterLabel:
+            text: root.item
+
+
+
 <blackTaboo>:
 #    name: "GUapplication"
     BoxLayout:
-        BoxLayout
+        BoxLayout:
             orientation: "vertical"
             BoxLayout:
                 size_hint_y: 0.1
@@ -12,3 +35,58 @@
                     size_hint_x: 0.1
                     size: 150, 100
                     on_press: root.tohome()
+            BoxLayout:
+                orientation:"horizontal"
+                BoxLayout:
+                    orientation:"vertical"
+                    BoxLayout:
+                        size_hint_y: 0.2
+                        BoldLabel:
+                            text: "Manage Taboo List"
+                            font_size: 50
+                    RecycleView:
+                        size_hint_y: 0.7
+                        id: tabooList
+                        data: []
+                        viewclass: 'tabooWords'
+                        VRVL:
+                            default_size: None, dp(20)
+                    BoxLayout:
+                        size_hint_y: 0.1
+                        padding: 170, 0, 170, 0
+                        OrangeButton:
+                            text: "Add new taboo word"
+                BoxLayout:
+                    orientation: "vertical"
+                    BoxLayout:
+                        size_hint_y:0.2
+                        BoldLabel:
+                            text: "User BlackList"
+                            font_size: 50
+                    RecycleView:
+                        size_hint_y: 0.7
+                        id: userBlackList
+                        data: []
+                        viewclass: 'userBlackLists'
+                        VRVL:
+                            default_size: None, dp(20)
+                    BoxLayout:
+                        size_hint_y:0.2
+                        BoldLabel:
+                            text: "Item BlackList"
+                            font_size: 50
+                    RecycleView:
+                        size_hint_y: 0.7
+                        id: itemBlackList
+                        data: []
+                        viewclass: 'itemBlackLists'
+                        VRVL:
+                            default_size: None, dp(20)
+
+
+            BoxLayout:
+                size_hint_y: 0.1
+                SkyBlueButton:
+                    size_hint:(0.5,0.8)
+                    text:"Refresh List"
+                    on_press:root.blackListData()
