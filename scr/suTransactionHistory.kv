@@ -1,14 +1,25 @@
 <suTransaction>:
 #    name: "GUapplication"
     BoxLayout:
-        BoxLayout
-            orientation: "vertical"
+        orientation: "vertical"
+        spacing: 20
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 20
             BoxLayout:
-                size_hint_y: 0.1
+                orientation: 'vertical'
                 Label:
-                    size_hint_x: 0.9
-                GrayButton:
-                    text:"Home"
-                    size_hint_x: 0.1
-                    size: 150, 100
-                    on_press: root.tohome()
+                    size_hint_y: .1
+                VRVL:
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: .1
+                VRVL:
+        BoxLayout:
+            size_hint_y: 0.1
+            GrayButton:
+                text:"Home"
+                size_hint_x: 0.1
+                size: 150, 100
+                on_press: root.tohome()
