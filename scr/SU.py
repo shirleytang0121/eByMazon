@@ -98,3 +98,30 @@ class SU():
         # action == False: justified: change the justified to True in DB
         #                  check for two justified compliant that will cause warning
         pass
+
+    def getTabooList(self):
+        self.cursor.execute("SELECT * FROM Taboo;")
+        self.tabooList = []
+
+        for taboo in self.cursor:
+            self.tabooList.append({'taboo': taboo[0]})
+
+        return self.tabooList
+
+    def getUserBlackList(self):
+        self.cursor.execute("SELECT * FROM ouBlacklist;")
+        self.userBlackList = []
+
+        for user in self.cursor:
+            self.userBlackList.append({'username': user[0]})
+
+        return self.userBlackList
+
+    def getItemBlackList(self):
+        self.cursor.execute("SELECT * FROM itemBlackList;")
+        self.itemBlackList = []
+
+        for item in self.cursor:
+            self.itemBlackList.append({'item': item[0]})
+
+        return self.itemBlackList
