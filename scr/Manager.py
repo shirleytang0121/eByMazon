@@ -382,6 +382,32 @@ class processCompliant(Screen):
 class ouWarning(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "profilePage"
+
+    def warningData(self):
+        warningTimes = ou.getWarnings()
+        for time in warningTimes:
+            if (time['warningID'] == 0):
+                time['warningID'] = "low rating"
+            elif (time['warningID'] == 1):
+                time['warningID'] = "complaints"
+            elif (time['warningID'] == 2):
+                time['warningID'] = "decline deal"
+            else:
+                time['warningID'] = "decline deal"
+
+            time['warnTime'] = time['warnTime'].strftime('%m/%d/%Y')
+        # self.ids['complaint'].data = ou.getComplaints()
+        self.ids['warning'].data = warningTimes
+
+        complaintTimes = ou.getComplaints()
+        # for warningtype in complaintTimes:
+        #     warningtype['warningID']
+        for times in complaintTimes:
+            times['compliantTime'] = times['compliantTime'].strftime('%m/%d/%Y')
+        self.ids['complaint'].data = complaintTimes
+        print("Refresh")
+
+
 class blackTaboo(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
@@ -831,6 +857,7 @@ class Manager(Screen):
         self.getOUitem()
         self.ids['screenmanager'].current = "ouItem"
     def toWarning(self):
+        self.ids['ouWarning'].warningData()
         self.ids['screenmanager'].current = "ouWarning"
 
     def toCompliant(self):

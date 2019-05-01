@@ -1,7 +1,36 @@
+<complaints@BoxLayout>:
+    itemID: 0
+    description: ""
+    compliantTime: ""
+    BoxLayout:
+        orientation:"horizontal"
+        CenterLabel:
+            text: str(root.itemID)
+        CenterLabel:
+            text: root.description
+        CenterLabel:
+            text: root.compliantTime
+
+
+<warnings@BoxLayout>:
+    warningID: ""
+    description: ""
+    warnTime: ""
+    BoxLayout:
+        orientation: "horizontal"
+        CenterLabel:
+            text: root.warningID
+        CenterLabel:
+            text: root.description
+        CenterLabel:
+            text: root.warnTime
+
+
+
 <ouWarning>:
 #    name: "GUapplication"
     BoxLayout:
-        BoxLayout
+        BoxLayout:
             orientation: "vertical"
             BoxLayout:
                 size_hint_y: 0.1
@@ -12,3 +41,57 @@
                     size_hint_x: 0.1
                     size: 150, 100
                     on_press: root.tohome()
+            BoxLayout:
+                size_hint_y: 0.45
+                orientation: "vertical"
+                BoldLabel:
+                    size_hint_y: 0.2
+                    text: "Complaint History"
+                    font_size: 50
+                BoxLayout:
+                    size_hint_y: 0.2
+                    orientation: "horizontal"
+                    CenterLabel:
+                        text: "ItemID"
+                        bold: True
+                    CenterLabel:
+                        text: "Description"
+                        bold: True
+                    CenterLabel:
+                        text: "Time"
+                        bold: True
+                RecycleView:
+                    size_hint_y: 0.7
+                    id: complaint
+                    data: []
+                    viewclass: 'complaints'
+                    VRVL:
+                        default_size: None, dp(50)
+
+            BoxLayout:
+                size_hint_y: 0.45
+                orientation: "vertical"
+                BoldLabel:
+                    size_hint_y: 0.2
+                    text: "Warning History"
+                    font_size: 50
+                BoxLayout:
+                    size_hint_y: 0.2
+                    orientation: "horizontal"
+                    CenterLabel:
+                        text: "Warning Type"
+                        bold: True
+                    CenterLabel:
+                        text: "Description"
+                        bold: True
+                    CenterLabel:
+                        text: "Time"
+                        bold: True
+                RecycleView:
+                    size_hint_y: 0.7
+                    id: warning
+                    data: []
+                    viewclass: 'warnings'
+                    VRVL:
+                        default_size: None, dp(50)
+
