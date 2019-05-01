@@ -386,6 +386,16 @@ class blackTaboo(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
 
+    def addTabooWord(self):
+        # check input is not empty
+        if guest.checkInput(self.ids['tabooWord'].text):
+            print("Empty")
+            self.warnShow = True
+        else:
+            su.addTaboo(self.ids['tabooWord'].text)
+            self.ids['tabooWord'].text = ""
+            root.ids['blackTaboo'].blackListData()
+
     def blackListData(self):
         self.ids['tabooList'].data = su.getTabooList()
         self.ids['userBlackList'].data = su.getUserBlackList()

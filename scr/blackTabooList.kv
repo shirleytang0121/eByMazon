@@ -23,6 +23,7 @@
 
 <blackTaboo>:
 #    name: "GUapplication"
+    warnShow: False
     BoxLayout:
         BoxLayout:
             orientation: "vertical"
@@ -39,11 +40,13 @@
                 orientation:"horizontal"
                 BoxLayout:
                     orientation:"vertical"
-                    BoxLayout:
+#                    BoxLayout:
+#                        size_hint_y: 0.2
+                    CenterLabel:
                         size_hint_y: 0.2
-                        BoldLabel:
-                            text: "Manage Taboo List"
-                            font_size: 50
+                        text: "Manage Taboo List"
+                        font_size: 50
+                        bold: True
                     RecycleView:
                         size_hint_y: 0.7
                         id: tabooList
@@ -52,10 +55,20 @@
                         VRVL:
                             default_size: None, dp(20)
                     BoxLayout:
-                        size_hint_y: 0.1
-                        padding: 170, 0, 170, 0
+                        size_hint:(0.6, 0.2)
+                        pos_hint: {'center_x':0.6,'center_y':0.5}
+                        orientation:"vertical"
+                        padding: 0,0,0,30
+                        CenterLabel:
+                            text: "Empty value invalid" if root.warnShow else ""
+                        ProfileInput:
+                            size_hint_x: 0.7
+                            id: tabooWord
                         OrangeButton:
+                            size_hint_x: 0.7
                             text: "Add new taboo word"
+                            on_press: root.addTabooWord()
+
                 BoxLayout:
                     orientation: "vertical"
                     BoxLayout:
@@ -82,11 +95,3 @@
                         viewclass: 'itemBlackLists'
                         VRVL:
                             default_size: None, dp(20)
-
-
-            BoxLayout:
-                size_hint_y: 0.1
-                SkyBlueButton:
-                    size_hint:(0.5,0.8)
-                    text:"Refresh List"
-                    on_press:root.blackListData()
