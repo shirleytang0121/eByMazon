@@ -9,13 +9,19 @@
             BoxLayout:
                 orientation: 'vertical'
                 Label:
+                    text: 'Transactions'
                     size_hint_y: .1
-                VRVL:
-            BoxLayout:
-                orientation: 'vertical'
-                Label:
-                    size_hint_y: .1
-                VRVL:
+                RecycleView:
+                    id: transaction
+                    data:[]
+                    viewclass: 'item'
+                    VRVL:
+            # BoxLayout:
+            #     orientation: 'vertical'
+            #     Label:
+            #         text: ''
+            #         size_hint_y: .1
+            #     VRVL:
         BoxLayout:
             size_hint_y: 0.1
             GrayButton:
