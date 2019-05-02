@@ -1,31 +1,63 @@
+<suTransactionRow@BoxLayout>:
+    numb: ''
+    itemID: ''
+    seller: ''
+    buyer: ''
+    price: ''
+    date: ''
+    BoxLayout:
+        GridLayout:
+            cols: 6
+            BoldLabel:
+                text: root.numb
+            BoldLabel:
+                text: root.itemID
+            BoldLabel:
+                text: root.seller
+            BoldLabel:
+                text: root.buyer
+            BoldLabel:
+                text: root.price
+            BoldLabel:
+                text: root.date
+
 <suTransaction>:
-#    name: "GUapplication"
+    # name: "GUapplication"
     BoxLayout:
         orientation: "vertical"
         spacing: 20
         BoxLayout:
-            orientation: 'horizontal'
-            spacing: 20
+            orientation: 'vertical'
+            size_hint_y: .2
             BoxLayout:
-                orientation: 'vertical'
-                Label:
+                BoldLabel:
+                    # background_color: [2.37, 1.13, .68, 0.7]
                     text: 'Transactions'
-                    size_hint_y: .1
-                RecycleView:
-                    id: transaction
-                    data:[]
-                    viewclass: 'item'
-                    VRVL:
-            # BoxLayout:
-            #     orientation: 'vertical'
-            #     Label:
-            #         text: ''
-            #         size_hint_y: .1
-            #     VRVL:
+                    color: 2.37, 1.13, .68, 0.7
+            BoxLayout:
+                orientation: 'horizontal'
+                BoldLabel: 
+                    text: '#'
+                BoldLabel:
+                    text: 'Item ID'
+                BoldLabel:
+                    text: 'Seller'
+                BoldLabel:
+                    text: 'Buyer'
+                BoldLabel:
+                    text: 'Price'
+                BoldLabel:
+                    text: 'Date'
+        RecycleView:
+            size_hint_y: .7
+            id: transactions
+            data:[]
+            viewclass: 'suTransactionRow'
+            VRVL:
+                default_size: None, dp(20)
         BoxLayout:
-            size_hint_y: 0.1
+            size_hint_y: .1
             GrayButton:
-                text:"Home"
-                size_hint_x: 0.1
+                text:"home"
                 size: 150, 100
                 on_press: root.tohome()

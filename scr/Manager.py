@@ -432,6 +432,10 @@ class blackTaboo(Screen):
 class suTransaction(Screen):
     def tohome(self):
         root.ids['screenmanager'].current = "suHomepage"
+    def Transactions(self):
+        self.ids['transactions'].data = su.getTransaction() #data selection to be fixed
+                                                            #connections done
+        
 ####################### TO BE FILLED #################
 class editPassword(FloatLayout):
     back = ObjectProperty(None)
@@ -867,6 +871,7 @@ class Manager(Screen):
         self.ids['blackTaboo'].blackListData()
         self.ids['screenmanager'].current = "blackTaboo"
     def toSUtransaction(self):
+        self.ids['suTransaction'].Transactions()
         self.ids['screenmanager'].current = "suTransaction"
 
 class eByMazonApp(App):
@@ -880,8 +885,8 @@ class eByMazonApp(App):
 
 if __name__ == "__main__":
     config = {
-        "user": '',                 # Enter your own username
-        "password": '',             # Enter your own password
+        "user": 'eby',                 # Enter your own username
+        "password": 'ebypw',             # Enter your own password
         "host": '127.0.0.1',
         "database": 'eByMazon'
     }
