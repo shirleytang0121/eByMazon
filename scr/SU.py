@@ -125,3 +125,13 @@ class SU():
             self.itemBlackList.append({'item': item[0]})
 
         return self.itemBlackList
+
+    def addTaboo(self, taboo):
+        qry = ("INSERT INTO Taboo(word) VALUES ('%s');" %taboo )
+        try:
+            self.cursor.execute(qry)
+            self.cnx.commit()
+            return True
+        except mysql.connector.errors as ERR:
+            print(ERR)
+            return False

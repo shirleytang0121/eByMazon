@@ -281,3 +281,21 @@ class OU():
     def submitCompliant(self,itemID, complianterID, description):
         # add compliant to DB
         pass
+
+    def getComplaints(self):
+        self.cursor.execute("SELECT itemID, description, compliantTime FROM Complaint NATURAL JOIN ItemOwner WHERE ownerID = %s;"% self.ID)
+        self.complaintList = []
+
+        for complaint in self.cursor:
+            self.complaintList.append({"itemID": complaint[0],"description":complaint[1],
+                                      "compliantTime":complaint[2]})
+        return self.complaintList
+
+    def getWarnings(self):
+        self.cursor.execute("SELECT warningID, description, warnTime FROM Warning WHERE ouID = %s;" % self.ID)
+        self.warningList = []
+
+        for warning in self.cursor:
+            self.warningList.append({'warningID': warning[0], 'description':warning[1],
+                                      'warnTime':warning[2]})
+        return self.warningList
