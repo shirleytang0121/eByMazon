@@ -107,6 +107,16 @@ class SU():
             self.tabooList.append({'taboo': taboo[0]})
 
         return self.tabooList
+    def getTransaction(self):
+        self.cursor.execute("SELECT * FROM Transaction;")
+        self.transactions = []
+
+        for transaction in self.cursor:
+            self.transactions.append({'numb': str(transaction[1]), 'itemID': str(transaction[1]),
+            'seller':str(transaction[1]), 'buyer':str(transaction[1]),'price':str(transaction[1]),
+            'date': str(transaction[1]) }) #to be fixed(query)
+            print(transaction)
+        return self.transactions
 
     def getUserBlackList(self):
         self.cursor.execute("SELECT * FROM ouBlacklist;")
